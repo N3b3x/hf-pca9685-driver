@@ -30,9 +30,9 @@
 *.exe
 *.out
 *.app
-/build
 
 # Ignore build artifacts and generated files
+/build
 build/
 docs/doxygen/
 *.DS_Store
