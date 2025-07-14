@@ -11,12 +11,6 @@
 *.gch
 *.pch
 
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
 # Compiled Dynamic libraries
 *.so
 *.dylib
@@ -36,6 +30,9 @@
 *.exe
 *.out
 *.app
+/build
 
-# debug information files
-*.dwo
+# Ignore build artifacts and generated files
+build/
+docs/doxygen/
+*.DS_Store
