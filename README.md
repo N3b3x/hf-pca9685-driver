@@ -24,6 +24,9 @@ permalink: /
 
 ## 📦 Overview
 
+> **📖 [📚🌐 Live Complete Documentation](https://n3b3x.github.io/hf-pca9685-driver/)** - 
+> Interactive guides, examples, and step-by-step tutorials
+
 The PCA9685 is a 16-channel, 12-bit PWM controller that communicates via I²C. This driver provides a hardware-agnostic interface for controlling the PCA9685, requiring only an implementation of the `I2cBus` interface.
 
 ## ✨ Features
