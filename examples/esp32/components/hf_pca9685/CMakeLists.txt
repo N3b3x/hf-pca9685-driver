@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.16)
 # =============================================================================
 # Set the source root path relative to this component directory
 set(SRC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../../src")
-set(INC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../../src")
+set(INC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../../inc")
 
 message(STATUS "PCA9685 Driver - ESP32 Component Configuration")
 message(STATUS "Source Root: ${SRC_ROOT}")
