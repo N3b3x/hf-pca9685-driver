@@ -9,7 +9,7 @@
  * @copyright HardFOC
  */
 
-#include "../../../src/pca9685.hpp"
+#include "pca9685.hpp"
 #include "TestFramework.h"
 #include <memory>
 #include "freertos/FreeRTOS.h"
@@ -62,13 +62,9 @@ static void cleanup_test_resources() noexcept {
 /**
  * @brief Basic initialization test
  */
-static void test_basic_initialization() noexcept {
-    TEST_START("Basic Initialization");
-    
+static bool test_basic_initialization() noexcept {
     // TODO: Implement test
-    TEST_PASS("Initialization successful");
-    
-    TEST_END();
+    return true; // Test passed
 }
 
 //=============================================================================
@@ -76,38 +72,41 @@ static void test_basic_initialization() noexcept {
 //=============================================================================
 
 extern "C" void app_main() {
-    ESP_LOGI(TAG, "=== PCA9685 Comprehensive Test Suite ===");
-    ESP_LOGI(TAG, "Starting tests...");
-    
-    // Initialize test framework
-    init_test_progress_indicator();
-    
+    ESP_LOGI(TAG, "╔══════════════════════════════════════════════════════════════════════════════╗");
+    ESP_LOGI(TAG, "║                    ESP32-C6 PCA9685 COMPREHENSIVE TEST SUITE                  ║");
+    ESP_LOGI(TAG, "║                         HardFOC PCA9685 Driver Tests                         ║");
+    ESP_LOGI(TAG, "╚══════════════════════════════════════════════════════════════════════════════╝");
+
+    vTaskDelay(pdMS_TO_TICKS(1000));
+
+    // Report test section configuration
+    print_test_section_status(TAG, "PCA9685");
+
     // Initialize test resources
     if (!init_test_resources()) {
         ESP_LOGE(TAG, "Failed to initialize test resources");
         return;
     }
-    
-    // Run tests
-    if (ENABLE_BASIC_TESTS) {
-        test_basic_initialization();
-    }
-    
+
+    // Run all tests based on configuration
+    RUN_TEST_SECTION_IF_ENABLED_WITH_PATTERN(
+        ENABLE_BASIC_TESTS, "PCA9685 BASIC TESTS", 5,
+        RUN_TEST_IN_TASK("basic_initialization", test_basic_initialization, 8192, 1);
+        flip_test_progress_indicator();
+    );
+
     // Cleanup
     cleanup_test_resources();
-    
+
     // Print results
-    print_test_summary(TAG, g_test_results);
-    
-    ESP_LOGI(TAG, "=== Test Suite Complete ===");
-    ESP_LOGI(TAG, "Total: %d | Passed: %d | Failed: %d", 
-             g_test_results.total, g_test_results.passed, g_test_results.failed);
-    
+    print_test_summary(g_test_results, "PCA9685", TAG);
+
     // Blink GPIO14 to indicate completion
-    for (int i = 0; i < 5; i++) {
-        set_test_progress_state(true);
-        vTaskDelay(pdMS_TO_TICKS(200));
-        set_test_progress_state(false);
-        vTaskDelay(pdMS_TO_TICKS(200));
+    output_section_indicator(5);
+    
+    cleanup_test_progress_indicator();
+
+    while (true) {
+        vTaskDelay(pdMS_TO_TICKS(10000));
     }
 }
