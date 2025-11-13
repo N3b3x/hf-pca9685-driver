@@ -5,16 +5,31 @@
  * @author Nebiyu Tadesse
  * @date 2025
  * @version 1.0
+ *
+ * @note This file is included by pca9685.hpp for template instantiation.
+ *       It should not be compiled separately when included.
  */
-#include "pca9685.hpp"
+
+#ifndef PCA9685_IMPL
+#define PCA9685_IMPL
+
+// When included from header, use relative path; when compiled directly, use standard include
+#ifdef PCA9685_HEADER_INCLUDED
+#include "../inc/pca9685.hpp"
+#else
+#include "../inc/pca9685.hpp"
+#endif
+
 #include <algorithm>
 #include <cmath>
 #include <cstring>
 
-PCA9685::PCA9685(I2cBus* bus, uint8_t address)
+template <typename I2cType>
+PCA9685<I2cType>::PCA9685(I2cType* bus, uint8_t address)
     : i2c_(bus), addr_(address), lastError_(Error::None), initialized_(false) {}
 
-bool PCA9685::reset() {
+template <typename I2cType>
+bool PCA9685<I2cType>::reset() {
   uint8_t mode1 = 0x00; // Reset value
   if (!writeReg(MODE1, mode1)) {
     lastError_ = Error::I2cWrite;
@@ -25,7 +40,8 @@ bool PCA9685::reset() {
   return true;
 }
 
-bool PCA9685::setPwmFreq(float freq_hz) {
+template <typename I2cType>
+bool PCA9685<I2cType>::setPwmFreq(float freq_hz) {
   if (!initialized_) {
     lastError_ = Error::NotInitialized;
     return false;
@@ -59,7 +75,8 @@ bool PCA9685::setPwmFreq(float freq_hz) {
   return true;
 }
 
-bool PCA9685::setPwm(uint8_t channel, uint16_t on, uint16_t off) {
+template <typename I2cType>
+bool PCA9685<I2cType>::setPwm(uint8_t channel, uint16_t on, uint16_t off) {
   if (!initialized_) {
     lastError_ = Error::NotInitialized;
     return false;
@@ -79,7 +96,8 @@ bool PCA9685::setPwm(uint8_t channel, uint16_t on, uint16_t off) {
   return true;
 }
 
-bool PCA9685::setDuty(uint8_t channel, float duty) {
+template <typename I2cType>
+bool PCA9685<I2cType>::setDuty(uint8_t channel, float duty) {
   if (duty < 0.0f)
     duty = 0.0f;
   if (duty > 1.0f)
@@ -88,7 +106,8 @@ bool PCA9685::setDuty(uint8_t channel, float duty) {
   return setPwm(channel, 0, off);
 }
 
-bool PCA9685::setAllPwm(uint16_t on, uint16_t off) {
+template <typename I2cType>
+bool PCA9685<I2cType>::setAllPwm(uint16_t on, uint16_t off) {
   if (!initialized_) {
     lastError_ = Error::NotInitialized;
     return false;
@@ -111,7 +130,8 @@ PCA9685::Error PCA9685::getLastError() const {
   return lastError_;
 }
 
-bool PCA9685::getPrescale(uint8_t& prescale) {
+template <typename I2cType>
+bool PCA9685<I2cType>::getPrescale(uint8_t& prescale) {
   if (!initialized_) {
     lastError_ = Error::NotInitialized;
     return false;
@@ -124,23 +144,28 @@ bool PCA9685::getPrescale(uint8_t& prescale) {
   return true;
 }
 
-bool PCA9685::writeReg(uint8_t reg, uint8_t value) {
+template <typename I2cType>
+bool PCA9685<I2cType>::writeReg(uint8_t reg, uint8_t value) {
   return i2c_ && i2c_->write(addr_, reg, &value, 1);
 }
 
-bool PCA9685::readReg(uint8_t reg, uint8_t& value) {
+template <typename I2cType>
+bool PCA9685<I2cType>::readReg(uint8_t reg, uint8_t& value) {
   return i2c_ && i2c_->read(addr_, reg, &value, 1);
 }
 
-bool PCA9685::writeRegBlock(uint8_t reg, const uint8_t* data, size_t len) {
+template <typename I2cType>
+bool PCA9685<I2cType>::writeRegBlock(uint8_t reg, const uint8_t* data, size_t len) {
   return i2c_ && i2c_->write(addr_, reg, data, len);
 }
 
-bool PCA9685::readRegBlock(uint8_t reg, uint8_t* data, size_t len) {
+template <typename I2cType>
+bool PCA9685<I2cType>::readRegBlock(uint8_t reg, uint8_t* data, size_t len) {
   return i2c_ && i2c_->read(addr_, reg, data, len);
 }
 
-uint8_t PCA9685::calcPrescale(float freq_hz) const {
+template <typename I2cType>
+uint8_t PCA9685<I2cType>::calcPrescale(float freq_hz) const {
   float prescaleval = (OSC_FREQ / (4096.0f * freq_hz)) - 1.0f;
   if (prescaleval < 3.0f)
     prescaleval = 3.0f;
@@ -148,3 +173,7 @@ uint8_t PCA9685::calcPrescale(float freq_hz) const {
     prescaleval = 255.0f;
   return static_cast<uint8_t>(prescaleval + 0.5f);
 }
+
+}  // namespace PCA9685
+
+#endif  // PCA9685_IMPL

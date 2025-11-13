@@ -21,17 +21,34 @@
 #include <cstddef>
 #include <cstdint>
 
+namespace PCA9685 {
+
 /**
- * @class I2cBus
- * @brief Abstract interface for I2C bus operations.
+ * @brief CRTP-based template interface for I2C bus operations
  *
- * Users must implement this interface to provide low-level I2C
- * communication for the PCA9685 driver. Provides basic read and write
- * methods with ACK/NACK feedback.
+ * This template class provides a hardware-agnostic interface for I2C communication
+ * using the CRTP pattern. Platform-specific implementations should inherit from
+ * this template with themselves as the template parameter.
+ *
+ * Benefits of CRTP:
+ * - Compile-time polymorphism (no virtual function overhead)
+ * - Static dispatch instead of dynamic dispatch
+ * - Better optimization opportunities for the compiler
+ *
+ * Example usage:
+ * @code
+ * class MyI2C : public PCA9685::I2cBus<MyI2C> {
+ * public:
+ *   bool write(...) { ... }
+ *   bool read(...) { ... }
+ * };
+ * @endcode
+ *
+ * @tparam Derived The derived class type (CRTP pattern)
  */
+template <typename Derived>
 class I2cBus {
 public:
-  virtual ~I2cBus() = default;
   /**
    * @brief Write bytes to a device register.
    * @param addr 7-bit I2C address of the target device.
@@ -40,7 +57,10 @@ public:
    * @param len Number of bytes to write from the buffer.
    * @return true if the device acknowledges the transfer; false on NACK or error.
    */
-  virtual bool write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) = 0;
+  bool write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) {
+    return static_cast<Derived*>(this)->write(addr, reg, data, len);
+  }
+
   /**
    * @brief Read bytes from a device register.
    * @param addr 7-bit I2C address of the target device.
@@ -49,8 +69,32 @@ public:
    * @param len Number of bytes to read into the buffer.
    * @return true if the read succeeds; false on NACK or error.
    */
-  virtual bool read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) = 0;
+  bool read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) {
+    return static_cast<Derived*>(this)->read(addr, reg, data, len);
+  }
+
+protected:
+  /**
+   * @brief Protected constructor to prevent direct instantiation
+   */
+  I2cBus() = default;
+
+  // Prevent copying
+  I2cBus(const I2cBus&) = delete;
+  I2cBus& operator=(const I2cBus&) = delete;
+
+  // Allow moving
+  I2cBus(I2cBus&&) = default;
+  I2cBus& operator=(I2cBus&&) = default;
+
+  /**
+   * @brief Protected destructor
+   * @note Derived classes can have public destructors
+   */
+  ~I2cBus() = default;
 };
+
+}  // namespace PCA9685
 
 /**
  * @class PCA9685
@@ -60,7 +104,12 @@ public:
  * the PCA9685, including frequency setting, per-channel PWM, and device reset.
  *
  * All I2C operations are routed through the user-supplied I2cBus interface.
+ *
+ * @tparam I2cType The I2C interface implementation type that inherits from PCA9685::I2cBus<I2cType>
+ *
+ * @note The driver uses CRTP-based I2C interface for zero virtual call overhead.
  */
+template <typename I2cType>
 class PCA9685 {
 public:
   /**
@@ -105,10 +154,10 @@ public:
 
   /**
    * @brief Construct a new PCA9685 driver instance.
-   * @param bus Pointer to a user-implemented I2cBus interface.
+   * @param bus Pointer to a user-implemented I2C interface (must inherit from PCA9685::I2cBus<I2cType>).
    * @param address 7-bit I2C address of the PCA9685 device (0x00 to 0x7F).
    */
-  PCA9685(I2cBus* bus, uint8_t address);
+  PCA9685(I2cType* bus, uint8_t address);
 
   /**
    * @brief Reset the device to its power-on default state.
@@ -171,7 +220,7 @@ public:
   }
 
 private:
-  I2cBus* i2c_;
+  I2cType* i2c_;
   uint8_t addr_;
   Error lastError_;
   bool initialized_;
@@ -182,3 +231,10 @@ private:
   bool readRegBlock(uint8_t reg, uint8_t* data, size_t len);
   uint8_t calcPrescale(float freq_hz) const;
 };
+
+// Include template implementation
+#define PCA9685_HEADER_INCLUDED
+#include "../src/pca9685.cpp"
+#undef PCA9685_HEADER_INCLUDED
+
+}  // namespace PCA9685
