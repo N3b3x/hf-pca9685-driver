@@ -34,7 +34,7 @@ See the [datasheet](../datasheet/) for the full register map.
 
 ## Setting PWM Frequency
 
-- Use `setPwmFreq(float freq_hz)`
+- Use `SetPwmFreq(float freq_hz)`
 - Valid range: ~24 Hz to 1526 Hz
 - **Formula:**
 
@@ -52,9 +52,9 @@ See the [datasheet](../datasheet/) for the full register map.
 
 ## Setting PWM Output
 
-- Use `setPwm(channel, on, off)` for individual channels
-- Use `setAllPwm(on, off)` for all channels
-- Use `setDuty(channel, duty)` for floating-point duty cycle (0.0–1.0)
+- Use `SetPwm(channel, on, off)` for individual channels
+- Use `SetAllPwm(on, off)` for all channels
+- Use `SetDuty(channel, duty)` for floating-point duty cycle (0.0–1.0)
 - `on` and `off` are 12-bit values (0–4095)
 
 ---
@@ -70,9 +70,9 @@ See the [datasheet](../datasheet/) for the full register map.
 ## Real-World Example
 
 ```cpp
-pwm.setPwmFreq(1000.0f); // 1 kHz for LEDs
+pwm.SetPwmFreq(1000.0f); // 1 kHz for LEDs
 for (uint8_t ch = 0; ch < 16; ++ch) {
-    pwm.setDuty(ch, 0.5f); // 50% duty on all channels
+    pwm.SetDuty(ch, 0.5f); // 50% duty on all channels
 }
 ```
 

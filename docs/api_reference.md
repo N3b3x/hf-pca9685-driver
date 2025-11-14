@@ -14,14 +14,14 @@ The `PCA9685` class provides a robust, hardware-agnostic interface to the PCA968
 
 | Method | Description |
 |--------|-------------|
-| `reset()` | Reset the device to its power-on default state |
-| `setPwmFreq(float freq_hz)` | Set the PWM frequency |
-| `setPwm(uint8_t channel, uint16_t on, uint16_t off)` | Set PWM timing for a channel |
-| `setDuty(uint8_t channel, float duty)` | Set duty cycle (0.0–1.0) for a channel |
-| `setAllPwm(uint16_t on, uint16_t off)` | Set all channels at once |
-| `getLastError()` | Get the last error code |
-| `getPrescale(uint8_t &prescale)` | Get the current prescale value |
-| `setOutputEnable(bool enabled)` | (Stub) Set output enable state |
+| `Reset()` | Reset the device to its power-on default state |
+| `SetPwmFreq(float freq_hz)` | Set the PWM frequency |
+| `SetPwm(uint8_t channel, uint16_t on, uint16_t off)` | Set PWM timing for a channel |
+| `SetDuty(uint8_t channel, float duty)` | Set duty cycle (0.0–1.0) for a channel |
+| `SetAllPwm(uint16_t on, uint16_t off)` | Set all channels at once |
+| `GetLastError()` | Get the last error code |
+| `GetPrescale(uint8_t &prescale)` | Get the current prescale value |
+| `SetOutputEnable(bool enabled)` | (Stub) Set output enable state |
 
 ---
 
@@ -31,17 +31,17 @@ The `PCA9685` class provides a robust, hardware-agnostic interface to the PCA968
 #include "pca9685.hpp"
 // ...
 MyI2cBus i2c;
-PCA9685 pwm(&i2c, 0x40);
-if (!pwm.reset()) { /* handle error */ }
-pwm.setPwmFreq(50.0f); // 50 Hz for servos
-pwm.setPwm(0, 0, 2048); // 50% duty on channel 0
+pca9685::PCA9685<MyI2cBus> pwm(&i2c, 0x40);
+if (!pwm.Reset()) { /* handle error */ }
+pwm.SetPwmFreq(50.0f); // 50 Hz for servos
+pwm.SetPwm(0, 0, 2048); // 50% duty on channel 0
 ```
 
 ---
 
 ## Error Handling
 
-Most methods return `true` on success, `false` on failure. Use `getLastError()` to retrieve the error code:
+Most methods return `true` on success, `false` on failure. Use `GetLastError()` to retrieve the error code:
 - `None`: Success
 - `I2cWrite`: I2C write failure
 - `I2cRead`: I2C read failure
@@ -55,8 +55,8 @@ Most methods return `true` on success, `false` on failure. Use `getLastError()` 
 ## Integration Tips
 
 - Implement the `I2cBus` interface for your platform (see [Examples](../examples/README.md)).
-- Call `reset()` before using other methods.
-- Use `setPwmFreq()` before setting channel outputs.
+- Call `Reset()` before using other methods.
+- Use `SetPwmFreq()` before setting channel outputs.
 - For multi-chip setups, configure unique I2C addresses.
 - See [Configuration Guide](configuration.md) for advanced features.
 

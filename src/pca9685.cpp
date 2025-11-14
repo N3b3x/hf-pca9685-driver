@@ -16,7 +16,7 @@
 // Include standard library headers BEFORE the namespace opens
 #include <algorithm>
 #include <cmath>
-#include <string.h>  // Use C string.h for ESP-IDF compatibility (cstring has issues with ESP-IDF toolchain)
+#include <string.h> // Use C string.h for ESP-IDF compatibility (cstring has issues with ESP-IDF toolchain)
 
 // When included from header, use relative path; when compiled directly, use standard include
 #ifdef PCA9685_HEADER_INCLUDED
@@ -26,148 +26,143 @@
 #endif
 
 template <typename I2cType>
-PCA9685<I2cType>::PCA9685(I2cType* bus, uint8_t address)
-    : i2c_(bus), addr_(address), lastError_(Error::None), initialized_(false) {}
+pca9685::PCA9685<I2cType>::PCA9685(I2cType* bus, uint8_t address)
+    : i2c_(bus), addr_(address), last_error_(Error::None), initialized_(false) {}
 
 template <typename I2cType>
-bool PCA9685<I2cType>::reset() {
+bool pca9685::PCA9685<I2cType>::Reset() {
   uint8_t mode1 = 0x00; // Reset value
   if (!writeReg(MODE1, mode1)) {
-    lastError_ = Error::I2cWrite;
+    last_error_ = Error::I2cWrite;
     return false;
   }
   initialized_ = true;
-  lastError_ = Error::None;
+  last_error_ = Error::None;
   return true;
 }
 
 template <typename I2cType>
-bool PCA9685<I2cType>::setPwmFreq(float freq_hz) {
+bool pca9685::PCA9685<I2cType>::SetPwmFreq(float freq_hz) {
   if (!initialized_) {
-    lastError_ = Error::NotInitialized;
+    last_error_ = Error::NotInitialized;
     return false;
   }
   if (freq_hz < 24.0f || freq_hz > 1526.0f) {
-    lastError_ = Error::OutOfRange;
+    last_error_ = Error::OutOfRange;
     return false;
   }
   uint8_t prescale = calcPrescale(freq_hz);
   uint8_t oldmode = 0;
   if (!readReg(MODE1, oldmode)) {
-    lastError_ = Error::I2cRead;
+    last_error_ = Error::I2cRead;
     return false;
   }
   uint8_t sleep = (oldmode & 0x7F) | 0x10; // sleep
   if (!writeReg(MODE1, sleep)) {
-    lastError_ = Error::I2cWrite;
+    last_error_ = Error::I2cWrite;
     return false;
   }
   if (!writeReg(PRE_SCALE, prescale)) {
-    lastError_ = Error::I2cWrite;
+    last_error_ = Error::I2cWrite;
     return false;
   }
   if (!writeReg(MODE1, oldmode)) {
-    lastError_ = Error::I2cWrite;
+    last_error_ = Error::I2cWrite;
     return false;
   }
   // Wait for oscillator to stabilize (500us typical)
   // (User should delay if needed)
-  lastError_ = Error::None;
+  last_error_ = Error::None;
   return true;
 }
 
 template <typename I2cType>
-bool PCA9685<I2cType>::setPwm(uint8_t channel, uint16_t on, uint16_t off) {
+bool pca9685::PCA9685<I2cType>::SetPwm(uint8_t channel, uint16_t on, uint16_t off) {
   if (!initialized_) {
-    lastError_ = Error::NotInitialized;
+    last_error_ = Error::NotInitialized;
     return false;
   }
   if (channel >= MAX_CHANNELS || on > MAX_PWM || off > MAX_PWM) {
-    lastError_ = Error::OutOfRange;
+    last_error_ = Error::OutOfRange;
     return false;
   }
   uint8_t reg = LED0_ON_L + 4 * channel;
   uint8_t data[4] = {static_cast<uint8_t>(on & 0xFF), static_cast<uint8_t>((on >> 8) & 0x0F),
                      static_cast<uint8_t>(off & 0xFF), static_cast<uint8_t>((off >> 8) & 0x0F)};
   if (!writeRegBlock(reg, data, 4)) {
-    lastError_ = Error::I2cWrite;
+    last_error_ = Error::I2cWrite;
     return false;
   }
-  lastError_ = Error::None;
+  last_error_ = Error::None;
   return true;
 }
 
 template <typename I2cType>
-bool PCA9685<I2cType>::setDuty(uint8_t channel, float duty) {
+bool pca9685::PCA9685<I2cType>::SetDuty(uint8_t channel, float duty) {
   if (duty < 0.0f)
     duty = 0.0f;
   if (duty > 1.0f)
     duty = 1.0f;
   uint16_t off = static_cast<uint16_t>(duty * MAX_PWM + 0.5f);
-  return setPwm(channel, 0, off);
+  return SetPwm(channel, 0, off);
 }
 
 template <typename I2cType>
-bool PCA9685<I2cType>::setAllPwm(uint16_t on, uint16_t off) {
+bool pca9685::PCA9685<I2cType>::SetAllPwm(uint16_t on, uint16_t off) {
   if (!initialized_) {
-    lastError_ = Error::NotInitialized;
+    last_error_ = Error::NotInitialized;
     return false;
   }
   if (on > MAX_PWM || off > MAX_PWM) {
-    lastError_ = Error::OutOfRange;
+    last_error_ = Error::OutOfRange;
     return false;
   }
   uint8_t data[4] = {static_cast<uint8_t>(on & 0xFF), static_cast<uint8_t>((on >> 8) & 0x0F),
                      static_cast<uint8_t>(off & 0xFF), static_cast<uint8_t>((off >> 8) & 0x0F)};
   if (!writeRegBlock(ALL_LED_ON_L, data, 4)) {
-    lastError_ = Error::I2cWrite;
+    last_error_ = Error::I2cWrite;
     return false;
   }
-  lastError_ = Error::None;
+  last_error_ = Error::None;
   return true;
 }
 
 template <typename I2cType>
-typename PCA9685<I2cType>::Error PCA9685<I2cType>::getLastError() const {
-  return lastError_;
-}
-
-template <typename I2cType>
-bool PCA9685<I2cType>::getPrescale(uint8_t& prescale) {
+bool pca9685::PCA9685<I2cType>::GetPrescale(uint8_t& prescale) {
   if (!initialized_) {
-    lastError_ = Error::NotInitialized;
+    last_error_ = Error::NotInitialized;
     return false;
   }
   if (!readReg(PRE_SCALE, prescale)) {
-    lastError_ = Error::I2cRead;
+    last_error_ = Error::I2cRead;
     return false;
   }
-  lastError_ = Error::None;
+  last_error_ = Error::None;
   return true;
 }
 
 template <typename I2cType>
-bool PCA9685<I2cType>::writeReg(uint8_t reg, uint8_t value) {
-  return i2c_ && i2c_->write(addr_, reg, &value, 1);
+bool pca9685::PCA9685<I2cType>::writeReg(uint8_t reg, uint8_t value) {
+  return i2c_ && i2c_->Write(addr_, reg, &value, 1);
 }
 
 template <typename I2cType>
-bool PCA9685<I2cType>::readReg(uint8_t reg, uint8_t& value) {
-  return i2c_ && i2c_->read(addr_, reg, &value, 1);
+bool pca9685::PCA9685<I2cType>::readReg(uint8_t reg, uint8_t& value) {
+  return i2c_ && i2c_->Read(addr_, reg, &value, 1);
 }
 
 template <typename I2cType>
-bool PCA9685<I2cType>::writeRegBlock(uint8_t reg, const uint8_t* data, size_t len) {
-  return i2c_ && i2c_->write(addr_, reg, data, len);
+bool pca9685::PCA9685<I2cType>::writeRegBlock(uint8_t reg, const uint8_t* data, size_t len) {
+  return i2c_ && i2c_->Write(addr_, reg, data, len);
 }
 
 template <typename I2cType>
-bool PCA9685<I2cType>::readRegBlock(uint8_t reg, uint8_t* data, size_t len) {
-  return i2c_ && i2c_->read(addr_, reg, data, len);
+bool pca9685::PCA9685<I2cType>::readRegBlock(uint8_t reg, uint8_t* data, size_t len) {
+  return i2c_ && i2c_->Read(addr_, reg, data, len);
 }
 
 template <typename I2cType>
-uint8_t PCA9685<I2cType>::calcPrescale(float freq_hz) const {
+uint8_t pca9685::PCA9685<I2cType>::calcPrescale(float freq_hz) const {
   float prescaleval = (OSC_FREQ / (4096.0f * freq_hz)) - 1.0f;
   if (prescaleval < 3.0f)
     prescaleval = 3.0f;
@@ -178,4 +173,4 @@ uint8_t PCA9685<I2cType>::calcPrescale(float freq_hz) const {
 
 // Note: Namespace is closed in pca9685.hpp, not here
 
-#endif  // PCA9685_IMPL
+#endif // PCA9685_IMPL

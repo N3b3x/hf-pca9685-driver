@@ -17,14 +17,15 @@
  * @date 2025
  * @version 1.0
  */
-#pragma once
+#ifndef PCA9685_HPP
+#define PCA9685_HPP
 
+#include <algorithm> // For std algorithms
+#include <cmath>     // For math functions
 #include <cstddef>
 #include <cstdint>
-#include <stdio.h>   // For FILE* used by ESP-IDF headers
-#include <string.h>  // For C string functions
-#include <algorithm> // For std algorithms 
-#include <cmath>     // For math functions 
+#include <stdio.h>  // For FILE* used by ESP-IDF headers
+#include <string.h> // For C string functions
 
 namespace pca9685 {
 
@@ -44,8 +45,8 @@ namespace pca9685 {
  * @code
  * class MyI2C : public pca9685::I2cBus<MyI2C> {
  * public:
- *   bool write(...) { ... }
- *   bool read(...) { ... }
+ *   bool Write(...) { ... }
+ *   bool Read(...) { ... }
  * };
  * @endcode
  *
@@ -62,8 +63,8 @@ public:
    * @param len Number of bytes to write from the buffer.
    * @return true if the device acknowledges the transfer; false on NACK or error.
    */
-  bool write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) {
-    return static_cast<Derived*>(this)->write(addr, reg, data, len);
+  bool Write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) {
+    return static_cast<Derived*>(this)->Write(addr, reg, data, len);
   }
 
   /**
@@ -74,8 +75,8 @@ public:
    * @param len Number of bytes to read into the buffer.
    * @return true if the read succeeds; false on NACK or error.
    */
-  bool read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) {
-    return static_cast<Derived*>(this)->read(addr, reg, data, len);
+  bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) {
+    return static_cast<Derived*>(this)->Read(addr, reg, data, len);
   }
 
 protected:
@@ -157,7 +158,8 @@ public:
 
   /**
    * @brief Construct a new PCA9685 driver instance.
-   * @param bus Pointer to a user-implemented I2C interface (must inherit from pca9685::I2cBus<I2cType>).
+   * @param bus Pointer to a user-implemented I2C interface (must inherit from
+   * pca9685::I2cBus<I2cType>).
    * @param address 7-bit I2C address of the PCA9685 device (0x00 to 0x7F).
    */
   PCA9685(I2cType* bus, uint8_t address);
@@ -166,14 +168,14 @@ public:
    * @brief Reset the device to its power-on default state.
    * @return true on success; false on I2C failure.
    */
-  bool reset();
+  bool Reset();
 
   /**
    * @brief Set the PWM frequency for all channels.
    * @param freq_hz Desired frequency in Hz (24-1526 typical).
    * @return true on success; false on I2C failure or invalid parameter.
    */
-  bool setPwmFreq(float freq_hz);
+  bool SetPwmFreq(float freq_hz);
 
   /**
    * @brief Set the PWM on/off time for a channel.
@@ -182,7 +184,7 @@ public:
    * @param off Tick count when signal turns OFF (0-4095).
    * @return true on success; false on I2C failure or invalid parameter.
    */
-  bool setPwm(uint8_t channel, uint16_t on, uint16_t off);
+  bool SetPwm(uint8_t channel, uint16_t on, uint16_t off);
 
   /**
    * @brief Set the duty cycle for a channel (0.0-1.0).
@@ -190,7 +192,7 @@ public:
    * @param duty Duty cycle (0.0 = always off, 1.0 = always on).
    * @return true on success; false on I2C failure or invalid parameter.
    */
-  bool setDuty(uint8_t channel, float duty);
+  bool SetDuty(uint8_t channel, float duty);
 
   /**
    * @brief Set all channels to the same PWM value.
@@ -198,34 +200,36 @@ public:
    * @param off Tick count when signal turns OFF (0-4095).
    * @return true on success; false on I2C failure.
    */
-  bool setAllPwm(uint16_t on, uint16_t off);
+  bool SetAllPwm(uint16_t on, uint16_t off);
 
   /**
    * @brief Get the last error code.
    * @return Error code from the last operation.
    */
-  Error getLastError() const;
+  Error GetLastError() const {
+    return last_error_;
+  }
 
   /**
    * @brief Get the current prescale value (frequency divider).
    * @param[out] prescale The prescale register value.
    * @return true on success; false on I2C failure.
    */
-  bool getPrescale(uint8_t& prescale);
+  bool GetPrescale(uint8_t& prescale);
 
   /**
    * @brief Set the output enable state (if using OE pin externally).
    * @param enabled True to enable outputs, false to disable.
    * @note This is a stub; actual OE pin control must be handled externally.
    */
-  void setOutputEnable(bool enabled) {
+  void SetOutputEnable(bool enabled) {
     (void)enabled; /* User must implement if needed */
   }
 
 private:
   I2cType* i2c_;
   uint8_t addr_;
-  Error lastError_;
+  Error last_error_;
   bool initialized_;
 
   bool writeReg(uint8_t reg, uint8_t value);
@@ -240,4 +244,6 @@ private:
 #include "../src/pca9685.cpp"
 #undef PCA9685_HEADER_INCLUDED
 
-}  // namespace pca9685
+} // namespace pca9685
+
+#endif // PCA9685_HPP

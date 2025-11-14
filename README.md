@@ -53,17 +53,17 @@ public:
 
 ```cpp
 MyI2c i2c;
-PCA9685 pwm(&i2c, 0x40); // 0x40 is the default address
-pwm.reset();
-pwm.setPwmFreq(50.0f); // 50 Hz for servos
-pwm.setDuty(0, 0.075f); // Channel 0, 7.5% duty (1.5ms pulse)
+pca9685::PCA9685<MyI2c> pwm(&i2c, 0x40); // 0x40 is the default address
+pwm.Reset();
+pwm.SetPwmFreq(50.0f); // 50 Hz for servos
+pwm.SetDuty(0, 0.075f); // Channel 0, 7.5% duty (1.5ms pulse)
 ```
 
 3. **Error handling:**
 
 ```cpp
-if (!pwm.setDuty(0, 0.1f)) {
-    auto err = pwm.getLastError();
+if (!pwm.SetDuty(0, 0.1f)) {
+    auto err = pwm.GetLastError();
     // handle error
 }
 ```
