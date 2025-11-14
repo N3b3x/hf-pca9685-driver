@@ -1,5 +1,5 @@
 /**
- * @file PCA9685ComprehensiveTest.cpp
+ * @file pca9685_comprehensive_test.cpp
  * @brief Comprehensive test suite for PCA9685 driver on ESP32-C6
  *
  * This file contains comprehensive testing for PCA9685 features.

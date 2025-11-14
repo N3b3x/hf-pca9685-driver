@@ -22,7 +22,7 @@ apps:
   # --------------------------------------------------------------------------
   pca9685_comprehensive_test:
     description: "Comprehensive PCA9685 driver test suite covering all functionality"
-    source_file: "PCA9685ComprehensiveTest.cpp"
+    source_file: "pca9685_comprehensive_test.cpp"
     category: "test"
     idf_versions: ["release/v5.5"]
     build_types: ["Debug", "Release"]

@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 3.16)
 # Define default values for requirements phase (used by components)
 set(DEFAULT_APP_TYPE "pca9685_comprehensive_test" CACHE STRING "Default app type for requirements phase")
 set(DEFAULT_BUILD_TYPE "Release" CACHE STRING "Default build type for requirements phase")
-set(DEFAULT_SOURCE_FILE "PCA9685ComprehensiveTest.cpp" CACHE STRING "Default source file for requirements phase")
+set(DEFAULT_SOURCE_FILE "pca9685_comprehensive_test.cpp" CACHE STRING "Default source file for requirements phase")
 
 # =============================================================================
 # Build Parameter Validation

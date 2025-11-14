@@ -27,10 +27,10 @@ permalink: /
 > **📖 [📚🌐 Live Complete Documentation](https://n3b3x.github.io/hf-pca9685-driver/)** - 
 > Interactive guides, examples, and step-by-step tutorials
 
-The PCA9685 is a 16-channel, 12-bit PWM controller that communicates via I²C. This driver provides a hardware-agnostic interface for controlling the PCA9685, requiring only an implementation of the `I2cBus` interface.
+The PCA9685 is a 16-channel, 12-bit PWM controller that communicates via I²C. This driver provides a hardware-agnostic interface for controlling the PCA9685, requiring only an implementation of the `I2cInterface` interface.
 
 ## ✨ Features
-- Platform-independent: requires only a user-implemented I2cBus interface
+- Platform-independent: requires only a user-implemented I2cInterface interface
 - No dependencies on project-specific or MCU-specific code
 - Set PWM frequency (24 Hz to 1526 Hz typical)
 - Set PWM value (on/off time) for each channel
@@ -39,10 +39,10 @@ The PCA9685 is a 16-channel, 12-bit PWM controller that communicates via I²C. T
 
 ## 🚀 Quick Start
 
-1. **Implement the I2cBus interface** for your platform:
+1. **Implement the I2cInterface interface** for your platform:
 
 ```cpp
-class MyI2c : public I2cBus {
+class MyI2c : public I2cInterface {
 public:
     bool write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) override;
     bool read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) override;
@@ -71,7 +71,7 @@ if (!pwm.SetDuty(0, 0.1f)) {
 ## 🔧 Installation
 
 1. Copy the driver files into your project
-2. Implement the `I2cBus` interface for your platform
+2. Implement the `I2cInterface` interface for your platform
 3. Include the driver header in your code
 
 ## 📖 API Reference

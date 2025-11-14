@@ -15,8 +15,9 @@
 
 // Include standard library headers BEFORE the namespace opens
 #include <algorithm>
+#include <array>
 #include <cmath>
-#include <string.h> // Use C string.h for ESP-IDF compatibility (cstring has issues with ESP-IDF toolchain)
+#include <string.h> // NOLINT(modernize-deprecated-headers) - Use C string.h for ESP-IDF compatibility (cstring has issues with ESP-IDF toolchain)
 
 // When included from header, use relative path; when compiled directly, use standard include
 #ifdef PCA9685_HEADER_INCLUDED
@@ -27,12 +28,12 @@
 
 template <typename I2cType>
 pca9685::PCA9685<I2cType>::PCA9685(I2cType* bus, uint8_t address)
-    : i2c_(bus), addr_(address), last_error_(Error::None), initialized_(false) {}
+    : i2c_(bus), addr_(address), last_error_(Error::None) {}
 
 template <typename I2cType>
 bool pca9685::PCA9685<I2cType>::Reset() {
   uint8_t mode1 = 0x00; // Reset value
-  if (!writeReg(MODE1, mode1)) {
+  if (!writeReg(static_cast<uint8_t>(Register::MODE1), mode1)) {
     last_error_ = Error::I2cWrite;
     return false;
   }
@@ -47,26 +48,26 @@ bool pca9685::PCA9685<I2cType>::SetPwmFreq(float freq_hz) {
     last_error_ = Error::NotInitialized;
     return false;
   }
-  if (freq_hz < 24.0f || freq_hz > 1526.0f) {
+  if (freq_hz < 24.0F || freq_hz > 1526.0F) {
     last_error_ = Error::OutOfRange;
     return false;
   }
   uint8_t prescale = calcPrescale(freq_hz);
   uint8_t oldmode = 0;
-  if (!readReg(MODE1, oldmode)) {
+  if (!readReg(static_cast<uint8_t>(Register::MODE1), oldmode)) {
     last_error_ = Error::I2cRead;
     return false;
   }
   uint8_t sleep = (oldmode & 0x7F) | 0x10; // sleep
-  if (!writeReg(MODE1, sleep)) {
+  if (!writeReg(static_cast<uint8_t>(Register::MODE1), sleep)) {
     last_error_ = Error::I2cWrite;
     return false;
   }
-  if (!writeReg(PRE_SCALE, prescale)) {
+  if (!writeReg(static_cast<uint8_t>(Register::PRE_SCALE), prescale)) {
     last_error_ = Error::I2cWrite;
     return false;
   }
-  if (!writeReg(MODE1, oldmode)) {
+  if (!writeReg(static_cast<uint8_t>(Register::MODE1), oldmode)) {
     last_error_ = Error::I2cWrite;
     return false;
   }
@@ -77,19 +78,20 @@ bool pca9685::PCA9685<I2cType>::SetPwmFreq(float freq_hz) {
 }
 
 template <typename I2cType>
-bool pca9685::PCA9685<I2cType>::SetPwm(uint8_t channel, uint16_t on, uint16_t off) {
+bool pca9685::PCA9685<I2cType>::SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time) {
   if (!initialized_) {
     last_error_ = Error::NotInitialized;
     return false;
   }
-  if (channel >= MAX_CHANNELS || on > MAX_PWM || off > MAX_PWM) {
+  if (channel >= MAX_CHANNELS || on_time > MAX_PWM || off_time > MAX_PWM) {
     last_error_ = Error::OutOfRange;
     return false;
   }
-  uint8_t reg = LED0_ON_L + 4 * channel;
-  uint8_t data[4] = {static_cast<uint8_t>(on & 0xFF), static_cast<uint8_t>((on >> 8) & 0x0F),
-                     static_cast<uint8_t>(off & 0xFF), static_cast<uint8_t>((off >> 8) & 0x0F)};
-  if (!writeRegBlock(reg, data, 4)) {
+  uint8_t reg = static_cast<uint8_t>(Register::LED0_ON_L) + (4 * channel);
+  ::std::array<uint8_t, 4> data = {
+      static_cast<uint8_t>(on_time & 0xFF), static_cast<uint8_t>((on_time >> 8) & 0x0F),
+      static_cast<uint8_t>(off_time & 0xFF), static_cast<uint8_t>((off_time >> 8) & 0x0F)};
+  if (!writeRegBlock(reg, data.data(), 4)) {
     last_error_ = Error::I2cWrite;
     return false;
   }
@@ -98,28 +100,29 @@ bool pca9685::PCA9685<I2cType>::SetPwm(uint8_t channel, uint16_t on, uint16_t of
 }
 
 template <typename I2cType>
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters) - Types are different enough (uint8_t vs
+// float)
 bool pca9685::PCA9685<I2cType>::SetDuty(uint8_t channel, float duty) {
-  if (duty < 0.0f)
-    duty = 0.0f;
-  if (duty > 1.0f)
-    duty = 1.0f;
-  uint16_t off = static_cast<uint16_t>(duty * MAX_PWM + 0.5f);
-  return SetPwm(channel, 0, off);
+  duty = ::std::max(duty, 0.0F);
+  duty = ::std::min(duty, 1.0F);
+  auto off_time = static_cast<uint16_t>(lroundf((duty * MAX_PWM)));
+  return SetPwm(channel, 0, off_time);
 }
 
 template <typename I2cType>
-bool pca9685::PCA9685<I2cType>::SetAllPwm(uint16_t on, uint16_t off) {
+bool pca9685::PCA9685<I2cType>::SetAllPwm(uint16_t on_time, uint16_t off_time) {
   if (!initialized_) {
     last_error_ = Error::NotInitialized;
     return false;
   }
-  if (on > MAX_PWM || off > MAX_PWM) {
+  if (on_time > MAX_PWM || off_time > MAX_PWM) {
     last_error_ = Error::OutOfRange;
     return false;
   }
-  uint8_t data[4] = {static_cast<uint8_t>(on & 0xFF), static_cast<uint8_t>((on >> 8) & 0x0F),
-                     static_cast<uint8_t>(off & 0xFF), static_cast<uint8_t>((off >> 8) & 0x0F)};
-  if (!writeRegBlock(ALL_LED_ON_L, data, 4)) {
+  ::std::array<uint8_t, 4> data = {
+      static_cast<uint8_t>(on_time & 0xFF), static_cast<uint8_t>((on_time >> 8) & 0x0F),
+      static_cast<uint8_t>(off_time & 0xFF), static_cast<uint8_t>((off_time >> 8) & 0x0F)};
+  if (!writeRegBlock(static_cast<uint8_t>(Register::ALL_LED_ON_L), data.data(), 4)) {
     last_error_ = Error::I2cWrite;
     return false;
   }
@@ -133,7 +136,7 @@ bool pca9685::PCA9685<I2cType>::GetPrescale(uint8_t& prescale) {
     last_error_ = Error::NotInitialized;
     return false;
   }
-  if (!readReg(PRE_SCALE, prescale)) {
+  if (!readReg(static_cast<uint8_t>(Register::PRE_SCALE), prescale)) {
     last_error_ = Error::I2cRead;
     return false;
   }
@@ -163,12 +166,11 @@ bool pca9685::PCA9685<I2cType>::readRegBlock(uint8_t reg, uint8_t* data, size_t 
 
 template <typename I2cType>
 uint8_t pca9685::PCA9685<I2cType>::calcPrescale(float freq_hz) const {
-  float prescaleval = (OSC_FREQ / (4096.0f * freq_hz)) - 1.0f;
-  if (prescaleval < 3.0f)
-    prescaleval = 3.0f;
-  if (prescaleval > 255.0f)
-    prescaleval = 255.0f;
-  return static_cast<uint8_t>(prescaleval + 0.5f);
+  constexpr float OSC_FREQ_FLOAT = 25000000.0F; // 25 MHz oscillator frequency
+  float prescaleval = (OSC_FREQ_FLOAT / (4096.0F * freq_hz)) - 1.0F;
+  prescaleval = ::std::max(prescaleval, 3.0F);
+  prescaleval = ::std::min(prescaleval, 255.0F);
+  return static_cast<uint8_t>(lroundf(prescaleval));
 }
 
 // Note: Namespace is closed in pca9685.hpp, not here

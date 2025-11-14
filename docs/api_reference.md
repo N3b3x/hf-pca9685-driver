@@ -30,8 +30,8 @@ The `PCA9685` class provides a robust, hardware-agnostic interface to the PCA968
 ```cpp
 #include "pca9685.hpp"
 // ...
-MyI2cBus i2c;
-pca9685::PCA9685<MyI2cBus> pwm(&i2c, 0x40);
+MyI2cInterface i2c;
+pca9685::PCA9685<MyI2cInterface> pwm(&i2c, 0x40);
 if (!pwm.Reset()) { /* handle error */ }
 pwm.SetPwmFreq(50.0f); // 50 Hz for servos
 pwm.SetPwm(0, 0, 2048); // 50% duty on channel 0
@@ -54,7 +54,7 @@ Most methods return `true` on success, `false` on failure. Use `GetLastError()` 
 
 ## Integration Tips
 
-- Implement the `I2cBus` interface for your platform (see [Examples](../examples/README.md)).
+- Implement the `I2cInterface` interface for your platform (see [Examples](../examples/README.md)).
 - Call `Reset()` before using other methods.
 - Use `SetPwmFreq()` before setting channel outputs.
 - For multi-chip setups, configure unique I2C addresses.
