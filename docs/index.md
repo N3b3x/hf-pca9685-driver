@@ -1,75 +1,61 @@
-# PCA9685 Driver Documentation Index
+---
+layout: default
+title: "📚 Documentation"
+description: "Complete documentation for the HardFOC PCA9685 Driver"
+nav_order: 2
+parent: "HardFOC PCA9685 Driver"
+permalink: /docs/
+has_children: true
+---
 
-Welcome to the documentation for the hardware-agnostic PCA9685 PWM controller driver!
+# HF-PCA9685 Documentation
+
+Welcome! This directory contains step-by-step guides for installing, building, and using the **HF-PCA9685** library.
+
+## 📚 Documentation Structure
+
+### **Getting Started**
+
+1. **[🛠️ Installation](installation.md)** – Prerequisites and how to obtain the source
+2. **[⚡ Quick Start](quickstart.md)** – Minimal working example to get you running
+3. **[🔌 Hardware Setup](hardware_setup.md)** – Wiring diagrams and pin connections
+
+### **Integration**
+
+4. **[🔧 Platform Integration](platform_integration.md)** – Implement the CRTP bus interface for your platform
+5. **[⚙️ Configuration](configuration.md)** – Configuration options and settings
+
+### **Reference**
+
+6. **[📖 API Reference](api_reference.md)** – Complete API documentation
+7. **[💡 Examples](examples.md)** – Detailed example walkthroughs
+
+### **Troubleshooting**
+
+8. **[🐛 Troubleshooting](troubleshooting.md)** – Common issues and solutions
 
 ---
 
-## 📚 Documentation Navigation
+## 🚀 Quick Start Path
 
-- [Chip Overview](#chip-overview)
-- [API Reference](api_reference.md)
-- [Configuration Guide](configuration.md)
-- [Contributing](contributing.md)
-- [Examples](../examples/README.md)
+**New to PCA9685?** Follow this recommended path:
 
----
-
-## 🧩 Chip Overview
-
-The **PCA9685** is a 16-channel, 12-bit PWM controller with I2C interface, ideal for driving LEDs, servos, and more. It offloads PWM generation from your MCU, supports configurable frequency, and can daisy-chain multiple chips for up to 992 outputs.
-
-**Key Features:**
-- 16 independent PWM channels (12-bit resolution)
-- I2C interface (up to 1 MHz)
-- Configurable frequency (24 Hz – 1526 Hz)
-- Output enable, sleep, and all-call addressing
-- Open-drain or totem-pole outputs
+1. Start with **[Installation](installation.md)** to prepare your environment
+2. Follow **[Hardware Setup](hardware_setup.md)** to wire your hardware
+3. Read **[Quick Start](quickstart.md)** for a minimal working example
+4. Check **[Platform Integration](platform_integration.md)** to implement the interface
+5. Explore **[Examples](examples.md)** for more advanced usage
 
 ---
 
-## 🚦 Quick Start Flow
+## 💡 Need Help?
 
-```
-+---------------------+
-|  Read Chip Overview |
-+----------+----------+
-           |
-           v
-+----------+----------+
-|  Check API Reference|
-+----------+----------+
-           |
-           v
-+----------+----------+
-|Review Config Guide  |
-+----------+----------+
-           |
-           v
-+----------+----------+
-|   Run Examples      |
-+----------+----------+
-           |
-           v
-+----------+----------+
-|Integrate in Project |
-+----------+----------+
-           |
-           v
-+----------+----------+
-|Contribute Improvements|
-+---------------------+
-```
+- **🐛 Found a bug?** Check the [Troubleshooting](troubleshooting.md) guide
+- **❓ Have questions?** Review the [API Reference](api_reference.md)
+- **📝 Want to contribute?** See the contributing guidelines in the main README
 
 ---
 
-## 🔗 Quick Links
+**Navigation**
+➡️ [Installation](installation.md)
 
-- [API Reference](api_reference.md) →
-- [Configuration Guide](configuration.md) →
-- [Contributing](contributing.md) →
-- [Examples](../examples/README.md) →
-
----
-
-## What’s Next?
-- [API Reference](api_reference.md) 
