@@ -66,18 +66,16 @@ idf_component_register(
 # =============================================================================
 # Compiler Configuration
 # =============================================================================
-# Set C++ standard
-target_compile_features(${COMPONENT_LIB} PRIVATE cxx_std_17)
+# Set C++ standard (use INTERFACE since this may be an INTERFACE library)
+target_compile_features(${COMPONENT_LIB} INTERFACE cxx_std_17)
 
 # =============================================================================
 # Compiler Flags
 # =============================================================================
-target_compile_options(${COMPONENT_LIB} PRIVATE
-    -Wall                    # Enable all warnings
-    -Wextra                  # Enable extra warnings
-    -O2                      # Optimize for performance
-    -g                       # Include debug information
-)
+# Note: Compiler flags are typically set by the consuming component,
+#       but we can set INTERFACE properties for INTERFACE libraries
+#       For regular libraries, these would be PRIVATE, but since we have
+#       no source files, ESP-IDF creates an INTERFACE library
 
 # =============================================================================
 # Build Summary

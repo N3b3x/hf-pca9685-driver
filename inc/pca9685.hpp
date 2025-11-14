@@ -18,10 +18,15 @@
  * @version 1.0
  */
 #pragma once
+
 #include <cstddef>
 #include <cstdint>
+#include <stdio.h>   // For FILE* used by ESP-IDF headers
+#include <string.h>  // For C string functions
+#include <algorithm> // For std algorithms 
+#include <cmath>     // For math functions 
 
-namespace PCA9685 {
+namespace pca9685 {
 
 /**
  * @brief CRTP-based template interface for I2C bus operations
@@ -37,7 +42,7 @@ namespace PCA9685 {
  *
  * Example usage:
  * @code
- * class MyI2C : public PCA9685::I2cBus<MyI2C> {
+ * class MyI2C : public pca9685::I2cBus<MyI2C> {
  * public:
  *   bool write(...) { ... }
  *   bool read(...) { ... }
@@ -94,8 +99,6 @@ protected:
   ~I2cBus() = default;
 };
 
-}  // namespace PCA9685
-
 /**
  * @class PCA9685
  * @brief Driver for the PCA9685 16-channel 12-bit PWM controller.
@@ -105,7 +108,7 @@ protected:
  *
  * All I2C operations are routed through the user-supplied I2cBus interface.
  *
- * @tparam I2cType The I2C interface implementation type that inherits from PCA9685::I2cBus<I2cType>
+ * @tparam I2cType The I2C interface implementation type that inherits from pca9685::I2cBus<I2cType>
  *
  * @note The driver uses CRTP-based I2C interface for zero virtual call overhead.
  */
@@ -154,7 +157,7 @@ public:
 
   /**
    * @brief Construct a new PCA9685 driver instance.
-   * @param bus Pointer to a user-implemented I2C interface (must inherit from PCA9685::I2cBus<I2cType>).
+   * @param bus Pointer to a user-implemented I2C interface (must inherit from pca9685::I2cBus<I2cType>).
    * @param address 7-bit I2C address of the PCA9685 device (0x00 to 0x7F).
    */
   PCA9685(I2cType* bus, uint8_t address);
@@ -237,4 +240,4 @@ private:
 #include "../src/pca9685.cpp"
 #undef PCA9685_HEADER_INCLUDED
 
-}  // namespace PCA9685
+}  // namespace pca9685

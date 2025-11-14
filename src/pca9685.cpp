@@ -13,16 +13,17 @@
 #ifndef PCA9685_IMPL
 #define PCA9685_IMPL
 
+// Include standard library headers BEFORE the namespace opens
+#include <algorithm>
+#include <cmath>
+#include <string.h>  // Use C string.h for ESP-IDF compatibility (cstring has issues with ESP-IDF toolchain)
+
 // When included from header, use relative path; when compiled directly, use standard include
 #ifdef PCA9685_HEADER_INCLUDED
 #include "../inc/pca9685.hpp"
 #else
 #include "../inc/pca9685.hpp"
 #endif
-
-#include <algorithm>
-#include <cmath>
-#include <cstring>
 
 template <typename I2cType>
 PCA9685<I2cType>::PCA9685(I2cType* bus, uint8_t address)
@@ -126,7 +127,8 @@ bool PCA9685<I2cType>::setAllPwm(uint16_t on, uint16_t off) {
   return true;
 }
 
-PCA9685::Error PCA9685::getLastError() const {
+template <typename I2cType>
+typename PCA9685<I2cType>::Error PCA9685<I2cType>::getLastError() const {
   return lastError_;
 }
 
@@ -174,6 +176,6 @@ uint8_t PCA9685<I2cType>::calcPrescale(float freq_hz) const {
   return static_cast<uint8_t>(prescaleval + 0.5f);
 }
 
-}  // namespace PCA9685
+// Note: Namespace is closed in pca9685.hpp, not here
 
 #endif  // PCA9685_IMPL

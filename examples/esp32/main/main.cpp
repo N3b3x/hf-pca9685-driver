@@ -14,7 +14,7 @@
 /**
  * @brief ESP32 I2C bus implementation for PCA9685 driver.
  */
-class Esp32I2cBus : public PCA9685::I2cBus {
+class Esp32I2cBus : public pca9685::I2cBus<Esp32I2cBus> {
    public:
     bool write(uint8_t addr, const uint8_t* data, size_t len) override {
         i2c_cmd_handle_t cmd = i2c_cmd_link_create();
