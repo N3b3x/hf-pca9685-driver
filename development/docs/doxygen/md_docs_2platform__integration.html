@@ -112,7 +112,7 @@ Why CRTP Instead of Virtual Functions?</h2>
 </ul>
 <h2><a class="anchor" id="autotoc_md93"></a>
 How CRTP Works</h2>
-<div class="fragment"><div class="line"><span class="comment">// Base template class (from pca9685.hpp)</span></div>
+<div class="fragment"><div class="line"><span class="comment">// Base template class (from pca9685_i2c_interface.hpp)</span></div>
 <div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Derived&gt;</div>
 <div class="line"><span class="keyword">class </span>I2cInterface {</div>
 <div class="line"><span class="keyword">public</span>:</div>
@@ -201,38 +201,21 @@ Step 1: Create Your Implementation Class</h2>
 Step 2: Platform-Specific Examples</h2>
 <h3><a class="anchor" id="autotoc_md99"></a>
 ESP32 (ESP-IDF)</h3>
-<p><b>Location</b>: Based on <a href="../examples/esp32/main/main.cpp"><code>examples/esp32/main/main.cpp</code></a></p>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;driver/i2c.h&quot;</span></div>
+<p><b>Location</b>: See <a href="../examples/esp32/main/esp32_pca9685_bus.hpp"><code>examples/esp32/main/esp32_pca9685_bus.hpp</code></a> for a complete ESP32 implementation using ESP-IDF's I2C master driver API.</p>
+<p>For a complete working example, see <a href="../examples/esp32/main/pca9685_comprehensive_test.cpp"><code>examples/esp32/main/pca9685_comprehensive_test.cpp</code></a>.</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;driver/i2c_master.h&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;esp32_pca9685_bus.hpp&quot;</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">class </span>Esp32I2cBus : <span class="keyword">public</span> pca9685::I2cInterface&lt;Esp32I2cBus&gt; {</div>
-<div class="line"><span class="keyword">public</span>:</div>
-<div class="line">    <span class="keywordtype">bool</span> Write(uint8_t addr, uint8_t reg, <span class="keyword">const</span> uint8_t* data, <span class="keywordtype">size_t</span> len) {</div>
-<div class="line">        i2c_cmd_handle_t cmd = i2c_cmd_link_create();</div>
-<div class="line">        i2c_master_start(cmd);</div>
-<div class="line">        i2c_master_write_byte(cmd, (addr &lt;&lt; 1) | I2C_MASTER_WRITE, <span class="keyword">true</span>);</div>
-<div class="line">        i2c_master_write_byte(cmd, reg, <span class="keyword">true</span>);</div>
-<div class="line">        i2c_master_write(cmd, (uint8_t*)data, len, <span class="keyword">true</span>);</div>
-<div class="line">        i2c_master_stop(cmd);</div>
-<div class="line">        esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_0, cmd, 1000 / portTICK_PERIOD_MS);</div>
-<div class="line">        i2c_cmd_link_delete(cmd);</div>
-<div class="line">        <span class="keywordflow">return</span> ret == ESP_OK;</div>
-<div class="line">    }</div>
-<div class="line">    </div>
-<div class="line">    <span class="keywordtype">bool</span> Read(uint8_t addr, uint8_t reg, uint8_t* data, <span class="keywordtype">size_t</span> len) {</div>
-<div class="line">        i2c_cmd_handle_t cmd = i2c_cmd_link_create();</div>
-<div class="line">        i2c_master_start(cmd);</div>
-<div class="line">        i2c_master_write_byte(cmd, (addr &lt;&lt; 1) | I2C_MASTER_WRITE, <span class="keyword">true</span>);</div>
-<div class="line">        i2c_master_write_byte(cmd, reg, <span class="keyword">true</span>);</div>
-<div class="line">        i2c_master_start(cmd);</div>
-<div class="line">        i2c_master_write_byte(cmd, (addr &lt;&lt; 1) | I2C_MASTER_READ, <span class="keyword">true</span>);</div>
-<div class="line">        i2c_master_read(cmd, data, len, I2C_MASTER_LAST_NACK);</div>
-<div class="line">        i2c_master_stop(cmd);</div>
-<div class="line">        esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_0, cmd, 1000 / portTICK_PERIOD_MS);</div>
-<div class="line">        i2c_cmd_link_delete(cmd);</div>
-<div class="line">        <span class="keywordflow">return</span> ret == ESP_OK;</div>
-<div class="line">    }</div>
-<div class="line">};</div>
+<div class="line"><span class="comment">// Use the provided ESP32 bus implementation</span></div>
+<div class="line"><span class="keyword">auto</span> i2c_bus = CreateEsp32Pca9685Bus();</div>
+<div class="line">pca9685::PCA9685&lt;Esp32Pca9685Bus&gt; pwm(i2c_bus.get(), 0x40);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Initialize</span></div>
+<div class="line"><span class="keywordflow">if</span> (!pwm.Reset()) {</div>
+<div class="line">    <span class="comment">// Handle error</span></div>
+<div class="line">    <span class="keywordflow">return</span>;</div>
+<div class="line">}</div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md100"></a>
 STM32 (HAL)</h3>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;stm32f4xx_hal.h&quot;</span></div>

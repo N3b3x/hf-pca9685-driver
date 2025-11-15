@@ -15,9 +15,10 @@
   
 
     .site-nav > ul.nav-list:first-child > li > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > a,
     
-    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(1)) > a,
-    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li:not(:nth-child(6)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li > ul > li a {
       background-image: none;
     }
 
@@ -26,14 +27,16 @@
       background-image: none;
     }
 
-    .site-nav > ul.nav-list:first-child > li:nth-child(1) > ul > li:nth-child(1) > a {
+    .site-nav > ul.nav-list:first-child > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(6) > a {
       font-weight: 600;
       text-decoration: none;
     }.site-nav > ul.nav-list:first-child > li:nth-child(1) > button svg,
-    .site-nav > ul.nav-list:first-child > li:nth-child(1) > ul > li:nth-child(1) > button svg {
+    .site-nav > ul.nav-list:first-child > li:nth-child(1) > ul > li:nth-child(1) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(6) > button svg {
       transform: rotate(-90deg);
     }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(1) > ul.nav-list,
-    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(1) > ul.nav-list > li.nav-list-item:nth-child(1) > ul.nav-list {
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(1) > ul.nav-list > li.nav-list-item:nth-child(1) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(1) > ul.nav-list > li.nav-list-item:nth-child(1) > ul.nav-list > li.nav-list-item:nth-child(6) > ul.nav-list {
       display: block;
     }
   </style>
@@ -53,21 +56,21 @@
 
 
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>📚 Documentation | HardFOC PCA9685 Driver - development</title>
+<title>📖 API Reference | HardFOC PCA9685 Driver - development</title>
 <meta name="generator" content="Jekyll v3.10.0" />
-<meta property="og:title" content="📚 Documentation" />
+<meta property="og:title" content="📖 API Reference" />
 <meta name="author" content="N3b3x" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="Complete documentation for the HardFOC PCA9685 Driver" />
-<meta property="og:description" content="Complete documentation for the HardFOC PCA9685 Driver" />
-<link rel="canonical" href="https://n3b3x.github.io/hf-pca9685-driver/development/docs/" />
-<meta property="og:url" content="https://n3b3x.github.io/hf-pca9685-driver/development/docs/" />
+<meta name="description" content="Complete API reference for the PCA9685 driver" />
+<meta property="og:description" content="Complete API reference for the PCA9685 driver" />
+<link rel="canonical" href="https://n3b3x.github.io/hf-pca9685-driver/development/docs/api_reference/" />
+<meta property="og:url" content="https://n3b3x.github.io/hf-pca9685-driver/development/docs/api_reference/" />
 <meta property="og:site_name" content="HardFOC PCA9685 Driver - development" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="📚 Documentation" />
+<meta property="twitter:title" content="📖 API Reference" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"N3b3x","url":"https://github.com/n3b3x"},"description":"Complete documentation for the HardFOC PCA9685 Driver","headline":"📚 Documentation","url":"https://n3b3x.github.io/hf-pca9685-driver/development/docs/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"N3b3x","url":"https://github.com/n3b3x"},"description":"Complete API reference for the PCA9685 driver","headline":"📖 API Reference","url":"https://n3b3x.github.io/hf-pca9685-driver/development/docs/api_reference/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -250,7 +253,8 @@
       <nav aria-label="Breadcrumb" class="breadcrumb-nav">
   <ol class="breadcrumb-nav-list">
     <li class="breadcrumb-nav-list-item"><a href="/hf-pca9685-driver/development/">HardFOC PCA9685 Driver</a></li>
-    <li class="breadcrumb-nav-list-item"><span>📚 Documentation</span></li>
+    <li class="breadcrumb-nav-list-item"><a href="/hf-pca9685-driver/development/docs/">📚 Documentation</a></li>
+    <li class="breadcrumb-nav-list-item"><span>📖 API Reference</span></li>
   </ol>
 </nav>
 
@@ -258,153 +262,267 @@
       <div id="main-content" class="main-content">
         <main>
           
-            <h1 id="hf-pca9685-documentation">
+            <h1 id="api-reference">
   
   
-    <a href="#hf-pca9685-documentation" class="anchor-heading" aria-labelledby="hf-pca9685-documentation"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> HF-PCA9685 Documentation
+    <a href="#api-reference" class="anchor-heading" aria-labelledby="api-reference"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> API Reference
   
   
 </h1>
     
 
-<p>Welcome! This directory contains step-by-step guides for installing, building, and using the <strong>HF-PCA9685</strong> library.</p>
-<h2 id="-documentation-structure">
+<p>Complete reference documentation for all public methods and types in the PCA9685 driver.</p>
+<h2 id="source-code">
   
   
-    <a href="#-documentation-structure" class="anchor-heading" aria-labelledby="-documentation-structure"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📚 Documentation Structure
-  
-  
-</h2>
-    
-<h3 id="getting-started">
-  
-  
-    <a href="#getting-started" class="anchor-heading" aria-labelledby="getting-started"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Getting Started</strong>
-  
-  
-</h3>
-    
-
-<ol>
-  <li><strong><a href="/hf-pca9685-driver/development/docs/installation/">🛠️ Installation</a></strong> – Prerequisites and how to obtain the source</li>
-  <li><strong><a href="/hf-pca9685-driver/development/docs/quickstart/">⚡ Quick Start</a></strong> – Minimal working example to get you running</li>
-  <li><strong><a href="/hf-pca9685-driver/development/docs/hardware_setup/">🔌 Hardware Setup</a></strong> – Wiring diagrams and pin connections</li>
-</ol>
-<h3 id="integration">
-  
-  
-    <a href="#integration" class="anchor-heading" aria-labelledby="integration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Integration</strong>
-  
-  
-</h3>
-    
-
-<ol>
-  <li><strong><a href="/hf-pca9685-driver/development/docs/platform_integration/">🔧 Platform Integration</a></strong> – Implement the CRTP bus interface for your platform</li>
-  <li><strong><a href="/hf-pca9685-driver/development/docs/configuration/">⚙️ Configuration</a></strong> – Configuration options and settings</li>
-</ol>
-<h3 id="reference">
-  
-  
-    <a href="#reference" class="anchor-heading" aria-labelledby="reference"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Reference</strong>
-  
-  
-</h3>
-    
-
-<ol>
-  <li><strong><a href="/hf-pca9685-driver/development/docs/api_reference/">📖 API Reference</a></strong> – Complete API documentation</li>
-  <li><strong><a href="/hf-pca9685-driver/development/docs/examples/">💡 Examples</a></strong> – Detailed example walkthroughs</li>
-</ol>
-<h3 id="troubleshooting">
-  
-  
-    <a href="#troubleshooting" class="anchor-heading" aria-labelledby="troubleshooting"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Troubleshooting</strong>
-  
-  
-</h3>
-    
-
-<ol>
-  <li><strong><a href="/hf-pca9685-driver/development/docs/troubleshooting/">🐛 Troubleshooting</a></strong> – Common issues and solutions</li>
-</ol><hr />
-<h2 id="-quick-start-path">
-  
-  
-    <a href="#-quick-start-path" class="anchor-heading" aria-labelledby="-quick-start-path"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🚀 Quick Start Path
-  
-  
-</h2>
-    
-
-<p><strong>New to PCA9685?</strong> Follow this recommended path:</p>
-
-<ol>
-  <li>Start with <strong><a href="/hf-pca9685-driver/development/docs/installation/">Installation</a></strong> to prepare your environment</li>
-  <li>Follow <strong><a href="/hf-pca9685-driver/development/docs/hardware_setup/">Hardware Setup</a></strong> to wire your hardware</li>
-  <li>Read <strong><a href="/hf-pca9685-driver/development/docs/quickstart/">Quick Start</a></strong> for a minimal working example</li>
-  <li>Check <strong><a href="/hf-pca9685-driver/development/docs/platform_integration/">Platform Integration</a></strong> to implement the interface</li>
-  <li>Explore <strong><a href="/hf-pca9685-driver/development/docs/examples/">Examples</a></strong> for more advanced usage</li>
-</ol><hr />
-<h2 id="-need-help">
-  
-  
-    <a href="#-need-help" class="anchor-heading" aria-labelledby="-need-help"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 💡 Need Help?
+    <a href="#source-code" class="anchor-heading" aria-labelledby="source-code"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Source Code
   
   
 </h2>
     
 
 <ul>
-  <li><strong>🐛 Found a bug?</strong> Check the <a href="/hf-pca9685-driver/development/docs/troubleshooting/">Troubleshooting</a> guide</li>
-  <li><strong>❓ Have questions?</strong> Review the <a href="/hf-pca9685-driver/development/docs/api_reference/">API Reference</a></li>
-  <li><strong>📝 Want to contribute?</strong> See the contributing guidelines in the main README</li>
-</ul><hr />
+  <li><strong>Main Header</strong>: <a href="../inc/pca9685.hpp"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp</code></a></li>
+  <li><strong>Implementation</strong>: <a href="../src/pca9685.cpp"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp</code></a></li>
+</ul>
+<h2 id="core-class">
+  
+  
+    <a href="#core-class" class="anchor-heading" aria-labelledby="core-class"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Core Class
+  
+  
+</h2>
+    
+<h3 id="pca9685i2ctype">
+  
+  
+    <a href="#pca9685i2ctype" class="anchor-heading" aria-labelledby="pca9685i2ctype"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">PCA9685&lt;I2cType&gt;</code>
+  
+  
+</h3>
+    
+
+<p>Main driver class for interfacing with the PCA9685 PWM controller.</p>
+
+<p><strong>Template Parameter</strong>: <code class="language-plaintext highlighter-rouge">I2cType</code> - Your I2C interface implementation (must inherit from <code class="language-plaintext highlighter-rouge">pca9685::I2cInterface&lt;I2cType&gt;</code>)</p>
+
+<p><strong>Location</strong>: <a href="../inc/pca9685.hpp#L121"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L121</code></a></p>
+
+<p><strong>Constructor:</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">PCA9685</span><span class="p">(</span><span class="n">I2cType</span><span class="o">*</span> <span class="n">bus</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">address</span><span class="p">);</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p><strong>Location</strong>: <a href="../src/pca9685.cpp#L30"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L30</code></a></p>
+<h2 id="methods">
+  
+  
+    <a href="#methods" class="anchor-heading" aria-labelledby="methods"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Methods
+  
+  
+</h2>
+    
+<h3 id="initialization">
+  
+  
+    <a href="#initialization" class="anchor-heading" aria-labelledby="initialization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Initialization
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Signature</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Reset()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool Reset()</code></td>
+      <td><a href="../src/pca9685.cpp#L34"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L34</code></a></td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="frequency-control">
+  
+  
+    <a href="#frequency-control" class="anchor-heading" aria-labelledby="frequency-control"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Frequency Control
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Signature</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetPwmFreq()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetPwmFreq(float freq_hz)</code></td>
+      <td><a href="../src/pca9685.cpp#L46"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L46</code></a></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">GetPrescale()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool GetPrescale(uint8_t &amp;prescale)</code></td>
+      <td><a href="../src/pca9685.cpp#L220"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L220</code></a></td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="pwm-control">
+  
+  
+    <a href="#pwm-control" class="anchor-heading" aria-labelledby="pwm-control"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> PWM Control
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Signature</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetPwm()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time)</code></td>
+      <td><a href="../src/pca9685.cpp#L191"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L191</code></a></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetDuty()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetDuty(uint8_t channel, float duty)</code></td>
+      <td><a href="../src/pca9685.cpp#L199"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L199</code></a></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetAllPwm()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetAllPwm(uint16_t on_time, uint16_t off_time)</code></td>
+      <td><a href="../src/pca9685.cpp#L207"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L207</code></a></td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="utility">
+  
+  
+    <a href="#utility" class="anchor-heading" aria-labelledby="utility"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Utility
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Signature</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">GetLastError()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Error GetLastError() const</code></td>
+      <td><a href="../inc/pca9685.hpp#L213"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L213</code></a></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetOutputEnable()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">void SetOutputEnable(bool enabled)</code></td>
+      <td><a href="../inc/pca9685.hpp#L227"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L227</code></a></td>
+    </tr>
+  </tbody>
+</table></div>
+<h2 id="types">
+  
+  
+    <a href="#types" class="anchor-heading" aria-labelledby="types"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Types
+  
+  
+</h2>
+    
+<h3 id="enumerations">
+  
+  
+    <a href="#enumerations" class="anchor-heading" aria-labelledby="enumerations"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Enumerations
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Values</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Error</code></td>
+      <td><code class="language-plaintext highlighter-rouge">None</code>, <code class="language-plaintext highlighter-rouge">I2cWrite</code>, <code class="language-plaintext highlighter-rouge">I2cRead</code>, <code class="language-plaintext highlighter-rouge">InvalidParam</code>, <code class="language-plaintext highlighter-rouge">DeviceNotFound</code>, <code class="language-plaintext highlighter-rouge">NotInitialized</code>, <code class="language-plaintext highlighter-rouge">OutOfRange</code></td>
+      <td><a href="../inc/pca9685.hpp#L126"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L126</code></a></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Register</code></td>
+      <td><code class="language-plaintext highlighter-rouge">MODE1</code>, <code class="language-plaintext highlighter-rouge">MODE2</code>, <code class="language-plaintext highlighter-rouge">LED0_ON_L</code>, <code class="language-plaintext highlighter-rouge">LED0_OFF_L</code>, <code class="language-plaintext highlighter-rouge">PRE_SCALE</code>, etc.</td>
+      <td><a href="../inc/pca9685.hpp#L139"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L139</code></a></td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="constants">
+  
+  
+    <a href="#constants" class="anchor-heading" aria-labelledby="constants"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Constants
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Constant</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">MAX_CHANNELS</code></td>
+      <td><code class="language-plaintext highlighter-rouge">16</code></td>
+      <td>Maximum number of PWM channels</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">MAX_PWM</code></td>
+      <td><code class="language-plaintext highlighter-rouge">4095</code></td>
+      <td>Maximum PWM value</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">OSC_FREQ</code></td>
+      <td><code class="language-plaintext highlighter-rouge">25000000</code></td>
+      <td>Internal oscillator frequency (25 MHz)</td>
+    </tr>
+  </tbody>
+</table></div><hr />
 
 <p><strong>Navigation</strong>
-➡️ <a href="/hf-pca9685-driver/development/docs/installation/">Installation</a></p>
+⬅️ <a href="/hf-pca9685-driver/development/docs/configuration/">Configuration</a> | <a href="/hf-pca9685-driver/development/docs/examples/">Next: Examples ➡️</a> | <a href="/hf-pca9685-driver/development/docs/">Back to Index</a></p>
 
           
 
           
-            <hr>
-<h2 class="text-delta">Table of contents</h2>
-
-<ul>
-  
-  <li>
-    <a href="/hf-pca9685-driver/development/docs/installation/">🛠️ Installation</a>
-  </li>
-  
-  <li>
-    <a href="/hf-pca9685-driver/development/docs/quickstart/">⚡ Quick Start</a>
-  </li>
-  
-  <li>
-    <a href="/hf-pca9685-driver/development/docs/hardware_setup/">🔌 Hardware Setup</a>
-  </li>
-  
-  <li>
-    <a href="/hf-pca9685-driver/development/docs/platform_integration/">🔧 Platform Integration</a>
-  </li>
-  
-  <li>
-    <a href="/hf-pca9685-driver/development/docs/configuration/">⚙️ Configuration</a>
-  </li>
-  
-  <li>
-    <a href="/hf-pca9685-driver/development/docs/api_reference/">📖 API Reference</a>
-  </li>
-  
-  <li>
-    <a href="/hf-pca9685-driver/development/docs/examples/">💡 Examples</a>
-  </li>
-  
-  <li>
-    <a href="/hf-pca9685-driver/development/docs/troubleshooting/">🐛 Troubleshooting</a>
-  </li>
-  
-</ul>
+            
           
         </main>
         
