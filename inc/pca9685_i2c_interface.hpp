@@ -1,0 +1,96 @@
+/**
+ * @file pca9685_i2c_interface.hpp
+ * @brief CRTP-based I2C interface for PCA9685 driver
+ *
+ * This header defines the hardware-agnostic I2C communication interface
+ * using the CRTP (Curiously Recurring Template Pattern) for compile-time
+ * polymorphism. Platform-specific implementations should inherit from this
+ * template with themselves as the template parameter.
+ *
+ * @author Nebiyu Tadesse
+ * @date 2025
+ * @version 1.0
+ */
+#ifndef PCA9685_I2C_INTERFACE_HPP
+#define PCA9685_I2C_INTERFACE_HPP
+
+#include <cstddef>
+#include <cstdint>
+
+namespace pca9685 {
+
+/**
+ * @brief CRTP-based template interface for I2C bus operations
+ *
+ * This template class provides a hardware-agnostic interface for I2C
+ * communication using the CRTP pattern. Platform-specific implementations
+ * should inherit from this template with themselves as the template parameter.
+ *
+ * Benefits of CRTP:
+ * - Compile-time polymorphism (no virtual function overhead)
+ * - Static dispatch instead of dynamic dispatch
+ * - Better optimization opportunities for the compiler
+ *
+ * Example usage:
+ * @code
+ * class MyI2C : public pca9685::I2cInterface<MyI2C> {
+ * public:
+ *   bool Write(...) { ... }
+ *   bool Read(...) { ... }
+ * };
+ * @endcode
+ *
+ * @tparam Derived The derived class type (CRTP pattern)
+ */
+template <typename Derived> class I2cInterface {
+public:
+  /**
+   * @brief Write bytes to a device register.
+   * @param addr 7-bit I2C address of the target device.
+   * @param reg Register address to write to.
+   * @param data Pointer to the data buffer containing bytes to send.
+   * @param len Number of bytes to write from the buffer.
+   * @return true if the device acknowledges the transfer; false on NACK or
+   * error.
+   */
+  bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) {
+    return static_cast<Derived *>(this)->Write(addr, reg, data, len);
+  }
+
+  /**
+   * @brief Read bytes from a device register.
+   * @param addr 7-bit I2C address of the target device.
+   * @param reg Register address to read from.
+   * @param data Pointer to the buffer to store received data.
+   * @param len Number of bytes to read into the buffer.
+   * @return true if the read succeeds; false on NACK or error.
+   */
+  bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) {
+    return static_cast<Derived *>(this)->Read(addr, reg, data, len);
+  }
+
+  // Prevent copying
+  I2cInterface(const I2cInterface &) = delete;
+  I2cInterface &operator=(const I2cInterface &) = delete;
+
+  // Allow moving
+  I2cInterface(I2cInterface &&) = default;
+  I2cInterface &operator=(I2cInterface &&) = default;
+
+protected:
+  /**
+   * @brief Protected constructor to prevent direct instantiation
+   */
+  I2cInterface() = default;
+
+  /**
+   * @brief Protected destructor
+   * @note Derived classes can have public destructors
+   */
+  ~I2cInterface() = default;
+};
+
+} // namespace pca9685
+
+#endif // PCA9685_I2C_INTERFACE_HPP
+

@@ -40,7 +40,7 @@ The PCA9685 driver uses **CRTP** (Curiously Recurring Template Pattern) for hard
 ### How CRTP Works
 
 ```cpp
-// Base template class (from pca9685.hpp)
+// Base template class (from pca9685_i2c_interface.hpp)
 template <typename Derived>
 class I2cInterface {
 public:
@@ -134,40 +134,24 @@ public:
 
 #### ESP32 (ESP-IDF)
 
-**Location**: Based on [`examples/esp32/main/main.cpp`](../examples/esp32/main/main.cpp)
+**Location**: See [`examples/esp32/main/esp32_pca9685_bus.hpp`](../examples/esp32/main/esp32_pca9685_bus.hpp) for a complete ESP32 implementation using ESP-IDF's I2C master driver API.
+
+For a complete working example, see [`examples/esp32/main/pca9685_comprehensive_test.cpp`](../examples/esp32/main/pca9685_comprehensive_test.cpp).
 
 ```cpp
-#include "driver/i2c.h"
+#include "driver/i2c_master.h"
 #include "pca9685.hpp"
+#include "esp32_pca9685_bus.hpp"
 
-class Esp32I2cBus : public pca9685::I2cInterface<Esp32I2cBus> {
-public:
-    bool Write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) {
-        i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-        i2c_master_start(cmd);
-        i2c_master_write_byte(cmd, (addr << 1) | I2C_MASTER_WRITE, true);
-        i2c_master_write_byte(cmd, reg, true);
-        i2c_master_write(cmd, (uint8_t*)data, len, true);
-        i2c_master_stop(cmd);
-        esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_0, cmd, 1000 / portTICK_PERIOD_MS);
-        i2c_cmd_link_delete(cmd);
-        return ret == ESP_OK;
-    }
-    
-    bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) {
-        i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-        i2c_master_start(cmd);
-        i2c_master_write_byte(cmd, (addr << 1) | I2C_MASTER_WRITE, true);
-        i2c_master_write_byte(cmd, reg, true);
-        i2c_master_start(cmd);
-        i2c_master_write_byte(cmd, (addr << 1) | I2C_MASTER_READ, true);
-        i2c_master_read(cmd, data, len, I2C_MASTER_LAST_NACK);
-        i2c_master_stop(cmd);
-        esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_0, cmd, 1000 / portTICK_PERIOD_MS);
-        i2c_cmd_link_delete(cmd);
-        return ret == ESP_OK;
-    }
-};
+// Use the provided ESP32 bus implementation
+auto i2c_bus = CreateEsp32Pca9685Bus();
+pca9685::PCA9685<Esp32Pca9685Bus> pwm(i2c_bus.get(), 0x40);
+
+// Initialize
+if (!pwm.Reset()) {
+    // Handle error
+    return;
+}
 ```
 
 #### STM32 (HAL)
