@@ -1,5 +1,5 @@
-warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1765, file /tmp/doxyfile.YnobIY
-warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.YnobIY' has become obsolete.
+warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1765, file /tmp/doxyfile.lEe2hm
+warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.lEe2hm' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.cpp:30: warning: documented symbol 'pca9685::PCA9685::PCA9685' was not declared or defined.
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.cpp:34: warning: documented symbol 'bool pca9685::PCA9685::Reset' was not declared or defined.
@@ -110,15 +110,15 @@ Generating docs for file docs/quickstart.md...
 Generating docs for file docs/troubleshooting.md...
 Generating docs for file README.md...
 Generating docs for file src/pca9685.cpp...
-Generating page d/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:9: warning: unable to resolve reference to '-overview' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:10: warning: unable to resolve reference to '-features' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:11: warning: unable to resolve reference to '-quick-start' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:12: warning: unable to resolve reference to '-installation' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:13: warning: unable to resolve reference to '-api-reference' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:14: warning: unable to resolve reference to '-examples' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:15: warning: unable to resolve reference to '-documentation' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:16: warning: unable to resolve reference to '-contributing' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:17: warning: unable to resolve reference to '-license' for \ref command
+Generating page d/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:11: warning: unable to resolve reference to '-overview' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:12: warning: unable to resolve reference to '-features' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:13: warning: unable to resolve reference to '-quick-start' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:14: warning: unable to resolve reference to '-installation' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:15: warning: unable to resolve reference to '-api-reference' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:16: warning: unable to resolve reference to '-examples' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:17: warning: unable to resolve reference to '-documentation' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:18: warning: unable to resolve reference to '-contributing' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:19: warning: unable to resolve reference to '-license' for \ref command
 ocumentation...
 Generating docs for page md_docs_2api__reference...
 Generating docs for page md_docs_2configuration...
@@ -157,12 +157,7 @@ finalizing index lists...
 writing tag file...
 Running plantuml with JAVA...
 Running dot...
-Generating dot graphs using 5 parallel threads...
-Running dot for graph 1/2
-Running dot for graph 2/2
-Patching output file 1/3
-Patching output file 2/3
-Patching output file 3/3
+Patching output file 1/1
 type lookup cache used 1/65536 hits=0 misses=1
 symbol lookup cache used 1/65536 hits=0 misses=1
 finished...
