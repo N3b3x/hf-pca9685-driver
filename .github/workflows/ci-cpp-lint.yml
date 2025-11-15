@@ -14,7 +14,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: ci-cpp-lint-${{{{ github.ref }}}}
+  group: ci-cpp-lint-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
