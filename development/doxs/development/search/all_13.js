@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['parameter_0',['Parameter',['../md_docs_2platform__integration.html#autotoc_md106',1,'✅ Correct Template Parameter'],['../md_docs_2platform__integration.html#autotoc_md105',1,'❌ Don&apos;t Forget the Template Parameter']]],
+  ['pattern_1',['Understanding CRTP (Curiously Recurring Template Pattern)',['../md_docs_2platform__integration.html#autotoc_md87',1,'']]],
+  ['pca9685_2',['Single PCA9685',['../md_docs_2hardware__setup.html#autotoc_md63',1,'']]],
+  ['pca9685_20devices_3',['Q: Can I use multiple PCA9685 devices?',['../md_docs_2troubleshooting.html#autotoc_md135',1,'']]],
+  ['pca9685_20devices_20daisy_20chain_4',['Multiple PCA9685 Devices (Daisy Chain)',['../md_docs_2hardware__setup.html#autotoc_md64',1,'']]],
+  ['pca9685_20documentation_5',['HF-PCA9685 Documentation',['../md_docs_2index.html',1,'']]],
+  ['pca9685_20driver_6',['HF-PCA9685 Driver',['../index.html',1,'']]],
+  ['pca9685_20i2ctype_20tt_7',['&lt;tt&gt;PCA9685\&lt;I2cType\&gt;&lt;/tt&gt;',['../md_docs_2api__reference.html#autotoc_md14',1,'']]],
+  ['pca9685_2ecpp_8',['pca9685.cpp',['../pca9685_8cpp.html',1,'']]],
+  ['pca9685_5fimpl_9',['PCA9685_IMPL',['../pca9685_8cpp.html#a65030673b1f4c161d7148fd2f5591a7a',1,'pca9685.cpp']]],
+  ['performance_20comparison_10',['Performance Comparison',['../md_docs_2platform__integration.html#autotoc_md94',1,'']]],
+  ['physical_20layout_20recommendations_11',['Physical Layout Recommendations',['../md_docs_2hardware__setup.html#autotoc_md61',1,'']]],
+  ['pin_12',['Pin',['../md_docs_2configuration.html#autotoc_md34',1,'Output Enable (OE) Pin'],['../md_docs_2hardware__setup.html#autotoc_md65',1,'Output Enable (OE) Pin'],['../md_docs_2troubleshooting.html#autotoc_md137',1,'Q: How do I control the OE (Output Enable) pin?']]],
+  ['pin_20connections_13',['Pin Connections',['../md_docs_2hardware__setup.html#autotoc_md53',1,'']]],
+  ['pin_20descriptions_14',['Pin Descriptions',['../md_docs_2hardware__setup.html#autotoc_md55',1,'']]],
+  ['pitfalls_15',['Common Pitfalls',['../md_docs_2platform__integration.html#autotoc_md102',1,'']]],
+  ['platform_20integration_20guide_16',['Platform Integration Guide',['../md_docs_2platform__integration.html',1,'']]],
+  ['platform_20specific_20examples_17',['Step 2: Platform-Specific Examples',['../md_docs_2platform__integration.html#autotoc_md98',1,'']]],
+  ['platform_5fintegration_2emd_18',['platform_integration.md',['../platform__integration_8md.html',1,'']]],
+  ['polymorphism_20strong_19',['2. &lt;strong&gt;Compile-Time Polymorphism&lt;/strong&gt;',['../md_docs_2platform__integration.html#autotoc_md90',1,'']]],
+  ['power_20requirements_20',['Power Requirements',['../md_docs_2hardware__setup.html#autotoc_md57',1,'']]],
+  ['prerequisites_21',['Prerequisites',['../md_docs_2installation.html#autotoc_md75',1,'Prerequisites'],['../md_docs_2quickstart.html#autotoc_md111',1,'Prerequisites']]],
+  ['pwm_20control_22',['PWM Control',['../md_docs_2api__reference.html#autotoc_md18',1,'']]],
+  ['pwm_20frequency_23',['Step 5: Set PWM Frequency',['../md_docs_2quickstart.html#autotoc_md118',1,'']]],
+  ['pwm_20frequency_20configuration_24',['PWM Frequency Configuration',['../md_docs_2configuration.html#autotoc_md25',1,'']]]
+];

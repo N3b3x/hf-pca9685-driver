@@ -1,0 +1,8 @@
+name: hf-pca9685-driver
+version: "1.0.0"
+description: Hardware-agnostic PCA9685 driver component
+maintainers:
+  - "HardFOC"
+targets:
+  - esp32
+  - esp32c6
