@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['t_20forget_20the_20template_20parameter_0',['❌ Don&apos;t Forget the Template Parameter',['../md_docs_2platform__integration.html#autotoc_md105',1,'']]],
+  ['t_20use_20virtual_20functions_1',['❌ Don&apos;t Use Virtual Functions',['../md_docs_2platform__integration.html#autotoc_md103',1,'']]],
+  ['table_20of_20contents_2',['📚 Table of Contents',['../index.html#autotoc_md1',1,'']]],
+  ['template_20parameter_3',['Template Parameter',['../md_docs_2platform__integration.html#autotoc_md106',1,'✅ Correct Template Parameter'],['../md_docs_2platform__integration.html#autotoc_md105',1,'❌ Don&apos;t Forget the Template Parameter']]],
+  ['template_20pattern_4',['Understanding CRTP (Curiously Recurring Template Pattern)',['../md_docs_2platform__integration.html#autotoc_md87',1,'']]],
+  ['testing_20your_20implementation_5',['Testing Your Implementation',['../md_docs_2platform__integration.html#autotoc_md108',1,'']]],
+  ['tests_6',['Running Unit Tests',['../md_docs_2installation.html#autotoc_md83',1,'']]],
+  ['the_20difference_20between_20setpwm_20and_20setduty_7',['Q: What&apos;s the difference between SetPwm() and SetDuty()?',['../md_docs_2troubleshooting.html#autotoc_md134',1,'']]],
+  ['the_20header_8',['Step 1: Include the Header',['../md_docs_2quickstart.html#autotoc_md114',1,'']]],
+  ['the_20i2c_20interface_9',['Step 2: Implement the I2C Interface',['../md_docs_2quickstart.html#autotoc_md115',1,'']]],
+  ['the_20library_10',['Building the Library',['../md_docs_2installation.html#autotoc_md79',1,'']]],
+  ['the_20oe_20output_20enable_20pin_11',['Q: How do I control the OE (Output Enable) pin?',['../md_docs_2troubleshooting.html#autotoc_md137',1,'']]],
+  ['the_20source_12',['Obtaining the Source',['../md_docs_2installation.html#autotoc_md76',1,'']]],
+  ['the_20template_20parameter_13',['❌ Don&apos;t Forget the Template Parameter',['../md_docs_2platform__integration.html#autotoc_md105',1,'']]],
+  ['time_20polymorphism_20strong_14',['2. &lt;strong&gt;Compile-Time Polymorphism&lt;/strong&gt;',['../md_docs_2platform__integration.html#autotoc_md90',1,'']]],
+  ['to_20call_20setpwmfreq_20before_20setting_20channels_15',['Q: Why do I need to call SetPwmFreq() before setting channels?',['../md_docs_2troubleshooting.html#autotoc_md132',1,'']]],
+  ['troubleshooting_16',['Troubleshooting',['../md_docs_2troubleshooting.html',1,'Troubleshooting'],['../md_docs_2quickstart.html#autotoc_md121',1,'Troubleshooting']]],
+  ['troubleshooting_20strong_17',['&lt;strong&gt;Troubleshooting&lt;/strong&gt;',['../md_docs_2index.html#autotoc_md72',1,'']]],
+  ['troubleshooting_2emd_18',['troubleshooting.md',['../troubleshooting_8md.html',1,'']]],
+  ['tt_20pca9685_20i2ctype_20tt_19',['&lt;tt&gt;PCA9685\&lt;I2cType\&gt;&lt;/tt&gt;',['../md_docs_2api__reference.html#autotoc_md14',1,'']]],
+  ['tt_20reset_20tt_20returns_20false_20',['Error: Initialization Fails (&lt;tt&gt;Reset()&lt;/tt&gt; returns false)',['../md_docs_2troubleshooting.html#autotoc_md125',1,'']]],
+  ['type_20safety_21',['4. **Type Safety**',['../md_docs_2platform__integration.html#autotoc_md92',1,'']]],
+  ['types_22',['Types',['../md_docs_2api__reference.html#autotoc_md20',1,'']]]
+];
