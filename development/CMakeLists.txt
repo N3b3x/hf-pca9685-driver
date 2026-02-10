@@ -5,13 +5,12 @@ set(COMPONENT_NAME hf_pca9685_pwm)
 
 # Source files
 set(COMPONENT_SRCS
-    "src/Pca9685Pwm.cpp"
+    "src/pca9685.cpp"
 )
 
 # Include directories
 set(COMPONENT_INCLUDE_DIRS
     "inc"
-    "../../../internal/hf-internal-interface-wrap/inc"
 )
 
 # Create the component
