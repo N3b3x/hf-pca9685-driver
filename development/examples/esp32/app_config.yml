@@ -12,7 +12,7 @@ version: "1.0"
 metadata:
   project: "ESP32 PCA9685 Driver Examples"
   default_app: "pca9685_comprehensive_test"
-  target: "esp32c6"
+  target: "esp32s3"
   idf_versions: ["release/v5.5", "release/v5.4"]
   build_types: [["Debug", "Release"], ["Debug"]]
 

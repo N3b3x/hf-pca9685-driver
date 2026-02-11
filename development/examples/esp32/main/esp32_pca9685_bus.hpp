@@ -45,8 +45,8 @@ public:
      */
     struct I2CConfig {
         i2c_port_t port = I2C_NUM_0;           ///< I2C port number
-        gpio_num_t sda_pin = GPIO_NUM_21;       ///< SDA pin (default GPIO21)
-        gpio_num_t scl_pin = GPIO_NUM_22;       ///< SCL pin (default GPIO22)
+        gpio_num_t sda_pin = GPIO_NUM_4;       ///< SDA pin (default GPIO4, same as pcal95555/bno08x)
+        gpio_num_t scl_pin = GPIO_NUM_5;       ///< SCL pin (default GPIO5, same as pcal95555/bno08x)
         uint32_t frequency = 100000;            ///< I2C frequency in Hz (default 100kHz)
         bool pullup_enable = true;              ///< Enable internal pullups
     };
@@ -84,17 +84,16 @@ public:
         ESP_LOGI(TAG_I2C, "Initializing I2C bus on port %d (SDA:GPIO%d, SCL:GPIO%d, Freq:%lu Hz)",
                  config_.port, config_.sda_pin, config_.scl_pin, config_.frequency);
 
-        // Configure I2C master bus
-        i2c_master_bus_config_t bus_config = {
-            .i2c_port = config_.port,
-            .sda_io_num = config_.sda_pin,
-            .scl_io_num = config_.scl_pin,
-            .clk_source = I2C_CLK_SRC_DEFAULT,
-            .glitch_ignore_cnt = 7,
-            .flags = {
-                .enable_internal_pullup = config_.pullup_enable,
-            },
-        };
+        // Configure I2C master bus (same pattern as hf-pcal95555-driver)
+        i2c_master_bus_config_t bus_config = {};
+        bus_config.i2c_port = config_.port;
+        bus_config.sda_io_num = config_.sda_pin;
+        bus_config.scl_io_num = config_.scl_pin;
+        bus_config.clk_source = I2C_CLK_SRC_DEFAULT;
+        bus_config.glitch_ignore_cnt = 7;
+        bus_config.flags.enable_internal_pullup = config_.pullup_enable;
+        bus_config.intr_priority = 0;
+        bus_config.trans_queue_depth = 0;
 
         esp_err_t ret = i2c_new_master_bus(&bus_config, &bus_handle_);
         if (ret != ESP_OK) {
@@ -144,6 +143,8 @@ public:
             .dev_addr_length = I2C_ADDR_BIT_LEN_7,
             .device_address = addr,
             .scl_speed_hz = config_.frequency,
+            .scl_wait_us = 0,
+            .flags = {},
         };
 
         esp_err_t ret = i2c_master_bus_add_device(bus_handle_, &dev_config, &dev_handle);
@@ -207,6 +208,8 @@ public:
             .dev_addr_length = I2C_ADDR_BIT_LEN_7,
             .device_address = addr,
             .scl_speed_hz = config_.frequency,
+            .scl_wait_us = 0,
+            .flags = {},
         };
 
         esp_err_t ret = i2c_master_bus_add_device(bus_handle_, &dev_config, &dev_handle);
