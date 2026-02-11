@@ -176,7 +176,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
       </button><a href="/hf-pca9685-driver/development/" class="nav-list-link">HardFOC PCA9685 Driver</a><ul class="nav-list"><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="📚 Documentation submenu" aria-expanded="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-      </button><a href="/hf-pca9685-driver/development/docs/" class="nav-list-link">📚 Documentation</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/installation/" class="nav-list-link">🛠️ Installation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/quickstart/" class="nav-list-link">⚡ Quick Start</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/hardware_setup/" class="nav-list-link">🔌 Hardware Setup</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/platform_integration/" class="nav-list-link">🔧 Platform Integration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/configuration/" class="nav-list-link">⚙️ Configuration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/api_reference/" class="nav-list-link">📖 API Reference</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/examples/" class="nav-list-link">💡 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/troubleshooting/" class="nav-list-link">🐛 Troubleshooting</a></li></ul></li></ul></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/" class="nav-list-link">PCAL9555 ESP32-C6 Comprehensive Test Suite</a></li></ul>
+      </button><a href="/hf-pca9685-driver/development/docs/" class="nav-list-link">📚 Documentation</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/installation/" class="nav-list-link">🛠️ Installation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/quickstart/" class="nav-list-link">⚡ Quick Start</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/hardware_setup/" class="nav-list-link">🔌 Hardware Setup</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/platform_integration/" class="nav-list-link">🔧 Platform Integration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/configuration/" class="nav-list-link">⚙️ Configuration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/api_reference/" class="nav-list-link">📖 API Reference</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/examples/" class="nav-list-link">💡 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/troubleshooting/" class="nav-list-link">🐛 Troubleshooting</a></li></ul></li></ul></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/" class="nav-list-link">ESP32 PCA9685 Applications — Documentation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/comprehensive-test.html" class="nav-list-link">PCA9685 Comprehensive Test Suite</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/" class="nav-list-link">PCA9685 ESP32 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/servo-demo.html" class="nav-list-link">PCA9685 Hobby Servo Demo</a></li></ul>
   
 </nav>
 
@@ -815,7 +815,7 @@
     <span class="n">pwm</span><span class="p">.</span><span class="n">Reset</span><span class="p">();</span>
     <span class="n">pwm</span><span class="p">.</span><span class="n">SetPwmFreq</span><span class="p">(</span><span class="mf">1000.0</span><span class="n">f</span><span class="p">);</span>
     
-    <span class="c1">// Configure retry count for I2C operations (default is 1 retry)</span>
+    <span class="c1">// Configure retry count for I2C operations (default is 3)</span>
     <span class="n">pwm</span><span class="p">.</span><span class="n">SetRetries</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
     
     <span class="c1">// Configure output driver mode (true = totem-pole, false = open-drain)</span>
@@ -850,7 +850,7 @@
     
 
 <ul>
-  <li><strong><code class="language-plaintext highlighter-rouge">SetRetries()</code></strong>: Configures how many times I2C operations are retried on failure (default 1)</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">SetRetries()</code></strong>: Configures how many times I2C operations are retried on failure (default 3)</li>
   <li><strong><code class="language-plaintext highlighter-rouge">SetOutputDriverMode()</code></strong>: Selects totem-pole (true) or open-drain (false) output via MODE2 OUTDRV bit</li>
   <li><strong><code class="language-plaintext highlighter-rouge">SetOutputInvert()</code></strong>: Inverts output logic via MODE2 INVRT bit</li>
   <li><strong><code class="language-plaintext highlighter-rouge">SetChannelFullOn()</code> / <code class="language-plaintext highlighter-rouge">SetChannelFullOff()</code></strong>: Sets a channel fully on or off without PWM</li>
@@ -864,22 +864,74 @@
   
 </h2>
     
-<h3 id="esp32">
+<h3 id="esp32-applications">
   
   
-    <a href="#esp32" class="anchor-heading" aria-labelledby="esp32"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ESP32
+    <a href="#esp32-applications" class="anchor-heading" aria-labelledby="esp32-applications"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ESP32 Applications
   
   
 </h3>
     
 
-<p>The examples are available in the <a href="../examples/esp32/"><code class="language-plaintext highlighter-rouge">examples/esp32</code></a> directory.</p>
+<p>The ESP32 example project provides two applications, built and flashed via scripts (not raw <code class="language-plaintext highlighter-rouge">idf.py</code>):</p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Application</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>pca9685_comprehensive_test</strong></td>
+      <td>Full driver test suite: init, frequency, PWM, duty cycle, all-channel control, prescale readback, sleep/wake, output config, error handling, stress tests (12 tests total).</td>
+    </tr>
+    <tr>
+      <td><strong>pca9685_servo_demo</strong></td>
+      <td>16-channel hobby servo demo: 1000–2000 µs pulse, velocity-limited motion, synchronized animations (Wave, Breathe, Cascade, Mirror, etc.).</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<p><strong>Prerequisites</strong>: ESP-IDF (e.g. release/v5.5), target e.g. <code class="language-plaintext highlighter-rouge">esp32s3</code>. From the repo root:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
+3
+4
 </pre></td><td class="rouge-code"><pre><span class="nb">cd </span>examples/esp32
-idf.py build flash monitor
+<span class="nb">chmod</span> +x scripts/<span class="k">*</span>.sh
+./scripts/setup_repo.sh   <span class="c"># first time only</span>
+./scripts/build_app.sh list
 </pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p><strong>Build:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>./scripts/build_app.sh pca9685_comprehensive_test Debug
+<span class="c"># or</span>
+./scripts/build_app.sh pca9685_servo_demo Debug
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p><strong>Flash and monitor:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug
+<span class="c"># or</span>
+./scripts/flash_app.sh flash_monitor pca9685_servo_demo Debug
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p><strong>I2C pins</strong>: Default SDA=GPIO4, SCL=GPIO5. Override at configure time if needed:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>./scripts/build_app.sh pca9685_comprehensive_test Debug <span class="se">\</span>
+  <span class="nt">--</span> <span class="nt">-DPCA9685_EXAMPLE_I2C_SDA_GPIO</span><span class="o">=</span>8 <span class="nt">-DPCA9685_EXAMPLE_I2C_SCL_GPIO</span><span class="o">=</span>9
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p>See <a href="/hf-pca9685-driver/development/examples/esp32/">examples/esp32/README.md</a> and <a href="../examples/esp32/docs/">examples/esp32/docs/</a> for hardware setup and app details.</p>
 <h3 id="other-platforms">
   
   
@@ -889,7 +941,7 @@ idf.py build flash monitor
 </h3>
     
 
-<p>Adapt the I2C interface implementation for your platform (see <a href="/hf-pca9685-driver/development/docs/platform_integration/">Platform Integration</a>) and compile with your platform’s toolchain.</p>
+<p>Adapt the I2C interface implementation for your platform (see <a href="/hf-pca9685-driver/development/docs/platform_integration/">Platform Integration</a>) and compile with your platform’s toolchain. The ESP32 implementation in <a href="/hf-pca9685-driver/development/examples/esp32/main/esp32_pca9685_bus.hpp"><code class="language-plaintext highlighter-rouge">examples/esp32/main/esp32_pca9685_bus.hpp</code></a> uses ESP-IDF’s <code class="language-plaintext highlighter-rouge">driver/i2c_master.h</code> (new I2C master API) as a reference.</p>
 <h2 id="next-steps">
   
   

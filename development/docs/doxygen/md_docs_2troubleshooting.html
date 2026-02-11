@@ -76,10 +76,10 @@ $(function() {
   <div class="headertitle"><div class="title">Troubleshooting</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md132"></a> This guide helps you diagnose and resolve common issues when using the PCA9685 driver.</p>
-<h1><a class="anchor" id="autotoc_md133"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md133"></a> This guide helps you diagnose and resolve common issues when using the PCA9685 driver.</p>
+<h1><a class="anchor" id="autotoc_md134"></a>
 Common Error Messages</h1>
-<h2><a class="anchor" id="autotoc_md134"></a>
+<h2><a class="anchor" id="autotoc_md135"></a>
 Error: Initialization Fails (<code>Reset()</code> returns false)</h2>
 <p><b>Symptoms:</b></p><ul>
 <li><code>Reset()</code> returns <code>false</code></li>
@@ -92,10 +92,9 @@ Error: Initialization Fails (<code>Reset()</code> returns false)</h2>
 <li>Pull-up resistors missing</li>
 </ul>
 <p><b>Solutions:</b></p><ol type="1">
-<li><b>Verify I2C bus initialization</b>: <div class="fragment"><div class="line"><span class="comment">// Ensure I2C is initialized before creating driver</span></div>
-<div class="line">i2c_config_t conf = { <span class="comment">/* your config */</span> };</div>
-<div class="line">i2c_param_config(I2C_NUM_0, &amp;conf);</div>
-<div class="line">i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0);</div>
+<li><b>Verify I2C bus initialization</b>: <div class="fragment"><div class="line"><span class="comment">// Ensure I2C is initialized before creating driver.</span></div>
+<div class="line"><span class="comment">// ESP32: use driver/i2c_master.h (e.g. i2c_new_master_bus) as in</span></div>
+<div class="line"><span class="comment">// examples/esp32/main/esp32_pca9685_bus.hpp — or your platform&#39;s I2C init.</span></div>
 </div><!-- fragment --></li>
 <li><b>Check I2C address</b>:<ul>
 <li>Default is 0x40 (all A0-A5 pins to GND)</li>
@@ -115,7 +114,7 @@ Error: Initialization Fails (<code>Reset()</code> returns false)</h2>
 </ul>
 </li>
 </ol>
-<h2><a class="anchor" id="autotoc_md135"></a>
+<h2><a class="anchor" id="autotoc_md136"></a>
 Error: Channel Out of Range</h2>
 <p><b>Symptoms:</b></p><ul>
 <li><code>SetPwm()</code> or <code>SetDuty()</code> returns <code>false</code></li>
@@ -134,9 +133,9 @@ Error: Channel Out of Range</h2>
 <div class="line"><span class="keywordflow">if</span> (on_time &lt;= 4095 &amp;&amp; off_time &lt;= 4095) {</div>
 <div class="line">    pwm.SetPwm(channel, on_time, off_time);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md136"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md137"></a>
 Hardware Issues</h1>
-<h2><a class="anchor" id="autotoc_md137"></a>
+<h2><a class="anchor" id="autotoc_md138"></a>
 Device Not Detected</h2>
 <p><b>Symptoms:</b></p><ul>
 <li>Initialization fails</li>
@@ -157,7 +156,7 @@ Device Not Detected</h2>
 <li>Check for proper I2C start/stop conditions</li>
 <li>Verify ACK/NACK responses</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md138"></a>
+<h2><a class="anchor" id="autotoc_md139"></a>
 No Output on Channels</h2>
 <p><b>Symptoms:</b></p><ul>
 <li>Driver initializes successfully</li>
@@ -175,7 +174,7 @@ No Output on Channels</h2>
 <div class="line">pwm.Reset();           <span class="comment">// 1. Initialize</span></div>
 <div class="line">pwm.SetPwmFreq(50.0f); <span class="comment">// 2. Set frequency (REQUIRED!)</span></div>
 <div class="line">pwm.SetDuty(0, 0.5f);  <span class="comment">// 3. Now set channels</span></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md139"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md140"></a>
 Runtime Errors</h2>
 <p><b>Initialization Fails</b></p>
 <p><b>Checklist:</b></p><ul>
@@ -192,25 +191,25 @@ Runtime Errors</h2>
 <li>[ ] PWM values are 0-4095</li>
 <li>[ ] Error handling code checks return values</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md140"></a>
+<h1><a class="anchor" id="autotoc_md141"></a>
 FAQ</h1>
-<h2><a class="anchor" id="autotoc_md141"></a>
+<h2><a class="anchor" id="autotoc_md142"></a>
 Q: Why do I need to call SetPwmFreq() before setting channels?</h2>
 <p><b>A:</b> The PCA9685 requires the prescale register to be set before PWM outputs work correctly. The driver enforces this by checking initialization state. Always call <code>Reset()</code> then <code>SetPwmFreq()</code> before setting channels.</p>
-<h2><a class="anchor" id="autotoc_md142"></a>
+<h2><a class="anchor" id="autotoc_md143"></a>
 Q: Can I change frequency after setting channels?</h2>
 <p><b>A:</b> Yes, but it will affect all channels. Changing frequency updates the prescale register, which changes the PWM period for all 16 channels simultaneously.</p>
-<h2><a class="anchor" id="autotoc_md143"></a>
+<h2><a class="anchor" id="autotoc_md144"></a>
 Q: What's the difference between SetPwm() and SetDuty()?</h2>
 <p><b>A:</b></p><ul>
 <li><code>SetPwm()</code> gives you precise control over on/off timing (0-4095 ticks each)</li>
 <li><code>SetDuty()</code> is a convenience method that sets duty cycle as a float (0.0-1.0), automatically calculating the off_time</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md144"></a>
+<h2><a class="anchor" id="autotoc_md145"></a>
 Q: Can I use multiple PCA9685 devices?</h2>
 <p><b>A:</b> Yes! Configure different I2C addresses via A0-A5 pins, then create separate driver instances: </p><div class="fragment"><div class="line">pca9685::PCA9685&lt;MyI2c&gt; pwm1(&amp;i2c, 0x40); <span class="comment">// First device</span></div>
 <div class="line">pca9685::PCA9685&lt;MyI2c&gt; pwm2(&amp;i2c, 0x41); <span class="comment">// Second device</span></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md145"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md146"></a>
 Q: Why are my servos not moving?</h2>
 <p><b>A:</b> Common causes:</p><ol type="1">
 <li>Frequency not set (must call <code>SetPwmFreq(50.0f)</code> first)</li>
@@ -218,7 +217,7 @@ Q: Why are my servos not moving?</h2>
 <li>Servo power supply insufficient</li>
 <li>OE pin pulled HIGH (disables outputs)</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md146"></a>
+<h2><a class="anchor" id="autotoc_md147"></a>
 Q: How do I control the OE (Output Enable) pin?</h2>
 <p><b>A:</b> The driver doesn't control OE. You must control it via your platform's GPIO: </p><div class="fragment"><div class="line"><span class="comment">// Example: ESP32</span></div>
 <div class="line">gpio_set_direction(OE_PIN, GPIO_MODE_OUTPUT);</div>

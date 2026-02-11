@@ -76,8 +76,8 @@ $(function() {
   <div class="headertitle"><div class="title">Installation</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md83"></a> This guide covers how to obtain, build, and verify the PCA9685 driver library.</p>
-<h1><a class="anchor" id="autotoc_md84"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md85"></a> This guide covers how to obtain, build, and verify the PCA9685 driver library.</p>
+<h1><a class="anchor" id="autotoc_md86"></a>
 Prerequisites</h1>
 <p>Before installing the driver, ensure you have:</p>
 <ul>
@@ -85,57 +85,58 @@ Prerequisites</h1>
 <li><b>Build System</b>: Make or CMake (optional, for building static library)</li>
 <li><b>Platform SDK</b>: Your platform's I2C driver (ESP-IDF, STM32 HAL, Arduino Wire, etc.)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md85"></a>
+<h1><a class="anchor" id="autotoc_md87"></a>
 Obtaining the Source</h1>
-<h2><a class="anchor" id="autotoc_md86"></a>
+<h2><a class="anchor" id="autotoc_md88"></a>
 Option 1: Git Clone</h2>
 <div class="fragment"><div class="line">git clone https://github.com/N3b3x/hf-pca9685-driver.git</div>
 <div class="line">cd hf-pca9685-driver</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md87"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md89"></a>
 Option 2: Copy Files</h2>
 <p>Copy the following files into your project:</p>
 <div class="fragment"><div class="line">inc/</div>
-<div class="line">  └── pca9685.hpp</div>
+<div class="line">  ├── pca9685.hpp</div>
+<div class="line">  └── pca9685_i2c_interface.hpp</div>
 <div class="line">src/</div>
-<div class="line">  └── pca9685.cpp</div>
-</div><!-- fragment --><p><b>Note</b>: The driver uses a header-only template design where <code>pca9685.cpp</code> is included by <code>pca9685.hpp</code>. You typically only need to include the header file in your project.</p>
-<h1><a class="anchor" id="autotoc_md88"></a>
+<div class="line">  └── pca9685.ipp</div>
+</div><!-- fragment --><p><b>Note</b>: The driver uses a template design: the implementation is in <code><a class="el" href="pca9685_8ipp.html" title="Hardware-agnostic implementation for the PCA9685 16-channel 12-bit PWM controller (I2C)">src/pca9685.ipp</a></code> and is included by <code>inc/pca9685.hpp</code>. Your build must have <code>inc/</code> and <code>src/</code> on the include path so that <code>pca9685.hpp</code> can include the <code>.ipp</code> file. You do not compile <code><a class="el" href="pca9685_8ipp.html" title="Hardware-agnostic implementation for the PCA9685 16-channel 12-bit PWM controller (I2C)">pca9685.ipp</a></code> as a separate translation unit.</p>
+<h1><a class="anchor" id="autotoc_md90"></a>
 Building the Library</h1>
-<h2><a class="anchor" id="autotoc_md89"></a>
-Using Make</h2>
-<p>A simple Makefile is provided:</p>
-<div class="fragment"><div class="line">make</div>
-</div><!-- fragment --><p>This builds <code>build/libpca9685.a</code> which can be linked into your application.</p>
-<h2><a class="anchor" id="autotoc_md90"></a>
+<h2><a class="anchor" id="autotoc_md91"></a>
+As Part of Your Project (Include Path)</h2>
+<p>Since the driver is header-only (template implementation in <code>.ipp</code>), add the repository <code>inc/</code> and <code>src/</code> directories to your include path and include the main header:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
+</div><!-- fragment --><p>Your build system must allow the header to find <code>../src/pca9685.ipp</code> (relative to the header) or you can add <code>src/</code> to the include path as well.</p>
+<h2><a class="anchor" id="autotoc_md92"></a>
 Using CMake</h2>
-<div class="fragment"><div class="line">add_subdirectory(pca9685-driver)</div>
-<div class="line">target_link_libraries(your_target PRIVATE pca9685)</div>
-</div><!-- fragment --><p>Or manually:</p>
-<div class="fragment"><div class="line">add_library(pca9685 STATIC</div>
-<div class="line">    inc/pca9685.hpp</div>
-<div class="line">    src/pca9685.cpp</div>
+<div class="fragment"><div class="line"># Include path must include both inc and src (for .ipp include from header)</div>
+<div class="line">target_include_directories(your_target PRIVATE</div>
+<div class="line">    ${CMAKE_CURRENT_SOURCE_DIR}/hf-pca9685-driver/inc</div>
+<div class="line">    ${CMAKE_CURRENT_SOURCE_DIR}/hf-pca9685-driver/src</div>
 <div class="line">)</div>
-<div class="line">target_include_directories(pca9685 PUBLIC inc)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md91"></a>
-Using ESP-IDF Component</h2>
-<p>The driver can be used as an ESP-IDF component. See the <a href="../examples/esp32/">examples/esp32</a> directory for component integration examples.</p>
-<h1><a class="anchor" id="autotoc_md92"></a>
-Running Unit Tests</h1>
-<p>The library includes unit tests. To run them:</p>
-<div class="fragment"><div class="line">make test</div>
-<div class="line">./build/test</div>
-</div><!-- fragment --><p>Expected output: </p><div class="fragment"><div class="line">All tests passed.</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md93"></a>
+<div class="line"># No separate library: template is instantiated in your code</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md93"></a>
+Using ESP-IDF (ESP32 Examples)</h2>
+<p>The driver is provided as an ESP-IDF component in the ESP32 examples. Build and flash using the example scripts:</p>
+<div class="fragment"><div class="line">cd examples/esp32</div>
+<div class="line">./scripts/build_app.sh list                    # List available apps</div>
+<div class="line">./scripts/build_app.sh pca9685_comprehensive_test Debug</div>
+<div class="line">./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug</div>
+</div><!-- fragment --><p>See examples/esp32/README.md and <a href="../examples/esp32/docs/">examples/esp32/docs/</a> for full setup and app descriptions.</p>
+<h1><a class="anchor" id="autotoc_md94"></a>
 Verification</h1>
 <p>To verify the installation:</p>
 <ol type="1">
 <li>Include the header in a test file: <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
+<div class="line"><span class="comment">// Provide an I2C implementation and instantiate PCA9685&lt;YourI2c&gt;</span></div>
 </div><!-- fragment --></li>
-<li>Compile a simple test: <div class="fragment"><div class="line">g++ -std=c++11 -I inc/ -c src/pca9685.cpp -o test.o</div>
-</div><!-- fragment --></li>
-<li>If compilation succeeds, the library is properly installed.</li>
+<li>Ensure your include path contains both <code>inc/</code> and <code>src/</code> (so <code>pca9685.hpp</code> can include <code><a class="el" href="pca9685_8ipp.html" title="Hardware-agnostic implementation for the PCA9685 16-channel 12-bit PWM controller (I2C)">pca9685.ipp</a></code>).</li>
+<li>For hardware verification, use the ESP32 comprehensive test app (see <a class="el" href="md_docs_2examples.html">Examples</a>): <div class="fragment"><div class="line">cd examples/esp32</div>
+<div class="line">./scripts/build_app.sh pca9685_comprehensive_test Debug</div>
+<div class="line">./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug</div>
+</div><!-- fragment --> All 12 tests should pass when the PCA9685 is connected at 0x40 on the configured I2C pins.</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md94"></a>
+<h1><a class="anchor" id="autotoc_md95"></a>
 Next Steps</h1>
 <ul>
 <li>Follow the <a class="el" href="md_docs_2quickstart.html">Quick Start</a> guide to create your first application</li>

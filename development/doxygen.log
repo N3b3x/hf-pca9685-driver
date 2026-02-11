@@ -1,5 +1,5 @@
-warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1765, file /tmp/doxyfile.VqiZMt
-warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.VqiZMt' has become obsolete.
+warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1765, file /tmp/doxyfile.b5YSMC
+warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.b5YSMC' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:30: warning: documented symbol 'pca9685::PCA9685::PCA9685' was not declared or defined.
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:36: warning: documented symbol 'bool pca9685::PCA9685::EnsureInitialized' was not declared or defined.
@@ -16,11 +16,11 @@ warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.VqiZMt' has b
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:216: warning: documented symbol 'bool pca9685::PCA9685::SetChannelFullOn' was not declared or defined.
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:236: warning: documented symbol 'bool pca9685::PCA9685::SetChannelFullOff' was not declared or defined.
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:258: warning: documented symbol 'bool pca9685::PCA9685::writeReg' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:272: warning: documented symbol 'bool pca9685::PCA9685::readReg' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:286: warning: documented symbol 'bool pca9685::PCA9685::writeRegBlock' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:300: warning: documented symbol 'bool pca9685::PCA9685::readRegBlock' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:314: warning: documented symbol 'bool pca9685::PCA9685::modifyReg' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:328: warning: documented symbol 'uint8_t pca9685::PCA9685::calcPrescale' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:275: warning: documented symbol 'bool pca9685::PCA9685::readReg' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:292: warning: documented symbol 'bool pca9685::PCA9685::writeRegBlock' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:309: warning: documented symbol 'bool pca9685::PCA9685::readRegBlock' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:326: warning: documented symbol 'bool pca9685::PCA9685::modifyReg' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:340: warning: documented symbol 'uint8_t pca9685::PCA9685::calcPrescale' was not declared or defined.
 Doxygen version used: 1.10.0 (ebc57c6dd303a980bd19dd74b8b61c8f3f5180ca)
 Searching for include files...
 Searching for example files...
@@ -118,7 +118,12 @@ Generating docs for file docs/quickstart.md...
 Generating docs for file docs/troubleshooting.md...
 Generating docs for file README.md...
 Generating docs for file src/pca9685.ipp...
-Generating page d/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:11: warning: unable to resolve reference to '-overview' for \ref command
+Generating page d/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/examples.md:194: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/README.md' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/index.md:26: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/docs/index.md' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/index.md:26: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/docs/comprehensive-test.md' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/index.md:26: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/docs/servo-demo.md' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/installation.md:71: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/README.md' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:11: warning: unable to resolve reference to '-overview' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:12: warning: unable to resolve reference to '-features' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:13: warning: unable to resolve reference to '-quick-start' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:14: warning: unable to resolve reference to '-installation' for \ref command
@@ -127,6 +132,7 @@ Generating page d/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:17: warning: unable to resolve reference to '-documentation' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:18: warning: unable to resolve reference to '-contributing' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:19: warning: unable to resolve reference to '-license' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:106: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/README.md' for \ref command
 ocumentation...
 Generating docs for page md_docs_2api__reference...
 Generating docs for page md_docs_2configuration...
@@ -165,11 +171,7 @@ finalizing index lists...
 writing tag file...
 Running plantuml with JAVA...
 Running dot...
-Generating dot graphs using 5 parallel threads...
-Running dot for graph 1/1
-Patching output file 1/3
-Patching output file 2/3
-Patching output file 3/3
+Patching output file 1/1
 type lookup cache used 1/65536 hits=0 misses=1
 symbol lookup cache used 1/65536 hits=0 misses=1
 finished...

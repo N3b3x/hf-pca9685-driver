@@ -176,7 +176,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
       </button><a href="/hf-pca9685-driver/development/" class="nav-list-link">HardFOC PCA9685 Driver</a><ul class="nav-list"><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="📚 Documentation submenu" aria-expanded="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-      </button><a href="/hf-pca9685-driver/development/docs/" class="nav-list-link">📚 Documentation</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/installation/" class="nav-list-link">🛠️ Installation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/quickstart/" class="nav-list-link">⚡ Quick Start</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/hardware_setup/" class="nav-list-link">🔌 Hardware Setup</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/platform_integration/" class="nav-list-link">🔧 Platform Integration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/configuration/" class="nav-list-link">⚙️ Configuration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/api_reference/" class="nav-list-link">📖 API Reference</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/examples/" class="nav-list-link">💡 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/troubleshooting/" class="nav-list-link">🐛 Troubleshooting</a></li></ul></li></ul></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/" class="nav-list-link">PCAL9555 ESP32-C6 Comprehensive Test Suite</a></li></ul>
+      </button><a href="/hf-pca9685-driver/development/docs/" class="nav-list-link">📚 Documentation</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/installation/" class="nav-list-link">🛠️ Installation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/quickstart/" class="nav-list-link">⚡ Quick Start</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/hardware_setup/" class="nav-list-link">🔌 Hardware Setup</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/platform_integration/" class="nav-list-link">🔧 Platform Integration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/configuration/" class="nav-list-link">⚙️ Configuration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/api_reference/" class="nav-list-link">📖 API Reference</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/examples/" class="nav-list-link">💡 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/troubleshooting/" class="nav-list-link">🐛 Troubleshooting</a></li></ul></li></ul></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/" class="nav-list-link">ESP32 PCA9685 Applications — Documentation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/comprehensive-test.html" class="nav-list-link">PCA9685 Comprehensive Test Suite</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/" class="nav-list-link">PCA9685 ESP32 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/servo-demo.html" class="nav-list-link">PCA9685 Hobby Servo Demo</a></li></ul>
   
 </nav>
 
@@ -326,13 +326,15 @@
 2
 3
 4
+5
 </pre></td><td class="rouge-code"><pre>inc/
-  └── pca9685.hpp
+  ├── pca9685.hpp
+  └── pca9685_i2c_interface.hpp
 src/
-  └── pca9685.cpp
+  └── pca9685.ipp
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 
-<p><strong>Note</strong>: The driver uses a header-only template design where <code class="language-plaintext highlighter-rouge">pca9685.cpp</code> is included by <code class="language-plaintext highlighter-rouge">pca9685.hpp</code>. You typically only need to include the header file in your project.</p>
+<p><strong>Note</strong>: The driver uses a template design: the implementation is in <code class="language-plaintext highlighter-rouge">src/pca9685.ipp</code> and is included by <code class="language-plaintext highlighter-rouge">inc/pca9685.hpp</code>. Your build must have <code class="language-plaintext highlighter-rouge">inc/</code> and <code class="language-plaintext highlighter-rouge">src/</code> on the include path so that <code class="language-plaintext highlighter-rouge">pca9685.hpp</code> can include the <code class="language-plaintext highlighter-rouge">.ipp</code> file. You do not compile <code class="language-plaintext highlighter-rouge">pca9685.ipp</code> as a separate translation unit.</p>
 <h2 id="building-the-library">
   
   
@@ -341,22 +343,22 @@ src/
   
 </h2>
     
-<h3 id="using-make">
+<h3 id="as-part-of-your-project-include-path">
   
   
-    <a href="#using-make" class="anchor-heading" aria-labelledby="using-make"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Using Make
+    <a href="#as-part-of-your-project-include-path" class="anchor-heading" aria-labelledby="as-part-of-your-project-include-path"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> As Part of Your Project (Include Path)
   
   
 </h3>
     
 
-<p>A simple Makefile is provided:</p>
+<p>Since the driver is header-only (template implementation in <code class="language-plaintext highlighter-rouge">.ipp</code>), add the repository <code class="language-plaintext highlighter-rouge">inc/</code> and <code class="language-plaintext highlighter-rouge">src/</code> directories to your include path and include the main header:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre>make
-</pre></td></tr></tbody></table></div></code></pre></div></div>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">"pca9685.hpp"</span><span class="cp">
+</span></pre></td></tr></tbody></table></div></code></pre></div></div>
 
-<p>This builds <code class="language-plaintext highlighter-rouge">build/libpca9685.a</code> which can be linked into your application.</p>
+<p>Your build system must allow the header to find <code class="language-plaintext highlighter-rouge">../src/pca9685.ipp</code> (relative to the header) or you can add <code class="language-plaintext highlighter-rouge">src/</code> to the include path as well.</p>
 <h3 id="using-cmake">
   
   
@@ -368,54 +370,39 @@ src/
 
 <div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre></td><td class="rouge-code"><pre><span class="nb">add_subdirectory</span><span class="p">(</span>pca9685-driver<span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span>your_target PRIVATE pca9685<span class="p">)</span>
-</pre></td></tr></tbody></table></div></code></pre></div></div>
-
-<p>Or manually:</p>
-
-<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
 3
 4
 5
-</pre></td><td class="rouge-code"><pre><span class="nb">add_library</span><span class="p">(</span>pca9685 STATIC
-    inc/pca9685.hpp
-    src/pca9685.cpp
+6
+</pre></td><td class="rouge-code"><pre><span class="c1"># Include path must include both inc and src (for .ipp include from header)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span>your_target PRIVATE
+    <span class="si">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="si">}</span>/hf-pca9685-driver/inc
+    <span class="si">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="si">}</span>/hf-pca9685-driver/src
 <span class="p">)</span>
-<span class="nb">target_include_directories</span><span class="p">(</span>pca9685 PUBLIC inc<span class="p">)</span>
+<span class="c1"># No separate library: template is instantiated in your code</span>
 </pre></td></tr></tbody></table></div></code></pre></div></div>
-<h3 id="using-esp-idf-component">
+<h3 id="using-esp-idf-esp32-examples">
   
   
-    <a href="#using-esp-idf-component" class="anchor-heading" aria-labelledby="using-esp-idf-component"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Using ESP-IDF Component
+    <a href="#using-esp-idf-esp32-examples" class="anchor-heading" aria-labelledby="using-esp-idf-esp32-examples"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Using ESP-IDF (ESP32 Examples)
   
   
 </h3>
     
 
-<p>The driver can be used as an ESP-IDF component. See the <a href="../examples/esp32/">examples/esp32</a> directory for component integration examples.</p>
-<h2 id="running-unit-tests">
-  
-  
-    <a href="#running-unit-tests" class="anchor-heading" aria-labelledby="running-unit-tests"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Running Unit Tests
-  
-  
-</h2>
-    
-
-<p>The library includes unit tests. To run them:</p>
+<p>The driver is provided as an ESP-IDF component in the ESP32 examples. Build and flash using the example scripts:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre></td><td class="rouge-code"><pre>make <span class="nb">test</span>
-./build/test
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="nb">cd </span>examples/esp32
+./scripts/build_app.sh list                    <span class="c"># List available apps</span>
+./scripts/build_app.sh pca9685_comprehensive_test Debug
+./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 
-<p>Expected output:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre>All tests passed.
-</pre></td></tr></tbody></table></div></code></pre></div></div>
+<p>See <a href="/hf-pca9685-driver/development/examples/esp32/">examples/esp32/README.md</a> and <a href="../examples/esp32/docs/">examples/esp32/docs/</a> for full setup and app descriptions.</p>
 <h2 id="verification">
   
   
@@ -430,15 +417,24 @@ src/
 <ol>
   <li>Include the header in a test file:
     <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
 </pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">"pca9685.hpp"</span><span class="cp">
-</span></pre></td></tr></tbody></table></div></code></pre></div>    </div>
-  </li>
-  <li>Compile a simple test:
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre>g++ <span class="nt">-std</span><span class="o">=</span>c++11 <span class="nt">-I</span> inc/ <span class="nt">-c</span> src/pca9685.cpp <span class="nt">-o</span> test.o
+</span><span class="c1">// Provide an I2C implementation and instantiate PCA9685&lt;YourI2c&gt;</span>
 </pre></td></tr></tbody></table></div></code></pre></div>    </div>
   </li>
-  <li>If compilation succeeds, the library is properly installed.</li>
+  <li>
+    <p>Ensure your include path contains both <code class="language-plaintext highlighter-rouge">inc/</code> and <code class="language-plaintext highlighter-rouge">src/</code> (so <code class="language-plaintext highlighter-rouge">pca9685.hpp</code> can include <code class="language-plaintext highlighter-rouge">pca9685.ipp</code>).</p>
+  </li>
+  <li>For hardware verification, use the ESP32 comprehensive test app (see <a href="/hf-pca9685-driver/development/docs/examples/">Examples</a>):
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nb">cd </span>examples/esp32
+./scripts/build_app.sh pca9685_comprehensive_test Debug
+./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug
+</pre></td></tr></tbody></table></div></code></pre></div>    </div>
+    <p>All 12 tests should pass when the PCA9685 is connected at 0x40 on the configured I2C pins.</p>
+  </li>
 </ol>
 <h2 id="next-steps">
   

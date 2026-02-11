@@ -76,10 +76,10 @@ $(function() {
   <div class="headertitle"><div class="title">Hardware Setup</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md61"></a> This guide covers the physical connections and hardware requirements for the PCA9685 chip.</p>
-<h1><a class="anchor" id="autotoc_md62"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md62"></a> This guide covers the physical connections and hardware requirements for the PCA9685 chip.</p>
+<h1><a class="anchor" id="autotoc_md63"></a>
 Pin Connections</h1>
-<h2><a class="anchor" id="autotoc_md63"></a>
+<h2><a class="anchor" id="autotoc_md64"></a>
 Basic I2C Connections</h2>
 <div class="fragment"><div class="line">MCU              PCA9685</div>
 <div class="line">─────────────────────────</div>
@@ -87,7 +87,7 @@ Basic I2C Connections</h2>
 <div class="line">GND       ────── GND</div>
 <div class="line">SCL       ────── SCL (with 4.7kΩ pull-up to 3.3V)</div>
 <div class="line">SDA       ────── SDA (with 4.7kΩ pull-up to 3.3V)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md64"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md65"></a>
 Pin Descriptions</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -105,14 +105,14 @@ Pin Descriptions</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">A0-A5   </td><td class="markdownTableBodyNone">Address   </td><td class="markdownTableBodyNone">I2C address selection pins   </td><td class="markdownTableBodyNone">No (for single device)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md65"></a>
+<h2><a class="anchor" id="autotoc_md66"></a>
 Output Channels</h2>
 <p>The PCA9685 provides 16 PWM output channels (OUT0-OUT15). Each channel can drive:</p><ul>
 <li>LEDs (with current-limiting resistors)</li>
 <li>Servos (typically 5V servos)</li>
 <li>Other PWM-controlled devices</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md66"></a>
+<h1><a class="anchor" id="autotoc_md67"></a>
 Power Requirements</h1>
 <ul>
 <li><b>Supply Voltage</b>: 2.3V to 5.5V (3.3V or 5V typical)</li>
@@ -124,9 +124,9 @@ Power Requirements</h1>
 <li><b>Power Supply</b>: Stable, low-noise supply recommended</li>
 <li><b>Decoupling</b>: 100 nF ceramic capacitor close to VDD pin recommended</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md67"></a>
+<h1><a class="anchor" id="autotoc_md68"></a>
 I2C Configuration</h1>
-<h2><a class="anchor" id="autotoc_md68"></a>
+<h2><a class="anchor" id="autotoc_md69"></a>
 Address Configuration</h2>
 <p>The PCA9685 I2C address is determined by pins A0-A5:</p>
 <table class="markdownTable">
@@ -142,7 +142,7 @@ Address Configuration</h2>
 <td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">0x7F   </td></tr>
 </table>
 <p><b>Default</b>: All address pins to GND = <b>0x40</b> (used in examples)</p>
-<h2><a class="anchor" id="autotoc_md69"></a>
+<h2><a class="anchor" id="autotoc_md70"></a>
 I2C Bus Configuration</h2>
 <ul>
 <li><b>Speed</b>: Up to 1 MHz (Fast Mode Plus)<ul>
@@ -154,7 +154,7 @@ I2C Bus Configuration</h2>
 <li><b>Pull-up Resistors</b>: 4.7 kΩ on SCL and SDA (required for I2C)</li>
 <li><b>Bus Voltage</b>: Must match VDD (3.3V or 5V)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md70"></a>
+<h1><a class="anchor" id="autotoc_md71"></a>
 Physical Layout Recommendations</h1>
 <ul>
 <li><b>Trace Length</b>: Keep I2C traces short (&lt; 10 cm recommended for high speeds)</li>
@@ -163,9 +163,9 @@ Physical Layout Recommendations</h1>
 <li><b>Routing</b>: Route clock and data lines away from noise sources (switching regulators, motors)</li>
 <li><b>Multiple Devices</b>: When daisy-chaining, use proper bus termination</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md71"></a>
+<h1><a class="anchor" id="autotoc_md72"></a>
 Example Wiring Diagram</h1>
-<h2><a class="anchor" id="autotoc_md72"></a>
+<h2><a class="anchor" id="autotoc_md73"></a>
 Single PCA9685</h2>
 <div class="fragment"><div class="line">            PCA9685</div>
 <div class="line">            ┌─────────┐</div>
@@ -176,7 +176,7 @@ Single PCA9685</h2>
 <div class="line">            │         │</div>
 <div class="line">            │ OUT0-15 │─── To LEDs/Servos</div>
 <div class="line">            └─────────┘</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md73"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md74"></a>
 Multiple PCA9685 Devices (Daisy Chain)</h2>
 <div class="fragment"><div class="line">MCU SCL ──┬─── PCA9685 #1 (A0=0, Addr=0x40) SCL</div>
 <div class="line">          │</div>
@@ -185,7 +185,7 @@ Multiple PCA9685 Devices (Daisy Chain)</h2>
 <div class="line">MCU SDA ──┬─── PCA9685 #1 SDA</div>
 <div class="line">          │</div>
 <div class="line">          └─── PCA9685 #2 SDA</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md74"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md75"></a>
 Output Enable (OE) Pin</h1>
 <p>The OE pin is an active-low output enable. When pulled HIGH, all outputs are disabled (high-impedance). When pulled LOW or left floating, outputs are enabled.</p>
 <p><b>Typical Usage</b>:</p><ul>
@@ -193,7 +193,7 @@ Output Enable (OE) Pin</h1>
 <li>Leave floating if not needed (internal pull-up enables outputs)</li>
 <li>Use for synchronized startup of multiple devices</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md75"></a>
+<h1><a class="anchor" id="autotoc_md76"></a>
 Next Steps</h1>
 <ul>
 <li>Verify connections with a multimeter</li>

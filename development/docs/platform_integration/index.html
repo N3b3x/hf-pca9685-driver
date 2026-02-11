@@ -176,7 +176,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
       </button><a href="/hf-pca9685-driver/development/" class="nav-list-link">HardFOC PCA9685 Driver</a><ul class="nav-list"><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="📚 Documentation submenu" aria-expanded="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-      </button><a href="/hf-pca9685-driver/development/docs/" class="nav-list-link">📚 Documentation</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/installation/" class="nav-list-link">🛠️ Installation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/quickstart/" class="nav-list-link">⚡ Quick Start</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/hardware_setup/" class="nav-list-link">🔌 Hardware Setup</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/platform_integration/" class="nav-list-link">🔧 Platform Integration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/configuration/" class="nav-list-link">⚙️ Configuration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/api_reference/" class="nav-list-link">📖 API Reference</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/examples/" class="nav-list-link">💡 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/troubleshooting/" class="nav-list-link">🐛 Troubleshooting</a></li></ul></li></ul></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/" class="nav-list-link">PCAL9555 ESP32-C6 Comprehensive Test Suite</a></li></ul>
+      </button><a href="/hf-pca9685-driver/development/docs/" class="nav-list-link">📚 Documentation</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/installation/" class="nav-list-link">🛠️ Installation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/quickstart/" class="nav-list-link">⚡ Quick Start</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/hardware_setup/" class="nav-list-link">🔌 Hardware Setup</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/platform_integration/" class="nav-list-link">🔧 Platform Integration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/configuration/" class="nav-list-link">⚙️ Configuration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/api_reference/" class="nav-list-link">📖 API Reference</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/examples/" class="nav-list-link">💡 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/troubleshooting/" class="nav-list-link">🐛 Troubleshooting</a></li></ul></li></ul></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/" class="nav-list-link">ESP32 PCA9685 Applications — Documentation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/comprehensive-test.html" class="nav-list-link">PCA9685 Comprehensive Test Suite</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/" class="nav-list-link">PCA9685 ESP32 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/servo-demo.html" class="nav-list-link">PCA9685 Hobby Servo Demo</a></li></ul>
   
 </nav>
 
@@ -479,7 +479,7 @@
 
 <p>The PCA9685 driver requires you to implement the <code class="language-plaintext highlighter-rouge">I2cInterface</code> template:</p>
 
-<p><strong>Location</strong>: <a href="../inc/pca9685.hpp#L57"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L57</code></a></p>
+<p><strong>Location</strong>: <a href="../inc/pca9685_i2c_interface.hpp"><code class="language-plaintext highlighter-rouge">inc/pca9685_i2c_interface.hpp</code></a> (interface); driver class in <a href="../inc/pca9685.hpp"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp</code></a></p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -499,13 +499,17 @@
 <span class="p">};</span>
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 
+<p><strong>Note</strong>: <code class="language-plaintext highlighter-rouge">I2cInterface</code> is non-copyable and non-movable; use references or pointers to your concrete bus type.</p>
+
 <p><strong>Method Requirements</strong>:</p>
 <ul>
   <li><code class="language-plaintext highlighter-rouge">Write()</code>: Write <code class="language-plaintext highlighter-rouge">len</code> bytes from <code class="language-plaintext highlighter-rouge">data</code> to register <code class="language-plaintext highlighter-rouge">reg</code> at I2C address <code class="language-plaintext highlighter-rouge">addr</code> (7-bit address)</li>
   <li><code class="language-plaintext highlighter-rouge">Read()</code>: Read <code class="language-plaintext highlighter-rouge">len</code> bytes into <code class="language-plaintext highlighter-rouge">data</code> from register <code class="language-plaintext highlighter-rouge">reg</code> at I2C address <code class="language-plaintext highlighter-rouge">addr</code> (7-bit address)</li>
   <li><code class="language-plaintext highlighter-rouge">EnsureInitialized()</code>: Lazy-initialize the I2C bus; return true if ready</li>
-  <li>All methods return <code class="language-plaintext highlighter-rouge">true</code> on success, <code class="language-plaintext highlighter-rouge">false</code> on failure (NACK, timeout, etc.)</li>
+  <li>Write/Read return <code class="language-plaintext highlighter-rouge">true</code> on success, <code class="language-plaintext highlighter-rouge">false</code> on failure (NACK, timeout, etc.)</li>
 </ul>
+
+<p><strong>Optional retry delay</strong>: The driver can call an optional callback between I2C retries for bus recovery. Your bus class can expose a static delay (e.g. <code class="language-plaintext highlighter-rouge">static void RetryDelay() noexcept { vTaskDelay(pdMS_TO_TICKS(1)); }</code>). After constructing the driver, the application calls <code class="language-plaintext highlighter-rouge">driver-&gt;SetRetryDelay(MyBus::RetryDelay)</code>. If not set, no delay is used between retries.</p>
 <h2 id="implementation-steps">
   
   
@@ -553,6 +557,7 @@
 28
 29
 30
+31
 </pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">"pca9685.hpp"</span><span class="cp">
 </span>
 <span class="k">class</span> <span class="nc">MyPlatformI2c</span> <span class="o">:</span> <span class="k">public</span> <span class="n">pca9685</span><span class="o">::</span><span class="n">I2cInterface</span><span class="o">&lt;</span><span class="n">MyPlatformI2c</span><span class="o">&gt;</span> <span class="p">{</span>
@@ -582,6 +587,7 @@
         <span class="n">initialized_</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
     <span class="p">}</span>
+
 <span class="p">};</span>
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 <h3 id="step-2-platform-specific-examples">
@@ -665,6 +671,7 @@
 22
 23
 24
+25
 </pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">"stm32f4xx_hal.h"</span><span class="cp">
 #include</span> <span class="cpf">"pca9685.hpp"</span><span class="cp">
 </span>
@@ -688,6 +695,7 @@
     <span class="p">}</span>
 
     <span class="kt">bool</span> <span class="n">EnsureInitialized</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="cm">/* HAL_I2C_Init done elsewhere */</span> <span class="p">}</span>
+
 <span class="p">};</span>
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 <h4 id="arduino">
@@ -725,6 +733,7 @@
 24
 25
 26
+27
 </pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">&lt;Wire.h&gt;</span><span class="cp">
 #include</span> <span class="cpf">"pca9685.hpp"</span><span class="cp">
 </span>
@@ -750,6 +759,7 @@
     <span class="p">}</span>
 
     <span class="kt">bool</span> <span class="n">EnsureInitialized</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="n">Wire</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="p">}</span>
+
 <span class="p">};</span>
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 <h2 id="common-pitfalls">

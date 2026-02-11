@@ -176,11 +176,21 @@ Configuration</h2>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>SetRetries()</code>   </td><td class="markdownTableBodyNone"><code>void SetRetries(int retries) noexcept</code>   </td><td class="markdownTableBodyNone">Set I2C retry count for register operations   </td></tr>
+<td class="markdownTableBodyNone"><code>SetRetries()</code>   </td><td class="markdownTableBodyNone"><code>void SetRetries(int retries) noexcept</code>   </td><td class="markdownTableBodyNone">Set I2C retry count for register operations    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>SetRetryDelay()</code>   </td><td class="markdownTableBodyNone"><code>void SetRetryDelay(RetryDelayFn fn) noexcept</code>   </td><td class="markdownTableBodyNone">Set optional callback invoked between retries (e.g. 1 ms delay for bus recovery); default nullptr   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md23"></a>
 Types</h1>
 <h2><a class="anchor" id="autotoc_md24"></a>
+Type Aliases</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Definition   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>RetryDelayFn</code>   </td><td class="markdownTableBodyNone"><code>void (*)()</code>   </td><td class="markdownTableBodyNone">Optional callback for delay between I2C retries; used with <code>SetRetryDelay()</code>.   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md25"></a>
 Enumerations</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -190,7 +200,7 @@ Enumerations</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Register</code>   </td><td class="markdownTableBodyNone"><code>MODE1</code>, <code>MODE2</code>, <code>LED0_ON_L</code>, <code>LED0_OFF_L</code>, <code>PRE_SCALE</code>, etc.   </td><td class="markdownTableBodyNone"><a href="../inc/pca9685.hpp"><code>inc/pca9685.hpp</code></a>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md25"></a>
+<h2><a class="anchor" id="autotoc_md26"></a>
 Constants</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -202,12 +212,13 @@ Constants</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>OSC_FREQ_</code>   </td><td class="markdownTableBodyNone"><code>25000000</code>   </td><td class="markdownTableBodyNone">Internal oscillator frequency (25 MHz)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md26"></a>
+<h1><a class="anchor" id="autotoc_md27"></a>
 I2C Interface</h1>
-<h2><a class="anchor" id="autotoc_md27"></a>
+<h2><a class="anchor" id="autotoc_md28"></a>
 <code>I2cInterface&lt;Derived&gt;</code> (CRTP)</h2>
 <p>Hardware-agnostic I2C interface using the Curiously Recurring Template Pattern.</p>
 <p><b>Location</b>: <a href="../inc/pca9685_i2c_interface.hpp"><code>inc/pca9685_i2c_interface.hpp</code></a></p>
+<p>The interface is <b>non-copyable and non-movable</b>; use references or pointers to the concrete bus type.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Description    </th></tr>
@@ -218,6 +229,7 @@ I2C Interface</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>EnsureInitialized()</code>   </td><td class="markdownTableBodyNone"><code>bool EnsureInitialized() noexcept</code>   </td><td class="markdownTableBodyNone">Ensure I2C bus is initialized and ready   </td></tr>
 </table>
+<p>The driver supports an optional retry delay via <b>SetRetryDelay()</b> (a function pointer). The I2C implementation can expose a static delay (e.g. <code>Esp32Pca9685Bus::RetryDelay</code>) and the app passes it to the driver after construction. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

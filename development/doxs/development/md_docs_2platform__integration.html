@@ -76,41 +76,41 @@ $(function() {
   <div class="headertitle"><div class="title">Platform Integration Guide</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md95"></a> This guide explains how to implement the hardware abstraction interface for the PCA9685 driver on your platform.</p>
-<h1><a class="anchor" id="autotoc_md96"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md96"></a> This guide explains how to implement the hardware abstraction interface for the PCA9685 driver on your platform.</p>
+<h1><a class="anchor" id="autotoc_md97"></a>
 Understanding CRTP (Curiously Recurring Template Pattern)</h1>
 <p>The PCA9685 driver uses <b>CRTP</b> (Curiously Recurring Template Pattern) for hardware abstraction. This design choice provides several critical benefits for embedded systems:</p>
-<h2><a class="anchor" id="autotoc_md97"></a>
+<h2><a class="anchor" id="autotoc_md98"></a>
 Why CRTP Instead of Virtual Functions?</h2>
-<h3><a class="anchor" id="autotoc_md98"></a>
+<h3><a class="anchor" id="autotoc_md99"></a>
 1. <b>Zero Runtime Overhead</b></h3>
 <ul>
 <li><b>Virtual functions</b>: Require a vtable lookup (indirect call) = ~5-10 CPU cycles overhead per call</li>
 <li><b>CRTP</b>: Direct function calls = 0 overhead, compiler can inline</li>
 <li><b>Impact</b>: In time-critical embedded code, this matters significantly</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md99"></a>
+<h3><a class="anchor" id="autotoc_md100"></a>
 2. <b>Compile-Time Polymorphism</b></h3>
 <ul>
 <li><b>Virtual functions</b>: Runtime dispatch - the compiler cannot optimize across the abstraction boundary</li>
 <li><b>CRTP</b>: Compile-time dispatch - full optimization, dead code elimination, constant propagation</li>
 <li><b>Impact</b>: Smaller code size, faster execution</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md100"></a>
+<h3><a class="anchor" id="autotoc_md101"></a>
 3. <b>Memory Efficiency</b></h3>
 <ul>
 <li><b>Virtual functions</b>: Each object needs a vtable pointer (4-8 bytes)</li>
 <li><b>CRTP</b>: No vtable pointer needed</li>
 <li><b>Impact</b>: Critical in memory-constrained systems (many MCUs have &lt;64KB RAM)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md101"></a>
+<h3><a class="anchor" id="autotoc_md102"></a>
 4. **Type Safety**</h3>
 <ul>
 <li>**Virtual functions**: Runtime errors if method not implemented</li>
 <li>**CRTP**: Compile-time errors if method not implemented</li>
 <li>**Impact**: Catch bugs at compile time, not in the field</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md102"></a>
+<h2><a class="anchor" id="autotoc_md103"></a>
 How CRTP Works</h2>
 <div class="fragment"><div class="line"><span class="comment">// Base template class (from pca9685_i2c_interface.hpp)</span></div>
 <div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Derived&gt;</div>
@@ -147,7 +147,7 @@ How CRTP Works</h2>
 <div class="line">    }</div>
 <div class="line">};</div>
 </div><!-- fragment --><p>The key insight: <code>static_cast&lt;Derived*&gt;(this)</code> allows the base class to call methods on the derived class <b>at compile time</b>, not runtime.</p>
-<h2><a class="anchor" id="autotoc_md103"></a>
+<h2><a class="anchor" id="autotoc_md104"></a>
 Performance Comparison</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -163,10 +163,10 @@ Performance Comparison</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Optimization   </td><td class="markdownTableBodyNone">Limited   </td><td class="markdownTableBodyNone">Full   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md104"></a>
+<h1><a class="anchor" id="autotoc_md105"></a>
 Interface Definition</h1>
 <p>The PCA9685 driver requires you to implement the <code>I2cInterface</code> template:</p>
-<p><b>Location</b>: <a href="../inc/pca9685.hpp#L57"><code>inc/pca9685.hpp#L57</code></a></p>
+<p><b>Location</b>: <a href="../inc/pca9685_i2c_interface.hpp"><code>inc/pca9685_i2c_interface.hpp</code></a> (interface); driver class in <a href="../inc/pca9685.hpp"><code>inc/pca9685.hpp</code></a></p>
 <div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Derived&gt;</div>
 <div class="line"><span class="keyword">class </span>I2cInterface {</div>
 <div class="line"><span class="keyword">public</span>:</div>
@@ -175,15 +175,17 @@ Interface Definition</h1>
 <div class="line">    <span class="keywordtype">bool</span> Read(uint8_t addr, uint8_t reg, uint8_t *data, <span class="keywordtype">size_t</span> len) <span class="keyword">noexcept</span>;</div>
 <div class="line">    <span class="keywordtype">bool</span> EnsureInitialized() noexcept;</div>
 <div class="line">};</div>
-</div><!-- fragment --><p><b>Method Requirements</b>:</p><ul>
+</div><!-- fragment --><p><b>Note</b>: <code>I2cInterface</code> is non-copyable and non-movable; use references or pointers to your concrete bus type.</p>
+<p><b>Method Requirements</b>:</p><ul>
 <li><code>Write()</code>: Write <code>len</code> bytes from <code>data</code> to register <code>reg</code> at I2C address <code>addr</code> (7-bit address)</li>
 <li><code>Read()</code>: Read <code>len</code> bytes into <code>data</code> from register <code>reg</code> at I2C address <code>addr</code> (7-bit address)</li>
 <li><code>EnsureInitialized()</code>: Lazy-initialize the I2C bus; return true if ready</li>
-<li>All methods return <code>true</code> on success, <code>false</code> on failure (NACK, timeout, etc.)</li>
+<li>Write/Read return <code>true</code> on success, <code>false</code> on failure (NACK, timeout, etc.)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md105"></a>
+<p><b>Optional retry delay</b>: The driver can call an optional callback between I2C retries for bus recovery. Your bus class can expose a static delay (e.g. <code>static void RetryDelay() noexcept { vTaskDelay(pdMS_TO_TICKS(1)); }</code>). After constructing the driver, the application calls <code>driver-&gt;SetRetryDelay(MyBus::RetryDelay)</code>. If not set, no delay is used between retries.</p>
+<h1><a class="anchor" id="autotoc_md106"></a>
 Implementation Steps</h1>
-<h2><a class="anchor" id="autotoc_md106"></a>
+<h2><a class="anchor" id="autotoc_md107"></a>
 Step 1: Create Your Implementation Class</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
 <div class="line"> </div>
@@ -214,10 +216,11 @@ Step 1: Create Your Implementation Class</h2>
 <div class="line">        initialized_ = <span class="keyword">true</span>;</div>
 <div class="line">        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line">    }</div>
+<div class="line"> </div>
 <div class="line">};</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md107"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md108"></a>
 Step 2: Platform-Specific Examples</h2>
-<h3><a class="anchor" id="autotoc_md108"></a>
+<h3><a class="anchor" id="autotoc_md109"></a>
 ESP32 (ESP-IDF)</h3>
 <p><b>Location</b>: See <a href="../examples/esp32/main/esp32_pca9685_bus.hpp"><code>examples/esp32/main/esp32_pca9685_bus.hpp</code></a> for a complete ESP32 implementation using ESP-IDF's I2C master driver API.</p>
 <p>For a complete working example, see <a href="../examples/esp32/main/pca9685_comprehensive_test.cpp"><code>examples/esp32/main/pca9685_comprehensive_test.cpp</code></a>.</p>
@@ -234,7 +237,7 @@ ESP32 (ESP-IDF)</h3>
 <div class="line">    <span class="comment">// Handle error</span></div>
 <div class="line">    <span class="keywordflow">return</span>;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md109"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md110"></a>
 STM32 (HAL)</h3>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;stm32f4xx_hal.h&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
@@ -259,8 +262,9 @@ STM32 (HAL)</h3>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordtype">bool</span> EnsureInitialized() noexcept { <span class="keywordflow">return</span> <span class="keyword">true</span>; <span class="comment">/* HAL_I2C_Init done elsewhere */</span> }</div>
+<div class="line"> </div>
 <div class="line">};</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md110"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md111"></a>
 Arduino</h3>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;Wire.h&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
@@ -287,10 +291,11 @@ Arduino</h3>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordtype">bool</span> EnsureInitialized() noexcept { Wire.begin(); <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
+<div class="line"> </div>
 <div class="line">};</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md111"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md112"></a>
 Common Pitfalls</h1>
-<h2><a class="anchor" id="autotoc_md112"></a>
+<h2><a class="anchor" id="autotoc_md113"></a>
 ❌ Don't Use Virtual Functions</h2>
 <div class="fragment"><div class="line"><span class="comment">// WRONG - defeats the purpose of CRTP</span></div>
 <div class="line"><span class="keyword">class </span>MyI2c : <span class="keyword">public</span> pca9685::I2cInterface&lt;MyI2c&gt; {</div>
@@ -299,7 +304,7 @@ Common Pitfalls</h1>
 <div class="line">        <span class="comment">// ...</span></div>
 <div class="line">    }</div>
 <div class="line">};</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md113"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md114"></a>
 ✅ Correct CRTP Implementation</h2>
 <div class="fragment"><div class="line"><span class="comment">// CORRECT - no virtual keyword, PascalCase, noexcept</span></div>
 <div class="line"><span class="keyword">class </span>MyI2c : <span class="keyword">public</span> pca9685::I2cInterface&lt;MyI2c&gt; {</div>
@@ -308,19 +313,19 @@ Common Pitfalls</h1>
 <div class="line">        <span class="comment">// ...</span></div>
 <div class="line">    }</div>
 <div class="line">};</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md114"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md115"></a>
 ❌ Don't Forget the Template Parameter</h2>
 <div class="fragment"><div class="line"><span class="comment">// WRONG - missing template parameter</span></div>
 <div class="line"><span class="keyword">class </span>MyI2c : <span class="keyword">public</span> pca9685::I2cInterface {  <span class="comment">// ❌ Compiler error</span></div>
 <div class="line">    <span class="comment">// ...</span></div>
 <div class="line">};</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md115"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md116"></a>
 ✅ Correct Template Parameter</h2>
 <div class="fragment"><div class="line"><span class="comment">// CORRECT - pass your class as template parameter</span></div>
 <div class="line"><span class="keyword">class </span>MyI2c : <span class="keyword">public</span> pca9685::I2cInterface&lt;MyI2c&gt; {  <span class="comment">// ✅</span></div>
 <div class="line">    <span class="comment">// ...</span></div>
 <div class="line">};</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md116"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md117"></a>
 ❌ Address Format Confusion</h2>
 <p>The driver uses <b>7-bit I2C addresses</b>. Some platforms use 8-bit addresses (7-bit &lt;&lt; 1):</p>
 <div class="fragment"><div class="line"><span class="comment">// WRONG - if your platform uses 8-bit addresses</span></div>
@@ -328,7 +333,7 @@ Common Pitfalls</h1>
 <div class="line"> </div>
 <div class="line"><span class="comment">// CORRECT</span></div>
 <div class="line">i2c_write(addr &lt;&lt; 1, ...);  <span class="comment">// ✅ Convert 7-bit to 8-bit</span></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md117"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md118"></a>
 Testing Your Implementation</h1>
 <p>After implementing the interface, test it:</p>
 <div class="fragment"><div class="line">MyPlatformI2c i2c;</div>
@@ -346,7 +351,7 @@ Testing Your Implementation</h1>
 <div class="line">    <span class="comment">// Debug your I2C implementation</span></div>
 <div class="line">    pwm.ClearErrorFlags(flags); <span class="comment">// Clear after handling</span></div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md118"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md119"></a>
 Next Steps</h1>
 <ul>
 <li>See <a class="el" href="md_docs_2configuration.html">Configuration</a> for driver configuration options</li>

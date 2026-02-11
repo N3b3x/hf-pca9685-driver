@@ -176,7 +176,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
       </button><a href="/hf-pca9685-driver/development/" class="nav-list-link">HardFOC PCA9685 Driver</a><ul class="nav-list"><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="📚 Documentation submenu" aria-expanded="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-      </button><a href="/hf-pca9685-driver/development/docs/" class="nav-list-link">📚 Documentation</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/installation/" class="nav-list-link">🛠️ Installation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/quickstart/" class="nav-list-link">⚡ Quick Start</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/hardware_setup/" class="nav-list-link">🔌 Hardware Setup</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/platform_integration/" class="nav-list-link">🔧 Platform Integration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/configuration/" class="nav-list-link">⚙️ Configuration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/api_reference/" class="nav-list-link">📖 API Reference</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/examples/" class="nav-list-link">💡 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/troubleshooting/" class="nav-list-link">🐛 Troubleshooting</a></li></ul></li></ul></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/" class="nav-list-link">PCAL9555 ESP32-C6 Comprehensive Test Suite</a></li></ul>
+      </button><a href="/hf-pca9685-driver/development/docs/" class="nav-list-link">📚 Documentation</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/installation/" class="nav-list-link">🛠️ Installation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/quickstart/" class="nav-list-link">⚡ Quick Start</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/hardware_setup/" class="nav-list-link">🔌 Hardware Setup</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/platform_integration/" class="nav-list-link">🔧 Platform Integration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/configuration/" class="nav-list-link">⚙️ Configuration</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/api_reference/" class="nav-list-link">📖 API Reference</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/examples/" class="nav-list-link">💡 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/docs/troubleshooting/" class="nav-list-link">🐛 Troubleshooting</a></li></ul></li></ul></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/" class="nav-list-link">ESP32 PCA9685 Applications — Documentation</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/comprehensive-test.html" class="nav-list-link">PCA9685 Comprehensive Test Suite</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/" class="nav-list-link">PCA9685 ESP32 Examples</a></li><li class="nav-list-item"><a href="/hf-pca9685-driver/development/examples/esp32/docs/servo-demo.html" class="nav-list-link">PCA9685 Hobby Servo Demo</a></li></ul>
   
 </nav>
 
@@ -565,6 +565,11 @@
       <td><code class="language-plaintext highlighter-rouge">void SetRetries(int retries) noexcept</code></td>
       <td>Set I2C retry count for register operations</td>
     </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetRetryDelay()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">void SetRetryDelay(RetryDelayFn fn) noexcept</code></td>
+      <td>Set optional callback invoked between retries (e.g. 1 ms delay for bus recovery); default nullptr</td>
+    </tr>
   </tbody>
 </table></div>
 <h2 id="types">
@@ -575,6 +580,31 @@
   
 </h2>
     
+<h3 id="type-aliases">
+  
+  
+    <a href="#type-aliases" class="anchor-heading" aria-labelledby="type-aliases"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Type Aliases
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Definition</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">RetryDelayFn</code></td>
+      <td><code class="language-plaintext highlighter-rouge">void (*)()</code></td>
+      <td>Optional callback for delay between I2C retries; used with <code class="language-plaintext highlighter-rouge">SetRetryDelay()</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
 <h3 id="enumerations">
   
   
@@ -661,6 +691,8 @@
 
 <p><strong>Location</strong>: <a href="../inc/pca9685_i2c_interface.hpp"><code class="language-plaintext highlighter-rouge">inc/pca9685_i2c_interface.hpp</code></a></p>
 
+<p>The interface is <strong>non-copyable and non-movable</strong>; use references or pointers to the concrete bus type.</p>
+
 <div class="table-wrapper"><table>
   <thead>
     <tr>
@@ -686,7 +718,9 @@
       <td>Ensure I2C bus is initialized and ready</td>
     </tr>
   </tbody>
-</table></div><hr />
+</table></div>
+
+<p>The driver supports an optional retry delay via <strong>SetRetryDelay()</strong> (a function pointer). The I2C implementation can expose a static delay (e.g. <code class="language-plaintext highlighter-rouge">Esp32Pca9685Bus::RetryDelay</code>) and the app passes it to the driver after construction.</p><hr />
 
 <p><strong>Navigation</strong>
 ⬅️ <a href="/hf-pca9685-driver/development/docs/configuration/">Configuration</a> | <a href="/hf-pca9685-driver/development/docs/examples/">Next: Examples ➡️</a> | <a href="/hf-pca9685-driver/development/docs/">Back to Index</a></p>
