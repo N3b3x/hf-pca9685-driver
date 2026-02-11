@@ -76,8 +76,8 @@ $(function() {
   <div class="headertitle"><div class="title">Examples</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md44"></a> This guide provides complete, working examples demonstrating various use cases for the PCA9685 driver.</p>
-<h1><a class="anchor" id="autotoc_md45"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md49"></a> This guide provides complete, working examples demonstrating various use cases for the PCA9685 driver.</p>
+<h1><a class="anchor" id="autotoc_md50"></a>
 Example 1: Basic Servo Control</h1>
 <p>This example shows how to control a standard servo motor using the PCA9685.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
@@ -86,7 +86,8 @@ Example 1: Basic Servo Control</h1>
 <div class="line"><span class="comment">// ESP32 I2C implementation</span></div>
 <div class="line"><span class="keyword">class </span>Esp32I2cBus : <span class="keyword">public</span> pca9685::I2cInterface&lt;Esp32I2cBus&gt; {</div>
 <div class="line"><span class="keyword">public</span>:</div>
-<div class="line">    <span class="keywordtype">bool</span> Write(uint8_t addr, uint8_t reg, <span class="keyword">const</span> uint8_t* data, <span class="keywordtype">size_t</span> len) {</div>
+<div class="line">    <span class="keywordtype">bool</span> EnsureInitialized() noexcept { <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
+<div class="line">    <span class="keywordtype">bool</span> Write(uint8_t addr, uint8_t reg, <span class="keyword">const</span> uint8_t* data, <span class="keywordtype">size_t</span> len) <span class="keyword">noexcept</span> {</div>
 <div class="line">        i2c_cmd_handle_t cmd = i2c_cmd_link_create();</div>
 <div class="line">        i2c_master_start(cmd);</div>
 <div class="line">        i2c_master_write_byte(cmd, (addr &lt;&lt; 1) | I2C_MASTER_WRITE, <span class="keyword">true</span>);</div>
@@ -98,7 +99,7 @@ Example 1: Basic Servo Control</h1>
 <div class="line">        <span class="keywordflow">return</span> ret == ESP_OK;</div>
 <div class="line">    }</div>
 <div class="line">    </div>
-<div class="line">    <span class="keywordtype">bool</span> Read(uint8_t addr, uint8_t reg, uint8_t* data, <span class="keywordtype">size_t</span> len) {</div>
+<div class="line">    <span class="keywordtype">bool</span> Read(uint8_t addr, uint8_t reg, uint8_t* data, <span class="keywordtype">size_t</span> len) <span class="keyword">noexcept</span> {</div>
 <div class="line">        i2c_cmd_handle_t cmd = i2c_cmd_link_create();</div>
 <div class="line">        i2c_master_start(cmd);</div>
 <div class="line">        i2c_master_write_byte(cmd, (addr &lt;&lt; 1) | I2C_MASTER_WRITE, <span class="keyword">true</span>);</div>
@@ -139,7 +140,7 @@ Example 1: Basic Servo Control</h1>
 <div class="line">    </div>
 <div class="line">    printf(<span class="stringliteral">&quot;Servo control example complete.\n&quot;</span>);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md46"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md51"></a>
 Explanation</h2>
 <ol type="1">
 <li><b>I2C Interface</b>: Implement <code>I2cInterface</code> for your platform (ESP32 example shown)</li>
@@ -152,10 +153,10 @@ Explanation</h2>
 </ul>
 </li>
 </ol>
-<h2><a class="anchor" id="autotoc_md47"></a>
+<h2><a class="anchor" id="autotoc_md52"></a>
 Expected Output</h2>
 <p>The servo should move to different positions as the duty cycle changes.</p>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md53"></a>
 Example 3: Multiple Channels</h1>
 <p>This example shows controlling multiple channels simultaneously.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
@@ -180,10 +181,10 @@ Example 3: Multiple Channels</h1>
 <div class="line">        pwm.SetDuty(ch, 0.5f);</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md49"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md54"></a>
 Explanation</h2>
 <p>Each channel operates independently. You can set different duty cycles for each of the 16 channels.</p>
-<h1><a class="anchor" id="autotoc_md50"></a>
+<h1><a class="anchor" id="autotoc_md55"></a>
 Example 5: Bulk Channel Update</h1>
 <p>This example shows efficient bulk updates using <code>SetAllPwm()</code>.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
@@ -206,10 +207,26 @@ Example 5: Bulk Channel Update</h1>
 <div class="line">    <span class="comment">// Turn all channels fully on</span></div>
 <div class="line">    pwm.SetAllPwm(0, 4095);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md51"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md56"></a>
 Explanation</h2>
 <p><code>SetAllPwm()</code> is more efficient than calling <code>SetPwm()</code> 16 times. It writes to the ALL_LED registers, updating all channels in a single I2C transaction.</p>
-<p><b>Navigation</b> ⬅️ <a class="el" href="md_docs_2api__reference.html">API Reference</a> | <a class="el" href="md_docs_2troubleshooting.html">Next: Troubleshooting ➡️</a> | <a class="el" href="md_docs_2index.html">Back to Index</a> </p>
+<h1><a class="anchor" id="autotoc_md57"></a>
+Running the Examples</h1>
+<h2><a class="anchor" id="autotoc_md58"></a>
+ESP32</h2>
+<p>The examples are available in the <a href="../examples/esp32/"><code>examples/esp32</code></a> directory.</p>
+<div class="fragment"><div class="line">cd examples/esp32</div>
+<div class="line">idf.py build flash monitor</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md59"></a>
+Other Platforms</h2>
+<p>Adapt the I2C interface implementation for your platform (see <a class="el" href="md_docs_2platform__integration.html">Platform Integration</a>) and compile with your platform's toolchain.</p>
+<h1><a class="anchor" id="autotoc_md60"></a>
+Next Steps</h1>
+<ul>
+<li>Review the <a class="el" href="md_docs_2api__reference.html">API Reference</a> for method details</li>
+<li>Check <a class="el" href="md_docs_2troubleshooting.html">Troubleshooting</a> if you encounter issues</li>
+<li>Explore the <a href="../examples/">examples directory</a> for more examples </li>
+</ul>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
