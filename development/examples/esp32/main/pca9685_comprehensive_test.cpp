@@ -87,15 +87,26 @@ static std::unique_ptr<PCA9685Driver> create_test_driver() noexcept {
     return driver;
 }
 
+// Optional I2C pin override: if your PCA9685 is on different pins, build with
+// -DPCA9685_EXAMPLE_I2C_SDA_GPIO=<num> -DPCA9685_EXAMPLE_I2C_SCL_GPIO=<num>
+// (e.g. 8 and 9 for ESP32-S3). Default: GPIO4 (SDA), GPIO5 (SCL) to match pcal95555/bno08x.
+#if defined(PCA9685_EXAMPLE_I2C_SDA_GPIO) && defined(PCA9685_EXAMPLE_I2C_SCL_GPIO)
+static constexpr gpio_num_t EXAMPLE_SDA_PIN = (gpio_num_t)PCA9685_EXAMPLE_I2C_SDA_GPIO;
+static constexpr gpio_num_t EXAMPLE_SCL_PIN = (gpio_num_t)PCA9685_EXAMPLE_I2C_SCL_GPIO;
+#else
+static constexpr gpio_num_t EXAMPLE_SDA_PIN = GPIO_NUM_4;
+static constexpr gpio_num_t EXAMPLE_SCL_PIN = GPIO_NUM_5;
+#endif
+
 /**
  * @brief Initialize test resources
  */
 static bool init_test_resources() noexcept {
-    // Initialize I2C bus (same port/pins as hf-pcal95555-driver and bno08x: GPIO4/5)
+    // Initialize I2C bus (default GPIO4/5; override with PCA9685_EXAMPLE_I2C_SDA_GPIO/SCL_GPIO)
     Esp32Pca9685Bus::I2CConfig config;
     config.port = I2C_NUM_0;
-    config.sda_pin = GPIO_NUM_4;  // SDA - same as pcal95555/bno08x
-    config.scl_pin = GPIO_NUM_5;  // SCL - same as pcal95555/bno08x
+    config.sda_pin = EXAMPLE_SDA_PIN;
+    config.scl_pin = EXAMPLE_SCL_PIN;
     config.frequency = 100000;    // 100 kHz for PCA9685
     config.pullup_enable = true;
 
