@@ -92,7 +92,7 @@ The key insight: `static_cast<Derived*>(this)` allows the base class to call met
 
 The PCA9685 driver requires you to implement the `I2cInterface` template:
 
-**Location**: [`inc/pca9685.hpp#L57`](../inc/pca9685.hpp#L57)
+**Location**: [`inc/pca9685_i2c_interface.hpp`](../inc/pca9685_i2c_interface.hpp) (interface); driver class in [`inc/pca9685.hpp`](../inc/pca9685.hpp)
 
 ```cpp
 template <typename Derived>
@@ -105,11 +105,15 @@ public:
 };
 ```
 
+**Note**: `I2cInterface` is non-copyable and non-movable; use references or pointers to your concrete bus type.
+
 **Method Requirements**:
 - `Write()`: Write `len` bytes from `data` to register `reg` at I2C address `addr` (7-bit address)
 - `Read()`: Read `len` bytes into `data` from register `reg` at I2C address `addr` (7-bit address)
 - `EnsureInitialized()`: Lazy-initialize the I2C bus; return true if ready
-- All methods return `true` on success, `false` on failure (NACK, timeout, etc.)
+- Write/Read return `true` on success, `false` on failure (NACK, timeout, etc.)
+
+**Optional retry delay**: The driver can call an optional callback between I2C retries for bus recovery. Your bus class can expose a static delay (e.g. `static void RetryDelay() noexcept { vTaskDelay(pdMS_TO_TICKS(1)); }`). After constructing the driver, the application calls `driver->SetRetryDelay(MyBus::RetryDelay)`. If not set, no delay is used between retries.
 
 ## Implementation Steps
 
@@ -145,6 +149,7 @@ public:
         initialized_ = true;
         return true;
     }
+
 };
 ```
 
@@ -198,6 +203,7 @@ public:
     }
 
     bool EnsureInitialized() noexcept { return true; /* HAL_I2C_Init done elsewhere */ }
+
 };
 ```
 
@@ -229,6 +235,7 @@ public:
     }
 
     bool EnsureInitialized() noexcept { Wire.begin(); return true; }
+
 };
 ```
 

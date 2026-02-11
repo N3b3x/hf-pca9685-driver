@@ -263,6 +263,9 @@ bool pca9685::PCA9685<I2cType>::writeReg(uint8_t reg, uint8_t value) noexcept {
     if (i2c_->Write(addr_, reg, &value, 1)) {
       return true;
     }
+    if (attempt < retries_ && retry_delay_) {
+      retry_delay_();
+    }
   }
   setError(Error::I2cWrite);
   return false;
@@ -276,6 +279,9 @@ bool pca9685::PCA9685<I2cType>::readReg(uint8_t reg, uint8_t& value) noexcept {
   for (int attempt = 0; attempt <= retries_; ++attempt) {
     if (i2c_->Read(addr_, reg, &value, 1)) {
       return true;
+    }
+    if (attempt < retries_ && retry_delay_) {
+      retry_delay_();
     }
   }
   setError(Error::I2cRead);
@@ -291,6 +297,9 @@ bool pca9685::PCA9685<I2cType>::writeRegBlock(uint8_t reg, const uint8_t* data, 
     if (i2c_->Write(addr_, reg, data, len)) {
       return true;
     }
+    if (attempt < retries_ && retry_delay_) {
+      retry_delay_();
+    }
   }
   setError(Error::I2cWrite);
   return false;
@@ -304,6 +313,9 @@ bool pca9685::PCA9685<I2cType>::readRegBlock(uint8_t reg, uint8_t* data, size_t 
   for (int attempt = 0; attempt <= retries_; ++attempt) {
     if (i2c_->Read(addr_, reg, data, len)) {
       return true;
+    }
+    if (attempt < retries_ && retry_delay_) {
+      retry_delay_();
     }
   }
   setError(Error::I2cRead);
@@ -326,8 +338,7 @@ bool pca9685::PCA9685<I2cType>::modifyReg(uint8_t reg, uint8_t mask, uint8_t val
 
 template <typename I2cType>
 uint8_t pca9685::PCA9685<I2cType>::calcPrescale(float freq_hz) const noexcept {
-  constexpr float OSC_FREQ_FLOAT = 25000000.0F; // 25 MHz oscillator frequency
-  float prescale_val = (OSC_FREQ_FLOAT / (4096.0F * freq_hz)) - 1.0F;
+  float prescale_val = (static_cast<float>(OSC_FREQ_) / (4096.0F * freq_hz)) - 1.0F;
   prescale_val = ::std::max(prescale_val, 3.0F);
   prescale_val = ::std::min(prescale_val, 255.0F);
   return static_cast<uint8_t>(lroundf(prescale_val));

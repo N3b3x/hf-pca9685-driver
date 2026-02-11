@@ -28,10 +28,9 @@ This guide helps you diagnose and resolve common issues when using the PCA9685 d
 **Solutions:**
 1. **Verify I2C bus initialization**:
    ```cpp
-   // Ensure I2C is initialized before creating driver
-   i2c_config_t conf = { /* your config */ };
-   i2c_param_config(I2C_NUM_0, &conf);
-   i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0);
+   // Ensure I2C is initialized before creating driver.
+   // ESP32: use driver/i2c_master.h (e.g. i2c_new_master_bus) as in
+   // examples/esp32/main/esp32_pca9685_bus.hpp — or your platform's I2C init.
    ```
 
 2. **Check I2C address**:
@@ -147,14 +146,8 @@ pwm.SetPwmFreq(50.0f); // Now this will work
 **Solutions:**
 1. **Check bus speed**:
    ```cpp
-   // Reduce speed if using long wires
-   i2c_config_t conf = {
-       .mode = I2C_MODE_MASTER,
-       .sda_io_num = GPIO_NUM_4,
-       .scl_io_num = GPIO_NUM_5,
-       .master.clk_speed = 100000, // Try 100 kHz instead of 400 kHz
-       // ...
-   };
+   // Reduce speed if using long wires (e.g. in Esp32Pca9685Bus::I2CConfig)
+   config.frequency = 100000;  // 100 kHz instead of 400 kHz
    ```
 
 2. **Verify signal integrity**:
@@ -215,9 +208,7 @@ pwm.SetDuty(0, 0.5f);  // 3. Now set channels
 **Error: "Undefined reference"**
 
 **Solution:**
-- Verify you're including/linking the driver source
-- For header-only template, ensure `pca9685.ipp` is accessible
-- Check include paths are correct
+- The driver is template-based: implementation is in `pca9685.ipp`, included by `pca9685.hpp`. Ensure both `inc/` and `src/` are on the include path so the header can find the `.ipp` file. No separate library needs to be linked.
 
 ---
 

@@ -34,59 +34,49 @@ Copy the following files into your project:
 
 ```
 inc/
-  └── pca9685.hpp
+  ├── pca9685.hpp
+  └── pca9685_i2c_interface.hpp
 src/
-  └── pca9685.cpp
+  └── pca9685.ipp
 ```
 
-**Note**: The driver uses a header-only template design where `pca9685.cpp` is included by `pca9685.hpp`. You typically only need to include the header file in your project.
+**Note**: The driver uses a template design: the implementation is in `src/pca9685.ipp` and is included by `inc/pca9685.hpp`. Your build must have `inc/` and `src/` on the include path so that `pca9685.hpp` can include the `.ipp` file. You do not compile `pca9685.ipp` as a separate translation unit.
 
 ## Building the Library
 
-### Using Make
+### As Part of Your Project (Include Path)
 
-A simple Makefile is provided:
+Since the driver is header-only (template implementation in `.ipp`), add the repository `inc/` and `src/` directories to your include path and include the main header:
 
-```bash
-make
+```cpp
+#include "pca9685.hpp"
 ```
 
-This builds `build/libpca9685.a` which can be linked into your application.
+Your build system must allow the header to find `../src/pca9685.ipp` (relative to the header) or you can add `src/` to the include path as well.
 
 ### Using CMake
 
 ```cmake
-add_subdirectory(pca9685-driver)
-target_link_libraries(your_target PRIVATE pca9685)
-```
-
-Or manually:
-
-```cmake
-add_library(pca9685 STATIC
-    inc/pca9685.hpp
-    src/pca9685.cpp
+# Include path must include both inc and src (for .ipp include from header)
+target_include_directories(your_target PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/hf-pca9685-driver/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/hf-pca9685-driver/src
 )
-target_include_directories(pca9685 PUBLIC inc)
+# No separate library: template is instantiated in your code
 ```
 
-### Using ESP-IDF Component
+### Using ESP-IDF (ESP32 Examples)
 
-The driver can be used as an ESP-IDF component. See the [examples/esp32](../examples/esp32/) directory for component integration examples.
-
-## Running Unit Tests
-
-The library includes unit tests. To run them:
+The driver is provided as an ESP-IDF component in the ESP32 examples. Build and flash using the example scripts:
 
 ```bash
-make test
-./build/test
+cd examples/esp32
+./scripts/build_app.sh list                    # List available apps
+./scripts/build_app.sh pca9685_comprehensive_test Debug
+./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug
 ```
 
-Expected output:
-```
-All tests passed.
-```
+See [examples/esp32/README.md](../examples/esp32/README.md) and [examples/esp32/docs/](../examples/esp32/docs/) for full setup and app descriptions.
 
 ## Verification
 
@@ -95,14 +85,18 @@ To verify the installation:
 1. Include the header in a test file:
    ```cpp
    #include "pca9685.hpp"
+   // Provide an I2C implementation and instantiate PCA9685<YourI2c>
    ```
 
-2. Compile a simple test:
+2. Ensure your include path contains both `inc/` and `src/` (so `pca9685.hpp` can include `pca9685.ipp`).
+
+3. For hardware verification, use the ESP32 comprehensive test app (see [Examples](examples.md)):
    ```bash
-   g++ -std=c++11 -I inc/ -c src/pca9685.cpp -o test.o
+   cd examples/esp32
+   ./scripts/build_app.sh pca9685_comprehensive_test Debug
+   ./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug
    ```
-
-3. If compilation succeeds, the library is properly installed.
+   All 12 tests should pass when the PCA9685 is connected at 0x40 on the configured I2C pins.
 
 ## Next Steps
 

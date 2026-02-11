@@ -34,8 +34,8 @@ extern "C" {
 }
 #endif
 
-// Project headers
-#include "pca9685.hpp"
+// Project headers (interface only; include pca9685.hpp in app after this header so driver sees full bus type)
+#include "pca9685_i2c_interface.hpp"
 
 static constexpr const char* TAG_I2C = "PCA9685_I2C";
 
@@ -56,6 +56,7 @@ public:
     gpio_num_t sda_pin = GPIO_NUM_4; ///< SDA pin (default GPIO4)
     gpio_num_t scl_pin = GPIO_NUM_5; ///< SCL pin (default GPIO5)
     uint32_t frequency = 100000;     ///< I2C frequency in Hz (default 100kHz for PCA9685)
+    uint32_t scl_wait_us = 0;        ///< SCL clock-stretching timeout in us (0 = ESP-IDF default; set >0 to allow slave stretching)
     bool pullup_enable = true;       ///< Enable internal pullups
   };
 
@@ -224,6 +225,16 @@ public:
   }
 
   /**
+   * @brief Optional delay callback for PCA9685 driver retries (1 ms task delay).
+   *
+   * Pass to driver via SetRetryDelay(Esp32Pca9685Bus::RetryDelay) after creating
+   * the driver to allow I2C bus recovery between retry attempts.
+   */
+  static void RetryDelay() noexcept {
+    vTaskDelay(pdMS_TO_TICKS(1));
+  }
+
+  /**
    * @brief Get the I2C configuration
    * @return Reference to the I2C configuration
    */
@@ -272,7 +283,7 @@ private:
         .dev_addr_length = I2C_ADDR_BIT_LEN_7,
         .device_address = addr,
         .scl_speed_hz = config_.frequency,
-        .scl_wait_us = 0,
+        .scl_wait_us = config_.scl_wait_us,
         .flags = {},
     };
 

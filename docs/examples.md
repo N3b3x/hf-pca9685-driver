@@ -280,7 +280,7 @@ extern "C" void app_main() {
     pwm.Reset();
     pwm.SetPwmFreq(1000.0f);
     
-    // Configure retry count for I2C operations (default is 1 retry)
+    // Configure retry count for I2C operations (default is 3)
     pwm.SetRetries(3);
     
     // Configure output driver mode (true = totem-pole, false = open-drain)
@@ -308,7 +308,7 @@ extern "C" void app_main() {
 
 ### Explanation
 
-- **`SetRetries()`**: Configures how many times I2C operations are retried on failure (default 1)
+- **`SetRetries()`**: Configures how many times I2C operations are retried on failure (default 3)
 - **`SetOutputDriverMode()`**: Selects totem-pole (true) or open-drain (false) output via MODE2 OUTDRV bit
 - **`SetOutputInvert()`**: Inverts output logic via MODE2 INVRT bit
 - **`SetChannelFullOn()` / `SetChannelFullOff()`**: Sets a channel fully on or off without PWM
@@ -318,18 +318,49 @@ extern "C" void app_main() {
 
 ## Running the Examples
 
-### ESP32
+### ESP32 Applications
 
-The examples are available in the [`examples/esp32`](../examples/esp32/) directory.
+The ESP32 example project provides two applications, built and flashed via scripts (not raw `idf.py`):
+
+| Application | Description |
+|-------------|-------------|
+| **pca9685_comprehensive_test** | Full driver test suite: init, frequency, PWM, duty cycle, all-channel control, prescale readback, sleep/wake, output config, error handling, stress tests (12 tests total). |
+| **pca9685_servo_demo** | 16-channel hobby servo demo: 1000–2000 µs pulse, velocity-limited motion, synchronized animations (Wave, Breathe, Cascade, Mirror, etc.). |
+
+**Prerequisites**: ESP-IDF (e.g. release/v5.5), target e.g. `esp32s3`. From the repo root:
 
 ```bash
 cd examples/esp32
-idf.py build flash monitor
+chmod +x scripts/*.sh
+./scripts/setup_repo.sh   # first time only
+./scripts/build_app.sh list
 ```
+
+**Build:**
+```bash
+./scripts/build_app.sh pca9685_comprehensive_test Debug
+# or
+./scripts/build_app.sh pca9685_servo_demo Debug
+```
+
+**Flash and monitor:**
+```bash
+./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug
+# or
+./scripts/flash_app.sh flash_monitor pca9685_servo_demo Debug
+```
+
+**I2C pins**: Default SDA=GPIO4, SCL=GPIO5. Override at configure time if needed:
+```bash
+./scripts/build_app.sh pca9685_comprehensive_test Debug \
+  -- -DPCA9685_EXAMPLE_I2C_SDA_GPIO=8 -DPCA9685_EXAMPLE_I2C_SCL_GPIO=9
+```
+
+See [examples/esp32/README.md](../examples/esp32/README.md) and [examples/esp32/docs/](../examples/esp32/docs/) for hardware setup and app details.
 
 ### Other Platforms
 
-Adapt the I2C interface implementation for your platform (see [Platform Integration](platform_integration.md)) and compile with your platform's toolchain.
+Adapt the I2C interface implementation for your platform (see [Platform Integration](platform_integration.md)) and compile with your platform's toolchain. The ESP32 implementation in [`examples/esp32/main/esp32_pca9685_bus.hpp`](../examples/esp32/main/esp32_pca9685_bus.hpp) uses ESP-IDF's `driver/i2c_master.h` (new I2C master API) as a reference.
 
 ## Next Steps
 

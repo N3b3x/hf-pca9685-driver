@@ -43,7 +43,7 @@ pwm.SetPwmFreq(1000.0f); // 1 kHz for LEDs
 
 **Valid Range**: 24 Hz to 1526 Hz (typical)
 
-**Location**: [`src/pca9685.cpp#L46`](../src/pca9685.cpp#L46)
+**Location**: [`src/pca9685.ipp`](../src/pca9685.ipp) (template implementation)
 
 ### Frequency Calculation
 
@@ -58,7 +58,7 @@ Where:
 - `4096` is the PWM resolution (12 bits)
 - `freq_hz` is the desired frequency
 
-**Implementation**: [`src/pca9685.cpp#L168`](../src/pca9685.cpp#L168)
+**Implementation**: [`src/pca9685.ipp`](../src/pca9685.ipp) (`calcPrescale`)
 
 ### Common Frequencies
 
@@ -119,7 +119,7 @@ The driver abstracts register access, but understanding the register map helps w
 | `PRE_SCALE` | 0xFE | PWM frequency prescaler |
 | `TESTMODE` | 0xFF | Test mode register |
 
-**Register Definitions**: [`inc/pca9685.hpp#L139`](../inc/pca9685.hpp#L139)
+**Register Definitions**: [`inc/pca9685.hpp`](../inc/pca9685.hpp) (enum `Register`)
 
 ## Advanced Features
 

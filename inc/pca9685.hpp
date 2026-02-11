@@ -5,7 +5,7 @@
  *
  * This driver provides a platform-independent C++ interface for the NXP PCA9685
  * PWM controller. It requires the user to provide an implementation of the
- * I2cBus interface for their platform. No dependencies on project-specific or
+ * I2cInterface for their platform. No dependencies on project-specific or
  * MCU-specific types are present.
  *
  * Features:
@@ -21,13 +21,11 @@
 #ifndef PCA9685_HPP
 #define PCA9685_HPP
 
-#include <algorithm> // For std algorithms
-#include <array>     // For std::array
-#include <cmath>     // For math functions
+#include <algorithm>
+#include <array>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <stdio.h> // NOLINT(modernize-deprecated-headers) - For FILE* used by ESP-IDF headers
-#include <string.h> // NOLINT(modernize-deprecated-headers) - For C string functions (ESP-IDF compatibility)
 
 #include "pca9685_i2c_interface.hpp"
 
@@ -41,10 +39,10 @@ namespace pca9685 {
  * operate the PCA9685, including frequency setting, per-channel PWM, and device
  * reset.
  *
- * All I2C operations are routed through the user-supplied I2cBus interface.
+ * All I2C operations are routed through the user-supplied I2cInterface.
  *
  * @tparam I2cType The I2C interface implementation type that inherits from
- * pca9685::I2cBus<I2cType>
+ * pca9685::I2cInterface<I2cType>
  *
  * @note The driver uses CRTP-based I2C interface for zero virtual call
  * overhead.
@@ -69,31 +67,31 @@ public:
   };
 
   /**
-   * @brief PCA9685 register map.
+   * @brief PCA9685 register map (I2C register addresses).
    */
   enum class Register : uint8_t {
-    MODE1 = 0x00,
-    MODE2 = 0x01,
-    SUBADR1 = 0x02,
-    SUBADR2 = 0x03,
-    SUBADR3 = 0x04,
-    ALLCALLADR = 0x05,
-    LED0_ON_L = 0x06,
-    LED0_ON_H = 0x07,
-    LED0_OFF_L = 0x08,
-    LED0_OFF_H = 0x09,
-    // ... LED1-LED15 follow sequentially
-    ALL_LED_ON_L = 0xFA,
-    ALL_LED_ON_H = 0xFB,
-    ALL_LED_OFF_L = 0xFC,
-    ALL_LED_OFF_H = 0xFD,
-    PRE_SCALE = 0xFE,
-    TESTMODE = 0xFF
+    MODE1 = 0x00,       ///< Mode register 1 (reset, sleep, auto-increment, etc.)
+    MODE2 = 0x01,       ///< Mode register 2 (output drive, invert, output change behaviour)
+    SUBADR1 = 0x02,     ///< I2C subaddress 1
+    SUBADR2 = 0x03,     ///< I2C subaddress 2
+    SUBADR3 = 0x04,     ///< I2C subaddress 3
+    ALLCALLADR = 0x05,  ///< All-call I2C address
+    LED0_ON_L = 0x06,   ///< LED0 output and brightness control byte 0 (on time, low byte)
+    LED0_ON_H = 0x07,   ///< LED0 output and brightness control byte 1 (on time, high bits + full-on)
+    LED0_OFF_L = 0x08,  ///< LED0 output and brightness control byte 2 (off time, low byte)
+    LED0_OFF_H = 0x09,  ///< LED0 output and brightness control byte 3 (off time, high bits + full-off)
+    /* LED1–LED15: registers 0x0A–0x45 (four bytes per channel, same layout as LED0) */
+    ALL_LED_ON_L = 0xFA,   ///< All LED on time, low byte
+    ALL_LED_ON_H = 0xFB,   ///< All LED on time, high bits
+    ALL_LED_OFF_L = 0xFC,  ///< All LED off time, low byte
+    ALL_LED_OFF_H = 0xFD,  ///< All LED off time, high bits
+    PRE_SCALE = 0xFE,   ///< Prescaler for PWM frequency (oscillator / (4096 * freq))
+    TESTMODE = 0xFF     ///< Test mode register
   };
 
-  static constexpr uint8_t MAX_CHANNELS_ = 16;
-  static constexpr uint16_t MAX_PWM_ = 4095;
-  static constexpr uint32_t OSC_FREQ_ = 25000000;
+  static constexpr uint8_t MAX_CHANNELS_ = 16;   ///< Number of PWM channels (0-15)
+  static constexpr uint16_t MAX_PWM_ = 4095;    ///< Maximum tick value (12-bit)
+  static constexpr uint32_t OSC_FREQ_ = 25000000;  ///< Internal oscillator frequency (Hz)
 
   /**
    * @brief Construct a new PCA9685 driver instance.
@@ -187,7 +185,7 @@ public:
 
   /**
    * @brief Check if any error flag is set.
-   * @return true if error_flags_ != 0.
+   * @return true if one or more error flags are set.
    */
   [[nodiscard]] bool HasAnyError() const noexcept { return error_flags_ != 0; }
 
@@ -223,6 +221,24 @@ public:
    * @param retries Number of retries (0 = no retries, just one attempt).
    */
   void SetRetries(int retries) noexcept { retries_ = retries; }
+
+  /**
+   * @brief Type of optional callback invoked between I2C retry attempts.
+   *
+   * Set via SetRetryDelay(). No parameters, no return value. Called only after a
+   * failed Read/Write when retries remain (e.g. to perform a short delay for bus recovery).
+   */
+  using RetryDelayFn = void (*)();
+
+  /**
+   * @brief Set optional callback invoked between I2C retry attempts (after a failure, before next try).
+   *
+   * Set to a function that performs a short delay (e.g. 1–5 ms) to allow bus recovery,
+   * or leave default (nullptr) for no delay. The driver calls this only when a Read/Write
+   * failed and retries remain.
+   * @param fn Callback function, or nullptr to use no delay.
+   */
+  void SetRetryDelay(RetryDelayFn fn) noexcept { retry_delay_ = fn; }
 
   // ---- Power Management ----
 
@@ -297,18 +313,25 @@ private:
   uint8_t addr_;
   Error last_error_{Error::None};
   uint16_t error_flags_{0};
-  int retries_{1};
+  int retries_{3};
+  RetryDelayFn retry_delay_{nullptr};
   bool initialized_{false};
 
+  /** @brief Set last error and add to error flags. */
   void setError(Error e) noexcept {
     last_error_ = e;
     error_flags_ |= static_cast<uint16_t>(e);
   }
 
+  /** @brief Write one byte to a register. @param reg Register address. @param value Byte to write. @return true on success. */
   bool writeReg(uint8_t reg, uint8_t value) noexcept;
+  /** @brief Read one byte from a register. @param reg Register address. @param[out] value Byte read. @return true on success. */
   bool readReg(uint8_t reg, uint8_t &value) noexcept;
+  /** @brief Write a block of bytes to a register. @param reg Start register. @param data Buffer. @param len Length. @return true on success. */
   bool writeRegBlock(uint8_t reg, const uint8_t *data, size_t len) noexcept;
+  /** @brief Read a block of bytes from a register. @param reg Start register. @param data Buffer. @param len Length. @return true on success. */
   bool readRegBlock(uint8_t reg, uint8_t *data, size_t len) noexcept;
+  /** @brief Compute prescale value for given frequency. @param freq_hz Frequency in Hz. @return Prescale value (0–255). */
   [[nodiscard]] uint8_t calcPrescale(float freq_hz) const noexcept;
 
   /**

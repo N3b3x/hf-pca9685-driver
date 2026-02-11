@@ -110,10 +110,8 @@ For complete API documentation with source code links, see [docs/api_reference.m
 
 ## 📊 Examples
 
-For ESP32 examples, see the [examples/esp32](examples/esp32/) directory.
-Additional examples for other platforms are available in the [examples](examples/) directory.
-
-Detailed example walkthroughs are available in [docs/examples.md](docs/examples.md).
+- **ESP32**: [examples/esp32](examples/esp32/) — two apps: **pca9685_comprehensive_test** (full driver test suite) and **pca9685_servo_demo** (16-channel hobby servo animations). See [examples/esp32/README.md](examples/esp32/README.md) for build/flash and [examples/esp32/docs/](examples/esp32/docs/) for per-app documentation.
+- **Driver examples** (code snippets, any platform): [docs/examples.md](docs/examples.md).
 
 ## 📚 Documentation
 

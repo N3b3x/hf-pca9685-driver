@@ -28,11 +28,15 @@ Welcome! This directory contains step-by-step guides for installing, building, a
 ### **Reference**
 
 6. **[📖 API Reference](api_reference.md)** – Complete API documentation
-7. **[💡 Examples](examples.md)** – Detailed example walkthroughs
+7. **[💡 Examples](examples.md)** – Detailed example walkthroughs (code snippets + ESP32 app list)
+
+### **ESP32 Applications**
+
+8. **ESP32 apps** – [Index](../examples/esp32/docs/index.md) · [Comprehensive test](../examples/esp32/docs/comprehensive-test.md) · [Servo demo](../examples/esp32/docs/servo-demo.md) (build, run, customize)
 
 ### **Troubleshooting**
 
-8. **[🐛 Troubleshooting](troubleshooting.md)** – Common issues and solutions
+9. **[🐛 Troubleshooting](troubleshooting.md)** – Common issues and solutions
 
 ---
 

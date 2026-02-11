@@ -84,13 +84,14 @@ public:
     return static_cast<Derived *>(this)->EnsureInitialized();
   }
 
-  // Prevent copying
+  /** @brief Copy constructor deleted (non-copyable; avoids slicing). */
   I2cInterface(const I2cInterface &) = delete;
+  /** @brief Copy assignment deleted (non-copyable). */
   I2cInterface &operator=(const I2cInterface &) = delete;
-
-  // Allow moving
-  I2cInterface(I2cInterface &&) = default;
-  I2cInterface &operator=(I2cInterface &&) = default;
+  /** @brief Move constructor deleted (non-movable; use derived type to move). */
+  I2cInterface(I2cInterface &&) = delete;
+  /** @brief Move assignment deleted (non-movable). */
+  I2cInterface &operator=(I2cInterface &&) = delete;
 
 protected:
   /**

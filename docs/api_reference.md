@@ -89,8 +89,15 @@ PCA9685(I2cType* bus, uint8_t address);
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `SetRetries()` | `void SetRetries(int retries) noexcept` | Set I2C retry count for register operations |
+| `SetRetryDelay()` | `void SetRetryDelay(RetryDelayFn fn) noexcept` | Set optional callback invoked between retries (e.g. 1 ms delay for bus recovery); default nullptr |
 
 ## Types
+
+### Type Aliases
+
+| Type | Definition | Description |
+|------|-------------|-------------|
+| `RetryDelayFn` | `void (*)()` | Optional callback for delay between I2C retries; used with `SetRetryDelay()`. |
 
 ### Enumerations
 
@@ -115,11 +122,15 @@ Hardware-agnostic I2C interface using the Curiously Recurring Template Pattern.
 
 **Location**: [`inc/pca9685_i2c_interface.hpp`](../inc/pca9685_i2c_interface.hpp)
 
+The interface is **non-copyable and non-movable**; use references or pointers to the concrete bus type.
+
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `Write()` | `bool Write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) noexcept` | Write bytes to a device register |
 | `Read()` | `bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) noexcept` | Read bytes from a device register |
 | `EnsureInitialized()` | `bool EnsureInitialized() noexcept` | Ensure I2C bus is initialized and ready |
+
+The driver supports an optional retry delay via **SetRetryDelay()** (a function pointer). The I2C implementation can expose a static delay (e.g. `Esp32Pca9685Bus::RetryDelay`) and the app passes it to the driver after construction.
 
 ---
 
