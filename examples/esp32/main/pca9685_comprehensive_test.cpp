@@ -91,12 +91,12 @@ static std::unique_ptr<PCA9685Driver> create_test_driver() noexcept {
  * @brief Initialize test resources
  */
 static bool init_test_resources() noexcept {
-    // Initialize I2C bus
+    // Initialize I2C bus (same port/pins as hf-pcal95555-driver and bno08x: GPIO4/5)
     Esp32Pca9685Bus::I2CConfig config;
     config.port = I2C_NUM_0;
-    config.sda_pin = GPIO_NUM_21;
-    config.scl_pin = GPIO_NUM_22;
-    config.frequency = 100000;  // 100 kHz for PCA9685
+    config.sda_pin = GPIO_NUM_4;  // SDA - same as pcal95555/bno08x
+    config.scl_pin = GPIO_NUM_5;  // SCL - same as pcal95555/bno08x
+    config.frequency = 100000;    // 100 kHz for PCA9685
     config.pullup_enable = true;
 
     g_i2c_bus = CreateEsp32Pca9685Bus(config);
