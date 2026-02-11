@@ -118,6 +118,13 @@ endif()
 # Example Type Compile Definitions
 # =============================================================================
 # Add compile definitions for each example type to enable conditional compilation
-target_compile_definitions(${COMPONENT_LIB} PRIVATE
-    "EXAMPLE_TYPE_${APP_TYPE}=1"           # Enable specific example type features
-)
+set(EXAMPLE_DEFS "EXAMPLE_TYPE_${APP_TYPE}=1")
+
+# Optional I2C pin override for PCA9685 (if board uses different pins than GPIO4/5)
+# Pass -DPCA9685_EXAMPLE_I2C_SDA_GPIO=8 -DPCA9685_EXAMPLE_I2C_SCL_GPIO=9 at configure time if needed.
+if(DEFINED PCA9685_EXAMPLE_I2C_SDA_GPIO AND DEFINED PCA9685_EXAMPLE_I2C_SCL_GPIO)
+    list(APPEND EXAMPLE_DEFS "PCA9685_EXAMPLE_I2C_SDA_GPIO=${PCA9685_EXAMPLE_I2C_SDA_GPIO}" "PCA9685_EXAMPLE_I2C_SCL_GPIO=${PCA9685_EXAMPLE_I2C_SCL_GPIO}")
+    message(STATUS "PCA9685 example I2C pins override: SDA=GPIO${PCA9685_EXAMPLE_I2C_SDA_GPIO}, SCL=GPIO${PCA9685_EXAMPLE_I2C_SCL_GPIO}")
+endif()
+
+target_compile_definitions(${COMPONENT_LIB} PRIVATE ${EXAMPLE_DEFS})
