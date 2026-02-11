@@ -27,12 +27,19 @@ permalink: /
 
 ## 📦 Overview
 
-> **📖 [📚🌐 Live Complete Documentation](https://n3b3x.github.io/hf-pca9685-driver/)** - 
+> **📖 [📚🌐 Live Complete Documentation](https://n3b3x.github.io/hf-pca9685-driver/)** -
 > Interactive guides, examples, and step-by-step tutorials
 
-The **PCA9685** is a 16-channel, 12-bit PWM controller from NXP Semiconductors that communicates via I²C. It provides independent PWM control for up to 16 outputs with 12-bit resolution (4096 steps), making it ideal for driving LEDs, servos, and other PWM-controlled devices. The chip features an internal 25 MHz oscillator, configurable PWM frequency from 24 Hz to 1526 Hz, and supports daisy-chaining multiple devices for up to 992 PWM outputs.
+The **PCA9685** is a 16-channel, 12-bit PWM controller from NXP Semiconductors that communicates via
+I²C. It provides independent PWM control for up to 16 outputs with 12-bit resolution (4096 steps),
+making it ideal for driving LEDs, servos, and other PWM-controlled devices. The chip features an
+internal 25 MHz oscillator, configurable PWM frequency from 24 Hz to 1526 Hz, and supports
+daisy-chaining multiple devices for up to 992 PWM outputs.
 
-This driver provides a hardware-agnostic C++ interface that abstracts all register-level operations, requiring only an implementation of the `I2cInterface` for your platform. The driver uses the CRTP (Curiously Recurring Template Pattern) for zero-overhead hardware abstraction, making it suitable for resource-constrained embedded systems.
+This driver provides a hardware-agnostic C++ interface that abstracts all register-level operations,
+requiring only an implementation of the `I2cInterface` for your platform. The driver uses the CRTP
+(Curiously Recurring Template Pattern) for zero-overhead hardware abstraction, making it suitable
+for resource-constrained embedded systems.
 
 ## ✨ Features
 
@@ -106,11 +113,15 @@ For detailed installation instructions, see [docs/installation.md](docs/installa
 | `ClearErrorFlags(uint16_t mask)` | Clear specific error flags |
 | `GetPrescale(uint8_t &prescale)` | Get current prescale value |
 
-For complete API documentation with source code links, see [docs/api_reference.md](docs/api_reference.md).
+For complete API documentation with source code links, see
+[docs/api_reference.md](docs/api_reference.md).
 
 ## 📊 Examples
 
-- **ESP32**: [examples/esp32](examples/esp32/) — two apps: **pca9685_comprehensive_test** (full driver test suite) and **pca9685_servo_demo** (16-channel hobby servo animations). See [examples/esp32/README.md](examples/esp32/README.md) for build/flash and [examples/esp32/docs/](examples/esp32/docs/) for per-app documentation.
+- **ESP32**: [examples/esp32](examples/esp32/) — two apps: **pca9685_comprehensive_test** (full driver
+  test suite) and **pca9685_servo_demo** (16-channel hobby servo animations). See
+  [examples/esp32/README.md](examples/esp32/README.md) for build/flash and
+  [examples/esp32/docs/](examples/esp32/docs/) for per-app documentation.
 - **Driver examples** (code snippets, any platform): [docs/examples.md](docs/examples.md).
 
 ## 📚 Documentation

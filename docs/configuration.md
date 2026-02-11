@@ -133,7 +133,8 @@ The OE pin provides hardware control over all outputs:
 
 ### Sleep Mode
 
-The chip supports sleep mode for power saving. The driver handles sleep mode automatically when changing frequency (see `SetPwmFreq()` implementation).
+The chip supports sleep mode for power saving. The driver handles sleep mode automatically when
+changing frequency (see `SetPwmFreq()` implementation).
 
 ### Auto-Increment
 

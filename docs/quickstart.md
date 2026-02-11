@@ -66,7 +66,8 @@ pwm.SetDuty(0, 0.5f);
 
 ### Step 2: Implement the I2C Interface
 
-You need to implement the `I2cInterface` for your platform. See [Platform Integration](platform_integration.md) for detailed examples for ESP32, STM32, and Arduino.
+You need to implement the `I2cInterface` for your platform. See
+[Platform Integration](platform_integration.md) for detailed examples for ESP32, STM32, and Arduino.
 
 The interface requires two methods:
 - `Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len)` - Write data to a register

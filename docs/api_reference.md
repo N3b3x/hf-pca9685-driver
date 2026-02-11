@@ -130,7 +130,9 @@ The interface is **non-copyable and non-movable**; use references or pointers to
 | `Read()` | `bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) noexcept` | Read bytes from a device register |
 | `EnsureInitialized()` | `bool EnsureInitialized() noexcept` | Ensure I2C bus is initialized and ready |
 
-The driver supports an optional retry delay via **SetRetryDelay()** (a function pointer). The I2C implementation can expose a static delay (e.g. `Esp32Pca9685Bus::RetryDelay`) and the app passes it to the driver after construction.
+The driver supports an optional retry delay via **SetRetryDelay()** (a function pointer). The I2C
+implementation can expose a static delay (e.g. `Esp32Pca9685Bus::RetryDelay`) and the app passes it
+to the driver after construction.
 
 ---
 

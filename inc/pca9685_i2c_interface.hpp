@@ -43,7 +43,8 @@ namespace pca9685 {
  *
  * @tparam Derived The derived class type (CRTP pattern)
  */
-template <typename Derived> class I2cInterface {
+template <typename Derived>
+class I2cInterface {
 public:
   /**
    * @brief Write bytes to a device register.
@@ -53,8 +54,8 @@ public:
    * @param len Number of bytes to write from the buffer.
    * @return true if the device acknowledges the transfer; false on NACK or error.
    */
-  bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept {
-    return static_cast<Derived *>(this)->Write(addr, reg, data, len);
+  bool Write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) noexcept {
+    return static_cast<Derived*>(this)->Write(addr, reg, data, len);
   }
 
   /**
@@ -65,8 +66,8 @@ public:
    * @param len Number of bytes to read into the buffer.
    * @return true if the read succeeds; false on NACK or error.
    */
-  bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept {
-    return static_cast<Derived *>(this)->Read(addr, reg, data, len);
+  bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) noexcept {
+    return static_cast<Derived*>(this)->Read(addr, reg, data, len);
   }
 
   /**
@@ -81,17 +82,17 @@ public:
    *         false if initialization failed.
    */
   bool EnsureInitialized() noexcept {
-    return static_cast<Derived *>(this)->EnsureInitialized();
+    return static_cast<Derived*>(this)->EnsureInitialized();
   }
 
   /** @brief Copy constructor deleted (non-copyable; avoids slicing). */
-  I2cInterface(const I2cInterface &) = delete;
+  I2cInterface(const I2cInterface&) = delete;
   /** @brief Copy assignment deleted (non-copyable). */
-  I2cInterface &operator=(const I2cInterface &) = delete;
+  I2cInterface& operator=(const I2cInterface&) = delete;
   /** @brief Move constructor deleted (non-movable; use derived type to move). */
-  I2cInterface(I2cInterface &&) = delete;
+  I2cInterface(I2cInterface&&) = delete;
   /** @brief Move assignment deleted (non-movable). */
-  I2cInterface &operator=(I2cInterface &&) = delete;
+  I2cInterface& operator=(I2cInterface&&) = delete;
 
 protected:
   /**

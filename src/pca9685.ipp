@@ -27,15 +27,14 @@
 #endif
 
 template <typename I2cType>
-pca9685::PCA9685<I2cType>::PCA9685(I2cType* bus, uint8_t address)
-    : i2c_(bus), addr_(address) {
+pca9685::PCA9685<I2cType>::PCA9685(I2cType* bus, uint8_t address) : i2c_(bus), addr_(address) {
   // No initialization here - use EnsureInitialized() or Reset() when ready
 }
 
 template <typename I2cType>
 bool pca9685::PCA9685<I2cType>::EnsureInitialized() noexcept {
   if (initialized_) {
-    return true;  // Already initialized
+    return true; // Already initialized
   }
   return Reset();
 }
@@ -89,7 +88,8 @@ bool pca9685::PCA9685<I2cType>::SetPwmFreq(float freq_hz) noexcept {
 }
 
 template <typename I2cType>
-bool pca9685::PCA9685<I2cType>::SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time) noexcept {
+bool pca9685::PCA9685<I2cType>::SetPwm(uint8_t channel, uint16_t on_time,
+                                       uint16_t off_time) noexcept {
   if (!EnsureInitialized()) {
     setError(Error::NotInitialized);
     return false;
@@ -110,7 +110,8 @@ bool pca9685::PCA9685<I2cType>::SetPwm(uint8_t channel, uint16_t on_time, uint16
 }
 
 template <typename I2cType>
-// NOLINTNEXTLINE(bugprone-easily-swappable-parameters) - Types are different enough (uint8_t vs float)
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters) - Types are different enough (uint8_t vs
+// float)
 bool pca9685::PCA9685<I2cType>::SetDuty(uint8_t channel, float duty) noexcept {
   duty = ::std::max(duty, 0.0F);
   duty = ::std::min(duty, 1.0F);
@@ -159,7 +160,7 @@ bool pca9685::PCA9685<I2cType>::Sleep() noexcept {
     setError(Error::NotInitialized);
     return false;
   }
-  return modifyReg(static_cast<uint8_t>(Register::MODE1), 0x10, 0x10);  // Set SLEEP bit
+  return modifyReg(static_cast<uint8_t>(Register::MODE1), 0x10, 0x10); // Set SLEEP bit
 }
 
 template <typename I2cType>
@@ -172,15 +173,14 @@ bool pca9685::PCA9685<I2cType>::Wake() noexcept {
   if (!readReg(static_cast<uint8_t>(Register::MODE1), mode1)) {
     return false;
   }
-  uint8_t new_mode1 = mode1 & static_cast<uint8_t>(~0x10U);  // Clear SLEEP
+  uint8_t new_mode1 = mode1 & static_cast<uint8_t>(~0x10U); // Clear SLEEP
   if (!writeReg(static_cast<uint8_t>(Register::MODE1), new_mode1)) {
     return false;
   }
   // If RESTART bit was set, set it again to restart PWM channels
   if ((mode1 & 0x80U) != 0) {
     // Oscillator needs ~500us to stabilize; caller should delay if needed
-    if (!writeReg(static_cast<uint8_t>(Register::MODE1),
-                  static_cast<uint8_t>(new_mode1 | 0x80U))) {
+    if (!writeReg(static_cast<uint8_t>(Register::MODE1), static_cast<uint8_t>(new_mode1 | 0x80U))) {
       return false;
     }
   }
@@ -289,7 +289,8 @@ bool pca9685::PCA9685<I2cType>::readReg(uint8_t reg, uint8_t& value) noexcept {
 }
 
 template <typename I2cType>
-bool pca9685::PCA9685<I2cType>::writeRegBlock(uint8_t reg, const uint8_t* data, size_t len) noexcept {
+bool pca9685::PCA9685<I2cType>::writeRegBlock(uint8_t reg, const uint8_t* data,
+                                              size_t len) noexcept {
   if (!i2c_) {
     return false;
   }

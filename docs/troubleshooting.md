@@ -208,7 +208,9 @@ pwm.SetDuty(0, 0.5f);  // 3. Now set channels
 **Error: "Undefined reference"**
 
 **Solution:**
-- The driver is template-based: implementation is in `pca9685.ipp`, included by `pca9685.hpp`. Ensure both `inc/` and `src/` are on the include path so the header can find the `.ipp` file. No separate library needs to be linked.
+- The driver is template-based: implementation is in `pca9685.ipp`, included by `pca9685.hpp`.
+  Ensure both `inc/` and `src/` are on the include path so the header can find the `.ipp` file.
+  No separate library needs to be linked.
 
 ---
 
@@ -295,15 +297,18 @@ For I2C communication issues, a logic analyzer can help:
 
 ### Q: Why do I need to call SetPwmFreq() before setting channels?
 
-**A:** The PCA9685 requires the prescale register to be set before PWM outputs work correctly. The driver enforces this by checking initialization state. Always call `Reset()` then `SetPwmFreq()` before setting channels.
+**A:** The PCA9685 requires the prescale register to be set before PWM outputs work correctly. The
+driver enforces this by checking initialization state. Always call `Reset()` then `SetPwmFreq()`
+before setting channels.
 
 ### Q: Can I change frequency after setting channels?
 
-**A:** Yes, but it will affect all channels. Changing frequency updates the prescale register, which changes the PWM period for all 16 channels simultaneously.
+**A:** Yes, but it will affect all channels. Changing frequency updates the prescale register, which
+changes the PWM period for all 16 channels simultaneously.
 
 ### Q: What's the difference between SetPwm() and SetDuty()?
 
-**A:** 
+**A:**
 - `SetPwm()` gives you precise control over on/off timing (0-4095 ticks each)
 - `SetDuty()` is a convenience method that sets duty cycle as a float (0.0-1.0), automatically calculating the off_time
 

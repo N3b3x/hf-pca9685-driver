@@ -1,6 +1,7 @@
 # PCA9685 Hobby Servo Demo
 
-The **pca9685_servo_demo** application drives up to 16 hobby servos from the PCA9685 with standard 1000–2000 µs pulse width, velocity-limited motion, and synchronized animations.
+The **pca9685_servo_demo** application drives up to 16 hobby servos from the PCA9685 with standard
+1000–2000 µs pulse width, velocity-limited motion, and synchronized animations.
 
 ## Servo Timing (50 Hz)
 
@@ -11,7 +12,8 @@ The **pca9685_servo_demo** application drives up to 16 hobby servos from the PCA
 
 ## Velocity Limiting
 
-Servos cannot jump instantly. The demo tracks a **current position** per channel and moves toward a **target** at a bounded rate:
+Servos cannot jump instantly. The demo tracks a **current position** per channel and moves toward a
+**target** at a bounded rate:
 
 - **Max step**: 6 ticks per 20 ms update (~260°/s).
 - Full 0°→180° sweep in ~0.68 s, safe for typical hobby servos.
@@ -63,7 +65,8 @@ The demo runs indefinitely; exit the monitor with Ctrl+].
 1. Set **50 Hz**: `pwm.SetPwmFreq(50.0f);`
 2. Use **pulse width**, not raw duty 0–1:  
    - 1000 µs → `SetPwm(ch, 0, 205)` (or use a helper that converts µs to ticks).  
-   - The demo uses a `ServoController` class that converts 1000–2000 µs to ticks and applies velocity limiting; you can reuse or adapt that logic.
+   - The demo uses a `ServoController` class that converts 1000–2000 µs to ticks and applies
+     velocity limiting; you can reuse or adapt that logic.
 3. Avoid commanding large instantaneous changes; step or ramp toward the target to match servo speed limits.
 
 ## Relation to the API

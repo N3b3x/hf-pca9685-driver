@@ -40,25 +40,31 @@ src/
   └── pca9685.ipp
 ```
 
-**Note**: The driver uses a template design: the implementation is in `src/pca9685.ipp` and is included by `inc/pca9685.hpp`. Your build must have `inc/` and `src/` on the include path so that `pca9685.hpp` can include the `.ipp` file. You do not compile `pca9685.ipp` as a separate translation unit.
+**Note**: The driver uses a template design: the implementation is in `src/pca9685.ipp` and is
+included by `inc/pca9685.hpp`. Your build must have `inc/` and `src/` on the include path so that
+`pca9685.hpp` can include the `.ipp` file. You do not compile `pca9685.ipp` as a separate
+translation unit.
 
 ## Building the Library
 
 ### As Part of Your Project (Include Path)
 
-Since the driver is header-only (template implementation in `.ipp`), add the repository `inc/` and `src/` directories to your include path and include the main header:
+Since the driver is header-only (template implementation in `.ipp`), add the repository `inc/` and
+`src/` directories to your include path and include the main header:
 
 ```cpp
 #include "pca9685.hpp"
 ```
 
-Your build system must allow the header to find `../src/pca9685.ipp` (relative to the header) or you can add `src/` to the include path as well.
+Your build system must allow the header to find `../src/pca9685.ipp` (relative to the header) or
+you can add `src/` to the include path as well.
 
 ### Using CMake
 
 ```cmake
 # Include path must include both inc and src (for .ipp include from header)
-target_include_directories(your_target PRIVATE
+target_include_directories(your_target
+    PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/hf-pca9685-driver/inc
     ${CMAKE_CURRENT_SOURCE_DIR}/hf-pca9685-driver/src
 )
@@ -67,7 +73,8 @@ target_include_directories(your_target PRIVATE
 
 ### Using ESP-IDF (ESP32 Examples)
 
-The driver is provided as an ESP-IDF component in the ESP32 examples. Build and flash using the example scripts:
+The driver is provided as an ESP-IDF component in the ESP32 examples. Build and flash using the
+example scripts:
 
 ```bash
 cd examples/esp32
@@ -76,7 +83,8 @@ cd examples/esp32
 ./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug
 ```
 
-See [examples/esp32/README.md](../examples/esp32/README.md) and [examples/esp32/docs/](../examples/esp32/docs/) for full setup and app descriptions.
+See [examples/esp32/README.md](../examples/esp32/README.md) and
+[examples/esp32/docs/](../examples/esp32/docs/) for full setup and app descriptions.
 
 ## Verification
 

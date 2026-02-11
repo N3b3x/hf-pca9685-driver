@@ -1,6 +1,7 @@
 # PCA9685 ESP32 Examples
 
-This directory contains ESP32 applications for the **PCA9685** 16-channel 12-bit PWM driver. They use ESP-IDF and the shared build/flash scripts.
+This directory contains ESP32 applications for the **PCA9685** 16-channel 12-bit PWM driver. They
+use ESP-IDF and the shared build/flash scripts.
 
 ## Table of Contents
 
@@ -29,7 +30,8 @@ The PCA9685 is a 16-channel, 12-bit PWM controller (I²C). It is used to drive L
 
 The examples use:
 
-- **I2C**: Default SDA=GPIO4, SCL=GPIO5 (100 kHz for PCA9685). Same pattern as the HardFOC pcal9555/bno08x examples.
+- **I2C**: Default SDA=GPIO4, SCL=GPIO5 (100 kHz for PCA9685). Same pattern as the HardFOC
+  pcal9555/bno08x examples.
 - **Test indicator**: GPIO14 (e.g. comprehensive test progress).
 
 ---
@@ -78,7 +80,8 @@ Details: [docs/](docs/) (index, comprehensive test, servo demo).
 ### Prerequisites
 
 - **ESP-IDF** (e.g. `release/v5.5`). Install and source `export.sh` as usual.
-- **Target**: Default in config is `esp32s3`; other targets (e.g. `esp32`, `esp32c6`) depend on `app_config.yml` and component `targets`.
+- **Target**: Default in config is `esp32s3`; other targets (e.g. `esp32`, `esp32c6`) depend on
+  `app_config.yml` and component `targets`.
 
 ### First-Time Setup
 
@@ -134,7 +137,9 @@ Default: **SDA=GPIO4**, **SCL=GPIO5**. To override (e.g. for ESP32-S3 with diffe
 
 ### I2C Address
 
-Default in code is **0x40**. To use another address, change `PCA9685_I2C_ADDRESS` in the app source (e.g. `main/pca9685_comprehensive_test.cpp` or `main/pca9685_servo_demo.cpp`) and match hardware (A0–A5).
+Default in code is **0x40**. To use another address, change `PCA9685_I2C_ADDRESS` in the app source
+(e.g. `main/pca9685_comprehensive_test.cpp` or `main/pca9685_servo_demo.cpp`) and match hardware
+(A0–A5).
 
 ### Test Sections (Comprehensive Test)
 

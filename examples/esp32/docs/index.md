@@ -1,6 +1,7 @@
 # ESP32 PCA9685 Applications — Documentation
 
-This folder describes the ESP32 applications that use the PCA9685 driver: what they do, how to build and run them, and how they relate to the driver API.
+This folder describes the ESP32 applications that use the PCA9685 driver: what they do, how to build
+and run them, and how they relate to the driver API.
 
 ## Overview
 
@@ -14,7 +15,8 @@ This folder describes the ESP32 applications that use the PCA9685 driver: what t
 
 For the driver itself (class, API, integration):
 
-- **Main docs**: [../../../docs/](../../../docs/) — installation, quick start, hardware setup, platform integration, configuration, API reference, examples, troubleshooting.
+- **Main docs**: [../../../docs/](../../../docs/) — installation, quick start, hardware setup,
+  platform integration, configuration, API reference, examples, troubleshooting.
 - **API reference**: [../../../docs/api_reference.md](../../../docs/api_reference.md) — all public methods, types, and constants.
 - **Root README**: [../../../README.md](../../../README.md) — project overview and quick start.
 

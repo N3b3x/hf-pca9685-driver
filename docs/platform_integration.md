@@ -13,7 +13,8 @@ This guide explains how to implement the hardware abstraction interface for the 
 
 ## Understanding CRTP (Curiously Recurring Template Pattern)
 
-The PCA9685 driver uses **CRTP** (Curiously Recurring Template Pattern) for hardware abstraction. This design choice provides several critical benefits for embedded systems:
+The PCA9685 driver uses **CRTP** (Curiously Recurring Template Pattern) for hardware abstraction.
+This design choice provides several critical benefits for embedded systems:
 
 ### Why CRTP Instead of Virtual Functions?
 
@@ -76,7 +77,8 @@ public:
 };
 ```
 
-The key insight: `static_cast<Derived*>(this)` allows the base class to call methods on the derived class **at compile time**, not runtime.
+The key insight: `static_cast<Derived*>(this)` allows the base class to call methods on the derived
+class **at compile time**, not runtime.
 
 ### Performance Comparison
 
@@ -113,7 +115,11 @@ public:
 - `EnsureInitialized()`: Lazy-initialize the I2C bus; return true if ready
 - Write/Read return `true` on success, `false` on failure (NACK, timeout, etc.)
 
-**Optional retry delay**: The driver can call an optional callback between I2C retries for bus recovery. Your bus class can expose a static delay (e.g. `static void RetryDelay() noexcept { vTaskDelay(pdMS_TO_TICKS(1)); }`). After constructing the driver, the application calls `driver->SetRetryDelay(MyBus::RetryDelay)`. If not set, no delay is used between retries.
+**Optional retry delay**: The driver can call an optional callback between I2C retries for bus
+recovery. Your bus class can expose a static delay (e.g.
+`static void RetryDelay() noexcept { vTaskDelay(pdMS_TO_TICKS(1)); }`). After constructing the
+driver, the application calls `driver->SetRetryDelay(MyBus::RetryDelay)`. If not set, no delay is
+used between retries.
 
 ## Implementation Steps
 
@@ -157,7 +163,8 @@ public:
 
 #### ESP32 (ESP-IDF)
 
-**Location**: See [`examples/esp32/main/esp32_pca9685_bus.hpp`](../examples/esp32/main/esp32_pca9685_bus.hpp) for a complete ESP32 implementation using ESP-IDF's I2C master driver API.
+**Location**: See [`examples/esp32/main/esp32_pca9685_bus.hpp`](../examples/esp32/main/esp32_pca9685_bus.hpp)
+for a complete ESP32 implementation using ESP-IDF's I2C master driver API.
 
 For a complete working example, see [`examples/esp32/main/pca9685_comprehensive_test.cpp`](../examples/esp32/main/pca9685_comprehensive_test.cpp).
 

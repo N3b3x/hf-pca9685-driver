@@ -34,7 +34,8 @@ extern "C" {
 }
 #endif
 
-// Project headers (interface only; include pca9685.hpp in app after this header so driver sees full bus type)
+// Project headers (interface only; include pca9685.hpp in app after this header so driver sees full
+// bus type)
 #include "pca9685_i2c_interface.hpp"
 
 static constexpr const char* TAG_I2C = "PCA9685_I2C";
@@ -56,8 +57,9 @@ public:
     gpio_num_t sda_pin = GPIO_NUM_4; ///< SDA pin (default GPIO4)
     gpio_num_t scl_pin = GPIO_NUM_5; ///< SCL pin (default GPIO5)
     uint32_t frequency = 100000;     ///< I2C frequency in Hz (default 100kHz for PCA9685)
-    uint32_t scl_wait_us = 0;        ///< SCL clock-stretching timeout in us (0 = ESP-IDF default; set >0 to allow slave stretching)
-    bool pullup_enable = true;       ///< Enable internal pullups
+    uint32_t scl_wait_us = 0;  ///< SCL clock-stretching timeout in us (0 = ESP-IDF default; set >0
+                               ///< to allow slave stretching)
+    bool pullup_enable = true; ///< Enable internal pullups
   };
 
   /**
@@ -70,8 +72,7 @@ public:
    * @param config I2C bus configuration
    */
   explicit Esp32Pca9685Bus(const I2CConfig& config)
-      : config_(config), bus_handle_(nullptr), initialized_(false) {
-  }
+      : config_(config), bus_handle_(nullptr), initialized_(false) {}
 
   /**
    * @brief Destructor - cleans up I2C resources
@@ -270,7 +271,7 @@ private:
    */
   i2c_master_dev_handle_t getOrCreateDeviceHandle(uint8_t addr) noexcept {
     if (dev_handle_ != nullptr && cached_dev_addr_ == addr) {
-      return dev_handle_;  // Reuse cached handle
+      return dev_handle_; // Reuse cached handle
     }
 
     // Address changed or first call -- evict old handle

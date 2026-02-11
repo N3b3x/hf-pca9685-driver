@@ -227,7 +227,9 @@ Error flags are now `uint16_t` bitmask values:
 - `I2cWrite = 1<<0`, `I2cRead = 1<<1`, `InvalidParam = 1<<2`
 - `DeviceNotFound = 1<<3`, `NotInitialized = 1<<4`, `OutOfRange = 1<<5`
 
-Use `GetErrorFlags()` to retrieve all accumulated error flags, and `ClearErrorFlags(mask)` to clear them after handling. The convenience accessor `GetLastError()` still works for simple cases. Multiple error conditions can be set simultaneously since flags are a bitmask.
+Use `GetErrorFlags()` to retrieve all accumulated error flags, and `ClearErrorFlags(mask)` to clear
+them after handling. The convenience accessor `GetLastError()` still works for simple cases. Multiple
+error conditions can be set simultaneously since flags are a bitmask.
 
 ---
 
@@ -260,7 +262,8 @@ extern "C" void app_main() {
 
 ### Explanation
 
-`SetAllPwm()` is more efficient than calling `SetPwm()` 16 times. It writes to the ALL_LED registers, updating all channels in a single I2C transaction.
+`SetAllPwm()` is more efficient than calling `SetPwm()` 16 times. It writes to the ALL_LED
+registers, updating all channels in a single I2C transaction.
 
 ---
 
@@ -356,11 +359,15 @@ chmod +x scripts/*.sh
   -- -DPCA9685_EXAMPLE_I2C_SDA_GPIO=8 -DPCA9685_EXAMPLE_I2C_SCL_GPIO=9
 ```
 
-See [examples/esp32/README.md](../examples/esp32/README.md) and [examples/esp32/docs/](../examples/esp32/docs/) for hardware setup and app details.
+See [examples/esp32/README.md](../examples/esp32/README.md) and
+[examples/esp32/docs/](../examples/esp32/docs/) for hardware setup and app details.
 
 ### Other Platforms
 
-Adapt the I2C interface implementation for your platform (see [Platform Integration](platform_integration.md)) and compile with your platform's toolchain. The ESP32 implementation in [`examples/esp32/main/esp32_pca9685_bus.hpp`](../examples/esp32/main/esp32_pca9685_bus.hpp) uses ESP-IDF's `driver/i2c_master.h` (new I2C master API) as a reference.
+Adapt the I2C interface implementation for your platform (see
+[Platform Integration](platform_integration.md)) and compile with your platform's toolchain. The
+ESP32 implementation in [`examples/esp32/main/esp32_pca9685_bus.hpp`](../examples/esp32/main/esp32_pca9685_bus.hpp)
+uses ESP-IDF's `driver/i2c_master.h` (new I2C master API) as a reference.
 
 ## Next Steps
 

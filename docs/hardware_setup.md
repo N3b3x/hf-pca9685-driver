@@ -45,7 +45,7 @@ The PCA9685 provides 16 PWM output channels (OUT0-OUT15). Each channel can drive
 ## Power Requirements
 
 - **Supply Voltage**: 2.3V to 5.5V (3.3V or 5V typical)
-- **Current Consumption**: 
+- **Current Consumption**:
   - Active: ~10 mA typical
   - Sleep mode: < 1 µA
 - **Power Supply**: Stable, low-noise supply recommended
@@ -113,7 +113,8 @@ MCU SDA ──┬─── PCA9685 #1 SDA
 
 ## Output Enable (OE) Pin
 
-The OE pin is an active-low output enable. When pulled HIGH, all outputs are disabled (high-impedance). When pulled LOW or left floating, outputs are enabled.
+The OE pin is an active-low output enable. When pulled HIGH, all outputs are disabled
+(high-impedance). When pulled LOW or left floating, outputs are enabled.
 
 **Typical Usage**:
 - Connect to a GPIO for software control

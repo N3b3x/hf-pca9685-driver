@@ -1,6 +1,7 @@
 # PCA9685 Comprehensive Test Suite
 
-The **pca9685_comprehensive_test** application runs a full set of tests against the PCA9685 driver and hardware. Use it to verify wiring, I2C address, and all driver features.
+The **pca9685_comprehensive_test** application runs a full set of tests against the PCA9685 driver
+and hardware. Use it to verify wiring, I2C address, and all driver features.
 
 ## What It Tests
 
@@ -24,7 +25,8 @@ The **pca9685_comprehensive_test** application runs a full set of tests against 
    - **output_config**: `SetOutputInvert`, `SetOutputDriverMode` (totem-pole / open-drain).
 
 5. **Error handling**
-   - **error_handling**: Invalid channel (255), invalid PWM (5000), invalid frequency (5 Hz); `GetLastError`, `ClearError`, `HasAnyError`.
+   - **error_handling**: Invalid channel (255), invalid PWM (5000), invalid frequency (5 Hz);
+     `GetLastError`, `ClearError`, `HasAnyError`.
 
 6. **Stress**
    - **stress_rapid_writes**: Many back-to-back `SetDuty` and `SetAllPwm` and frequency changes.
@@ -32,7 +34,9 @@ The **pca9685_comprehensive_test** application runs a full set of tests against 
 
 ### I2C bus scan
 
-If the first attempt to connect to the PCA9685 at the configured address fails, the app runs an **I2C bus scan** (all 0x08 to 0x77) and logs which addresses respond. Use this to confirm the device address and bus.
+If the first attempt to connect to the PCA9685 at the configured address fails, the app runs an
+**I2C bus scan** (all 0x08 to 0x77) and logs which addresses respond. Use this to confirm the device
+address and bus.
 
 ## Source and Configuration
 
