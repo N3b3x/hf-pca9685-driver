@@ -76,8 +76,8 @@ $(function() {
   <div class="headertitle"><div class="title">Examples</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md49"></a> This guide provides complete, working examples demonstrating various use cases for the PCA9685 driver.</p>
-<h1><a class="anchor" id="autotoc_md50"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md50"></a> This guide provides complete, working examples demonstrating various use cases for the PCA9685 driver.</p>
+<h1><a class="anchor" id="autotoc_md51"></a>
 Example 1: Basic Servo Control</h1>
 <p>This example shows how to control a standard servo motor using the PCA9685.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
@@ -140,7 +140,7 @@ Example 1: Basic Servo Control</h1>
 <div class="line">    </div>
 <div class="line">    printf(<span class="stringliteral">&quot;Servo control example complete.\n&quot;</span>);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md51"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md52"></a>
 Explanation</h2>
 <ol type="1">
 <li><b>I2C Interface</b>: Implement <code>I2cInterface</code> for your platform (ESP32 example shown)</li>
@@ -153,10 +153,10 @@ Explanation</h2>
 </ul>
 </li>
 </ol>
-<h2><a class="anchor" id="autotoc_md52"></a>
+<h2><a class="anchor" id="autotoc_md53"></a>
 Expected Output</h2>
 <p>The servo should move to different positions as the duty cycle changes.</p>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md54"></a>
 Example 3: Multiple Channels</h1>
 <p>This example shows controlling multiple channels simultaneously.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
@@ -181,10 +181,10 @@ Example 3: Multiple Channels</h1>
 <div class="line">        pwm.SetDuty(ch, 0.5f);</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md54"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md55"></a>
 Explanation</h2>
 <p>Each channel operates independently. You can set different duty cycles for each of the 16 channels.</p>
-<h1><a class="anchor" id="autotoc_md55"></a>
+<h1><a class="anchor" id="autotoc_md56"></a>
 Example 5: Bulk Channel Update</h1>
 <p>This example shows efficient bulk updates using <code>SetAllPwm()</code>.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
@@ -207,20 +207,40 @@ Example 5: Bulk Channel Update</h1>
 <div class="line">    <span class="comment">// Turn all channels fully on</span></div>
 <div class="line">    pwm.SetAllPwm(0, 4095);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md56"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md57"></a>
 Explanation</h2>
 <p><code>SetAllPwm()</code> is more efficient than calling <code>SetPwm()</code> 16 times. It writes to the ALL_LED registers, updating all channels in a single I2C transaction.</p>
-<h1><a class="anchor" id="autotoc_md57"></a>
+<h1><a class="anchor" id="autotoc_md58"></a>
 Running the Examples</h1>
-<h2><a class="anchor" id="autotoc_md58"></a>
-ESP32</h2>
-<p>The examples are available in the <a href="../examples/esp32/"><code>examples/esp32</code></a> directory.</p>
+<h2><a class="anchor" id="autotoc_md59"></a>
+ESP32 Applications</h2>
+<p>The ESP32 example project provides two applications, built and flashed via scripts (not raw <code>idf.py</code>):</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Application   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>pca9685_comprehensive_test</b>   </td><td class="markdownTableBodyNone">Full driver test suite: init, frequency, PWM, duty cycle, all-channel control, prescale readback, sleep/wake, output config, error handling, stress tests (12 tests total).    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>pca9685_servo_demo</b>   </td><td class="markdownTableBodyNone">16-channel hobby servo demo: 1000–2000 µs pulse, velocity-limited motion, synchronized animations (Wave, Breathe, Cascade, Mirror, etc.).   </td></tr>
+</table>
+<p><b>Prerequisites</b>: ESP-IDF (e.g. release/v5.5), target e.g. <code>esp32s3</code>. From the repo root:</p>
 <div class="fragment"><div class="line">cd examples/esp32</div>
-<div class="line">idf.py build flash monitor</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md59"></a>
+<div class="line">chmod +x scripts/*.sh</div>
+<div class="line">./scripts/setup_repo.sh   # first time only</div>
+<div class="line">./scripts/build_app.sh list</div>
+</div><!-- fragment --><p><b>Build:</b> </p><div class="fragment"><div class="line">./scripts/build_app.sh pca9685_comprehensive_test Debug</div>
+<div class="line"># or</div>
+<div class="line">./scripts/build_app.sh pca9685_servo_demo Debug</div>
+</div><!-- fragment --><p><b>Flash and monitor:</b> </p><div class="fragment"><div class="line">./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug</div>
+<div class="line"># or</div>
+<div class="line">./scripts/flash_app.sh flash_monitor pca9685_servo_demo Debug</div>
+</div><!-- fragment --><p><b>I2C pins</b>: Default SDA=GPIO4, SCL=GPIO5. Override at configure time if needed: </p><div class="fragment"><div class="line">./scripts/build_app.sh pca9685_comprehensive_test Debug \</div>
+<div class="line">  -- -DPCA9685_EXAMPLE_I2C_SDA_GPIO=8 -DPCA9685_EXAMPLE_I2C_SCL_GPIO=9</div>
+</div><!-- fragment --><p>See examples/esp32/README.md and <a href="../examples/esp32/docs/">examples/esp32/docs/</a> for hardware setup and app details.</p>
+<h2><a class="anchor" id="autotoc_md60"></a>
 Other Platforms</h2>
-<p>Adapt the I2C interface implementation for your platform (see <a class="el" href="md_docs_2platform__integration.html">Platform Integration</a>) and compile with your platform's toolchain.</p>
-<h1><a class="anchor" id="autotoc_md60"></a>
+<p>Adapt the I2C interface implementation for your platform (see <a class="el" href="md_docs_2platform__integration.html">Platform Integration</a>) and compile with your platform's toolchain. The ESP32 implementation in <a href="../examples/esp32/main/esp32_pca9685_bus.hpp"><code>examples/esp32/main/esp32_pca9685_bus.hpp</code></a> uses ESP-IDF's <code>driver/i2c_master.h</code> (new I2C master API) as a reference.</p>
+<h1><a class="anchor" id="autotoc_md61"></a>
 Next Steps</h1>
 <ul>
 <li>Review the <a class="el" href="md_docs_2api__reference.html">API Reference</a> for method details</li>
