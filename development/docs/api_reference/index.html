@@ -284,7 +284,8 @@
 
 <ul>
   <li><strong>Main Header</strong>: <a href="../inc/pca9685.hpp"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp</code></a></li>
-  <li><strong>Implementation</strong>: <a href="../src/pca9685.cpp"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp</code></a></li>
+  <li><strong>I2C Interface</strong>: <a href="../inc/pca9685_i2c_interface.hpp"><code class="language-plaintext highlighter-rouge">inc/pca9685_i2c_interface.hpp</code></a></li>
+  <li><strong>Implementation</strong>: <a href="../src/pca9685.ipp"><code class="language-plaintext highlighter-rouge">src/pca9685.ipp</code></a> (template implementation, included by header)</li>
 </ul>
 <h2 id="core-class">
   
@@ -307,14 +308,12 @@
 
 <p><strong>Template Parameter</strong>: <code class="language-plaintext highlighter-rouge">I2cType</code> - Your I2C interface implementation (must inherit from <code class="language-plaintext highlighter-rouge">pca9685::I2cInterface&lt;I2cType&gt;</code>)</p>
 
-<p><strong>Location</strong>: <a href="../inc/pca9685.hpp#L121"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L121</code></a></p>
+<p><strong>Location</strong>: <a href="../inc/pca9685.hpp"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp</code></a></p>
 
 <p><strong>Constructor:</strong></p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre><span class="n">PCA9685</span><span class="p">(</span><span class="n">I2cType</span><span class="o">*</span> <span class="n">bus</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">address</span><span class="p">);</span>
 </pre></td></tr></tbody></table></div></code></pre></div></div>
-
-<p><strong>Location</strong>: <a href="../src/pca9685.cpp#L30"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L30</code></a></p>
 <h2 id="methods">
   
   
@@ -337,14 +336,24 @@
     <tr>
       <th>Method</th>
       <th>Signature</th>
-      <th>Location</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
+      <td><code class="language-plaintext highlighter-rouge">EnsureInitialized()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool EnsureInitialized() noexcept</code></td>
+      <td>Lazy initialization - ensures bus and device are ready</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">IsInitialized()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool IsInitialized() const noexcept</code></td>
+      <td>Check if driver has been initialized</td>
+    </tr>
+    <tr>
       <td><code class="language-plaintext highlighter-rouge">Reset()</code></td>
-      <td><code class="language-plaintext highlighter-rouge">bool Reset()</code></td>
-      <td><a href="../src/pca9685.cpp#L34"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L34</code></a></td>
+      <td><code class="language-plaintext highlighter-rouge">bool Reset() noexcept</code></td>
+      <td>Reset device to power-on default state</td>
     </tr>
   </tbody>
 </table></div>
@@ -362,19 +371,19 @@
     <tr>
       <th>Method</th>
       <th>Signature</th>
-      <th>Location</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">SetPwmFreq()</code></td>
-      <td><code class="language-plaintext highlighter-rouge">bool SetPwmFreq(float freq_hz)</code></td>
-      <td><a href="../src/pca9685.cpp#L46"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L46</code></a></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetPwmFreq(float freq_hz) noexcept</code></td>
+      <td>Set PWM frequency for all channels (24-1526 Hz)</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">GetPrescale()</code></td>
-      <td><code class="language-plaintext highlighter-rouge">bool GetPrescale(uint8_t &amp;prescale)</code></td>
-      <td><a href="../src/pca9685.cpp#L220"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L220</code></a></td>
+      <td><code class="language-plaintext highlighter-rouge">bool GetPrescale(uint8_t&amp; prescale) noexcept</code></td>
+      <td>Get current prescale register value</td>
     </tr>
   </tbody>
 </table></div>
@@ -392,31 +401,41 @@
     <tr>
       <th>Method</th>
       <th>Signature</th>
-      <th>Location</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">SetPwm()</code></td>
-      <td><code class="language-plaintext highlighter-rouge">bool SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time)</code></td>
-      <td><a href="../src/pca9685.cpp#L191"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L191</code></a></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time) noexcept</code></td>
+      <td>Set PWM on/off time for a channel</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">SetDuty()</code></td>
-      <td><code class="language-plaintext highlighter-rouge">bool SetDuty(uint8_t channel, float duty)</code></td>
-      <td><a href="../src/pca9685.cpp#L199"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L199</code></a></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetDuty(uint8_t channel, float duty) noexcept</code></td>
+      <td>Set duty cycle (0.0-1.0) for a channel</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">SetAllPwm()</code></td>
-      <td><code class="language-plaintext highlighter-rouge">bool SetAllPwm(uint16_t on_time, uint16_t off_time)</code></td>
-      <td><a href="../src/pca9685.cpp#L207"><code class="language-plaintext highlighter-rouge">src/pca9685.cpp#L207</code></a></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetAllPwm(uint16_t on_time, uint16_t off_time) noexcept</code></td>
+      <td>Set all channels to the same PWM value</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetChannelFullOn()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetChannelFullOn(uint8_t channel) noexcept</code></td>
+      <td>Set channel to fully ON (100% duty)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetChannelFullOff()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetChannelFullOff(uint8_t channel) noexcept</code></td>
+      <td>Set channel to fully OFF (0% duty)</td>
     </tr>
   </tbody>
 </table></div>
-<h3 id="utility">
+<h3 id="power-management">
   
   
-    <a href="#utility" class="anchor-heading" aria-labelledby="utility"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Utility
+    <a href="#power-management" class="anchor-heading" aria-labelledby="power-management"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Power Management
   
   
 </h3>
@@ -427,19 +446,124 @@
     <tr>
       <th>Method</th>
       <th>Signature</th>
-      <th>Location</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Sleep()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool Sleep() noexcept</code></td>
+      <td>Put PCA9685 into low-power sleep mode</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Wake()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool Wake() noexcept</code></td>
+      <td>Wake PCA9685 from sleep mode</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="output-configuration">
+  
+  
+    <a href="#output-configuration" class="anchor-heading" aria-labelledby="output-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Output Configuration
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Signature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetOutputInvert()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetOutputInvert(bool invert) noexcept</code></td>
+      <td>Set output polarity inversion</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetOutputDriverMode()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool SetOutputDriverMode(bool totem_pole) noexcept</code></td>
+      <td>Set totem-pole or open-drain mode</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="error-handling">
+  
+  
+    <a href="#error-handling" class="anchor-heading" aria-labelledby="error-handling"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Error Handling
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Signature</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">GetLastError()</code></td>
-      <td><code class="language-plaintext highlighter-rouge">Error GetLastError() const</code></td>
-      <td><a href="../inc/pca9685.hpp#L213"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L213</code></a></td>
+      <td><code class="language-plaintext highlighter-rouge">Error GetLastError() const noexcept</code></td>
+      <td>Get last error code (single-error convenience)</td>
     </tr>
     <tr>
-      <td><code class="language-plaintext highlighter-rouge">SetOutputEnable()</code></td>
-      <td><code class="language-plaintext highlighter-rouge">void SetOutputEnable(bool enabled)</code></td>
-      <td><a href="../inc/pca9685.hpp#L227"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L227</code></a></td>
+      <td><code class="language-plaintext highlighter-rouge">GetErrorFlags()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">uint16_t GetErrorFlags() const noexcept</code></td>
+      <td>Get accumulated error flags (bitmask)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">HasError()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool HasError(Error e) const noexcept</code></td>
+      <td>Check if a specific error flag is set</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">HasAnyError()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool HasAnyError() const noexcept</code></td>
+      <td>Check if any error flag is set</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ClearError()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">void ClearError(Error e) noexcept</code></td>
+      <td>Clear a single error flag</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ClearErrorFlags()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">void ClearErrorFlags(uint16_t mask = 0xFFFF) noexcept</code></td>
+      <td>Clear error flags by bitmask</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="configuration">
+  
+  
+    <a href="#configuration" class="anchor-heading" aria-labelledby="configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Configuration
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Signature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetRetries()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">void SetRetries(int retries) noexcept</code></td>
+      <td>Set I2C retry count for register operations</td>
     </tr>
   </tbody>
 </table></div>
@@ -472,12 +596,12 @@
     <tr>
       <td><code class="language-plaintext highlighter-rouge">Error</code></td>
       <td><code class="language-plaintext highlighter-rouge">None</code>, <code class="language-plaintext highlighter-rouge">I2cWrite</code>, <code class="language-plaintext highlighter-rouge">I2cRead</code>, <code class="language-plaintext highlighter-rouge">InvalidParam</code>, <code class="language-plaintext highlighter-rouge">DeviceNotFound</code>, <code class="language-plaintext highlighter-rouge">NotInitialized</code>, <code class="language-plaintext highlighter-rouge">OutOfRange</code></td>
-      <td><a href="../inc/pca9685.hpp#L126"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L126</code></a></td>
+      <td><a href="../inc/pca9685.hpp"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp</code></a></td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">Register</code></td>
       <td><code class="language-plaintext highlighter-rouge">MODE1</code>, <code class="language-plaintext highlighter-rouge">MODE2</code>, <code class="language-plaintext highlighter-rouge">LED0_ON_L</code>, <code class="language-plaintext highlighter-rouge">LED0_OFF_L</code>, <code class="language-plaintext highlighter-rouge">PRE_SCALE</code>, etc.</td>
-      <td><a href="../inc/pca9685.hpp#L139"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp#L139</code></a></td>
+      <td><a href="../inc/pca9685.hpp"><code class="language-plaintext highlighter-rouge">inc/pca9685.hpp</code></a></td>
     </tr>
   </tbody>
 </table></div>
@@ -500,19 +624,66 @@
   </thead>
   <tbody>
     <tr>
-      <td><code class="language-plaintext highlighter-rouge">MAX_CHANNELS</code></td>
+      <td><code class="language-plaintext highlighter-rouge">MAX_CHANNELS_</code></td>
       <td><code class="language-plaintext highlighter-rouge">16</code></td>
       <td>Maximum number of PWM channels</td>
     </tr>
     <tr>
-      <td><code class="language-plaintext highlighter-rouge">MAX_PWM</code></td>
+      <td><code class="language-plaintext highlighter-rouge">MAX_PWM_</code></td>
       <td><code class="language-plaintext highlighter-rouge">4095</code></td>
-      <td>Maximum PWM value</td>
+      <td>Maximum PWM value (12-bit)</td>
     </tr>
     <tr>
-      <td><code class="language-plaintext highlighter-rouge">OSC_FREQ</code></td>
+      <td><code class="language-plaintext highlighter-rouge">OSC_FREQ_</code></td>
       <td><code class="language-plaintext highlighter-rouge">25000000</code></td>
       <td>Internal oscillator frequency (25 MHz)</td>
+    </tr>
+  </tbody>
+</table></div>
+<h2 id="i2c-interface">
+  
+  
+    <a href="#i2c-interface" class="anchor-heading" aria-labelledby="i2c-interface"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> I2C Interface
+  
+  
+</h2>
+    
+<h3 id="i2cinterfacederived-crtp">
+  
+  
+    <a href="#i2cinterfacederived-crtp" class="anchor-heading" aria-labelledby="i2cinterfacederived-crtp"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">I2cInterface&lt;Derived&gt;</code> (CRTP)
+  
+  
+</h3>
+    
+
+<p>Hardware-agnostic I2C interface using the Curiously Recurring Template Pattern.</p>
+
+<p><strong>Location</strong>: <a href="../inc/pca9685_i2c_interface.hpp"><code class="language-plaintext highlighter-rouge">inc/pca9685_i2c_interface.hpp</code></a></p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Signature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Write()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool Write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) noexcept</code></td>
+      <td>Write bytes to a device register</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Read()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) noexcept</code></td>
+      <td>Read bytes from a device register</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">EnsureInitialized()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool EnsureInitialized() noexcept</code></td>
+      <td>Ensure I2C bus is initialized and ready</td>
     </tr>
   </tbody>
 </table></div><hr />

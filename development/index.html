@@ -314,9 +314,13 @@ Interactive guides, examples, and step-by-step tutorials</p>
   <li>✅ <strong>Hardware Agnostic</strong>: CRTP-based I2C interface for platform independence</li>
   <li>✅ <strong>Modern C++</strong>: C++11 compatible with template-based design</li>
   <li>✅ <strong>Zero Overhead</strong>: CRTP design for compile-time polymorphism</li>
-  <li>✅ <strong>Error Reporting</strong>: Comprehensive error codes for debugging</li>
+  <li>✅ <strong>Error Reporting</strong>: Bitmask error flags (<code class="language-plaintext highlighter-rouge">uint16_t</code>) via <code class="language-plaintext highlighter-rouge">GetErrorFlags()</code> / <code class="language-plaintext highlighter-rouge">ClearErrorFlags()</code></li>
   <li>✅ <strong>Duty Cycle Control</strong>: High-level <code class="language-plaintext highlighter-rouge">SetDuty()</code> method for easy 0.0-1.0 control</li>
   <li>✅ <strong>Bulk Operations</strong>: <code class="language-plaintext highlighter-rouge">SetAllPwm()</code> for simultaneous channel updates</li>
+  <li>✅ <strong>Power Management</strong>: <code class="language-plaintext highlighter-rouge">Sleep()</code> / <code class="language-plaintext highlighter-rouge">Wake()</code> via MODE1 SLEEP bit</li>
+  <li>✅ <strong>Output Modes</strong>: <code class="language-plaintext highlighter-rouge">SetOutputInvert()</code>, <code class="language-plaintext highlighter-rouge">SetOutputDriverMode()</code> (totem-pole/open-drain)</li>
+  <li>✅ <strong>Full ON/OFF</strong>: <code class="language-plaintext highlighter-rouge">SetChannelFullOn()</code> / <code class="language-plaintext highlighter-rouge">SetChannelFullOff()</code> without PWM</li>
+  <li>✅ <strong>Retry Logic</strong>: Configurable I2C retry count via <code class="language-plaintext highlighter-rouge">SetRetries()</code></li>
 </ul>
 <h2 id="-quick-start">
   
@@ -344,13 +348,15 @@ Interactive guides, examples, and step-by-step tutorials</p>
 15
 16
 17
+18
 </pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">"pca9685.hpp"</span><span class="cp">
 </span>
 <span class="c1">// 1. Implement the I2C interface (see platform_integration.md)</span>
 <span class="k">class</span> <span class="nc">MyI2c</span> <span class="o">:</span> <span class="k">public</span> <span class="n">pca9685</span><span class="o">::</span><span class="n">I2cInterface</span><span class="o">&lt;</span><span class="n">MyI2c</span><span class="o">&gt;</span> <span class="p">{</span>
 <span class="nl">public:</span>
-    <span class="kt">bool</span> <span class="n">Write</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">);</span>
-    <span class="kt">bool</span> <span class="n">Read</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">);</span>
+    <span class="kt">bool</span> <span class="n">Write</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">Read</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">EnsureInitialized</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="c1">// 2. Create driver instance</span>
@@ -423,8 +429,40 @@ Interactive guides, examples, and step-by-step tutorials</p>
       <td>Set all channels simultaneously</td>
     </tr>
     <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetChannelFullOn(uint8_t channel)</code></td>
+      <td>Set channel fully on (no PWM)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetChannelFullOff(uint8_t channel)</code></td>
+      <td>Set channel fully off (no PWM)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Sleep()</code> / <code class="language-plaintext highlighter-rouge">Wake()</code></td>
+      <td>Power management via MODE1 SLEEP bit</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetOutputInvert(bool invert)</code></td>
+      <td>Set MODE2 INVRT bit</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetOutputDriverMode(bool totem_pole)</code></td>
+      <td>Set MODE2 OUTDRV bit (true=totem-pole, false=open-drain)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SetRetries(int retries)</code></td>
+      <td>Configure I2C retry count</td>
+    </tr>
+    <tr>
       <td><code class="language-plaintext highlighter-rouge">GetLastError()</code></td>
-      <td>Get the last error code</td>
+      <td>Get the last error code (convenience accessor)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">GetErrorFlags()</code></td>
+      <td>Get all error flags as <code class="language-plaintext highlighter-rouge">uint16_t</code> bitmask</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ClearErrorFlags(uint16_t mask)</code></td>
+      <td>Clear specific error flags</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">GetPrescale(uint8_t &amp;prescale)</code></td>

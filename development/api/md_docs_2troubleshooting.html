@@ -76,14 +76,14 @@ $(function() {
   <div class="headertitle"><div class="title">Troubleshooting</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md123"></a> This guide helps you diagnose and resolve common issues when using the PCA9685 driver.</p>
-<h1><a class="anchor" id="autotoc_md124"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md132"></a> This guide helps you diagnose and resolve common issues when using the PCA9685 driver.</p>
+<h1><a class="anchor" id="autotoc_md133"></a>
 Common Error Messages</h1>
-<h2><a class="anchor" id="autotoc_md125"></a>
+<h2><a class="anchor" id="autotoc_md134"></a>
 Error: Initialization Fails (<code>Reset()</code> returns false)</h2>
 <p><b>Symptoms:</b></p><ul>
 <li><code>Reset()</code> returns <code>false</code></li>
-<li><code>GetLastError()</code> returns <code>I2cWrite</code></li>
+<li><code>GetLastError()</code> returns <code>I2cWrite</code> (or <code>GetErrorFlags()</code> has <code>I2cWrite</code> bit set)</li>
 </ul>
 <p><b>Causes:</b></p><ul>
 <li>I2C bus not initialized</li>
@@ -115,11 +115,11 @@ Error: Initialization Fails (<code>Reset()</code> returns false)</h2>
 </ul>
 </li>
 </ol>
-<h2><a class="anchor" id="autotoc_md126"></a>
+<h2><a class="anchor" id="autotoc_md135"></a>
 Error: Channel Out of Range</h2>
 <p><b>Symptoms:</b></p><ul>
 <li><code>SetPwm()</code> or <code>SetDuty()</code> returns <code>false</code></li>
-<li><code>GetLastError()</code> returns <code>OutOfRange</code></li>
+<li><code>GetLastError()</code> returns <code>OutOfRange</code> (or <code>GetErrorFlags()</code> has <code>OutOfRange</code> bit set)</li>
 </ul>
 <p><b>Causes:</b></p><ul>
 <li>Channel number &gt;= 16</li>
@@ -134,9 +134,9 @@ Error: Channel Out of Range</h2>
 <div class="line"><span class="keywordflow">if</span> (on_time &lt;= 4095 &amp;&amp; off_time &lt;= 4095) {</div>
 <div class="line">    pwm.SetPwm(channel, on_time, off_time);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md127"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md136"></a>
 Hardware Issues</h1>
-<h2><a class="anchor" id="autotoc_md128"></a>
+<h2><a class="anchor" id="autotoc_md137"></a>
 Device Not Detected</h2>
 <p><b>Symptoms:</b></p><ul>
 <li>Initialization fails</li>
@@ -157,7 +157,7 @@ Device Not Detected</h2>
 <li>Check for proper I2C start/stop conditions</li>
 <li>Verify ACK/NACK responses</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md129"></a>
+<h2><a class="anchor" id="autotoc_md138"></a>
 No Output on Channels</h2>
 <p><b>Symptoms:</b></p><ul>
 <li>Driver initializes successfully</li>
@@ -175,7 +175,7 @@ No Output on Channels</h2>
 <div class="line">pwm.Reset();           <span class="comment">// 1. Initialize</span></div>
 <div class="line">pwm.SetPwmFreq(50.0f); <span class="comment">// 2. Set frequency (REQUIRED!)</span></div>
 <div class="line">pwm.SetDuty(0, 0.5f);  <span class="comment">// 3. Now set channels</span></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md130"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md139"></a>
 Runtime Errors</h2>
 <p><b>Initialization Fails</b></p>
 <p><b>Checklist:</b></p><ul>
@@ -192,25 +192,25 @@ Runtime Errors</h2>
 <li>[ ] PWM values are 0-4095</li>
 <li>[ ] Error handling code checks return values</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md131"></a>
+<h1><a class="anchor" id="autotoc_md140"></a>
 FAQ</h1>
-<h2><a class="anchor" id="autotoc_md132"></a>
+<h2><a class="anchor" id="autotoc_md141"></a>
 Q: Why do I need to call SetPwmFreq() before setting channels?</h2>
 <p><b>A:</b> The PCA9685 requires the prescale register to be set before PWM outputs work correctly. The driver enforces this by checking initialization state. Always call <code>Reset()</code> then <code>SetPwmFreq()</code> before setting channels.</p>
-<h2><a class="anchor" id="autotoc_md133"></a>
+<h2><a class="anchor" id="autotoc_md142"></a>
 Q: Can I change frequency after setting channels?</h2>
 <p><b>A:</b> Yes, but it will affect all channels. Changing frequency updates the prescale register, which changes the PWM period for all 16 channels simultaneously.</p>
-<h2><a class="anchor" id="autotoc_md134"></a>
+<h2><a class="anchor" id="autotoc_md143"></a>
 Q: What's the difference between SetPwm() and SetDuty()?</h2>
 <p><b>A:</b></p><ul>
 <li><code>SetPwm()</code> gives you precise control over on/off timing (0-4095 ticks each)</li>
 <li><code>SetDuty()</code> is a convenience method that sets duty cycle as a float (0.0-1.0), automatically calculating the off_time</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md135"></a>
+<h2><a class="anchor" id="autotoc_md144"></a>
 Q: Can I use multiple PCA9685 devices?</h2>
 <p><b>A:</b> Yes! Configure different I2C addresses via A0-A5 pins, then create separate driver instances: </p><div class="fragment"><div class="line">pca9685::PCA9685&lt;MyI2c&gt; pwm1(&amp;i2c, 0x40); <span class="comment">// First device</span></div>
 <div class="line">pca9685::PCA9685&lt;MyI2c&gt; pwm2(&amp;i2c, 0x41); <span class="comment">// Second device</span></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md136"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md145"></a>
 Q: Why are my servos not moving?</h2>
 <p><b>A:</b> Common causes:</p><ol type="1">
 <li>Frequency not set (must call <code>SetPwmFreq(50.0f)</code> first)</li>
@@ -218,7 +218,7 @@ Q: Why are my servos not moving?</h2>
 <li>Servo power supply insufficient</li>
 <li>OE pin pulled HIGH (disables outputs)</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md137"></a>
+<h2><a class="anchor" id="autotoc_md146"></a>
 Q: How do I control the OE (Output Enable) pin?</h2>
 <p><b>A:</b> The driver doesn't control OE. You must control it via your platform's GPIO: </p><div class="fragment"><div class="line"><span class="comment">// Example: ESP32</span></div>
 <div class="line">gpio_set_direction(OE_PIN, GPIO_MODE_OUTPUT);</div>

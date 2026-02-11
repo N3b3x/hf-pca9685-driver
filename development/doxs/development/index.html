@@ -106,9 +106,13 @@ $(function() {
 <li>✅ <b>Hardware Agnostic</b>: CRTP-based I2C interface for platform independence</li>
 <li>✅ <b>Modern C++</b>: C++11 compatible with template-based design</li>
 <li>✅ <b>Zero Overhead</b>: CRTP design for compile-time polymorphism</li>
-<li>✅ <b>Error Reporting</b>: Comprehensive error codes for debugging</li>
+<li>✅ <b>Error Reporting</b>: Bitmask error flags (<code>uint16_t</code>) via <code>GetErrorFlags()</code> / <code>ClearErrorFlags()</code></li>
 <li>✅ <b>Duty Cycle Control</b>: High-level <code>SetDuty()</code> method for easy 0.0-1.0 control</li>
 <li>✅ <b>Bulk Operations</b>: <code>SetAllPwm()</code> for simultaneous channel updates</li>
+<li>✅ <b>Power Management</b>: <code>Sleep()</code> / <code>Wake()</code> via MODE1 SLEEP bit</li>
+<li>✅ <b>Output Modes</b>: <code>SetOutputInvert()</code>, <code>SetOutputDriverMode()</code> (totem-pole/open-drain)</li>
+<li>✅ <b>Full ON/OFF</b>: <code>SetChannelFullOn()</code> / <code>SetChannelFullOff()</code> without PWM</li>
+<li>✅ <b>Retry Logic</b>: Configurable I2C retry count via <code>SetRetries()</code></li>
 </ul>
 <h1><a class="anchor" id="autotoc_md4"></a>
 🚀 Quick Start</h1>
@@ -117,8 +121,9 @@ $(function() {
 <div class="line"><span class="comment">// 1. Implement the I2C interface (see platform_integration.md)</span></div>
 <div class="line"><span class="keyword">class </span>MyI2c : <span class="keyword">public</span> pca9685::I2cInterface&lt;MyI2c&gt; {</div>
 <div class="line"><span class="keyword">public</span>:</div>
-<div class="line">    <span class="keywordtype">bool</span> Write(uint8_t addr, uint8_t reg, <span class="keyword">const</span> uint8_t *data, <span class="keywordtype">size_t</span> len);</div>
-<div class="line">    <span class="keywordtype">bool</span> Read(uint8_t addr, uint8_t reg, uint8_t *data, <span class="keywordtype">size_t</span> len);</div>
+<div class="line">    <span class="keywordtype">bool</span> Write(uint8_t addr, uint8_t reg, <span class="keyword">const</span> uint8_t *data, <span class="keywordtype">size_t</span> len) <span class="keyword">noexcept</span>;</div>
+<div class="line">    <span class="keywordtype">bool</span> Read(uint8_t addr, uint8_t reg, uint8_t *data, <span class="keywordtype">size_t</span> len) <span class="keyword">noexcept</span>;</div>
+<div class="line">    <span class="keywordtype">bool</span> EnsureInitialized() noexcept;</div>
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// 2. Create driver instance</span></div>
@@ -156,7 +161,23 @@ $(function() {
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SetAllPwm(uint16_t on, uint16_t off)</code>   </td><td class="markdownTableBodyNone">Set all channels simultaneously    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>GetLastError()</code>   </td><td class="markdownTableBodyNone">Get the last error code    </td></tr>
+<td class="markdownTableBodyNone"><code>SetChannelFullOn(uint8_t channel)</code>   </td><td class="markdownTableBodyNone">Set channel fully on (no PWM)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>SetChannelFullOff(uint8_t channel)</code>   </td><td class="markdownTableBodyNone">Set channel fully off (no PWM)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>Sleep()</code> / <code>Wake()</code>   </td><td class="markdownTableBodyNone">Power management via MODE1 SLEEP bit    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>SetOutputInvert(bool invert)</code>   </td><td class="markdownTableBodyNone">Set MODE2 INVRT bit    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>SetOutputDriverMode(bool totem_pole)</code>   </td><td class="markdownTableBodyNone">Set MODE2 OUTDRV bit (true=totem-pole, false=open-drain)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>SetRetries(int retries)</code>   </td><td class="markdownTableBodyNone">Configure I2C retry count    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>GetLastError()</code>   </td><td class="markdownTableBodyNone">Get the last error code (convenience accessor)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>GetErrorFlags()</code>   </td><td class="markdownTableBodyNone">Get all error flags as <code>uint16_t</code> bitmask    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ClearErrorFlags(uint16_t mask)</code>   </td><td class="markdownTableBodyNone">Clear specific error flags    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>GetPrescale(uint8_t &amp;prescale)</code>   </td><td class="markdownTableBodyNone">Get current prescale value   </td></tr>
 </table>

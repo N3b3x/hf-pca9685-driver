@@ -76,8 +76,8 @@ $(function() {
   <div class="headertitle"><div class="title">Installation</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md74"></a> This guide covers how to obtain, build, and verify the PCA9685 driver library.</p>
-<h1><a class="anchor" id="autotoc_md75"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md83"></a> This guide covers how to obtain, build, and verify the PCA9685 driver library.</p>
+<h1><a class="anchor" id="autotoc_md84"></a>
 Prerequisites</h1>
 <p>Before installing the driver, ensure you have:</p>
 <ul>
@@ -85,28 +85,28 @@ Prerequisites</h1>
 <li><b>Build System</b>: Make or CMake (optional, for building static library)</li>
 <li><b>Platform SDK</b>: Your platform's I2C driver (ESP-IDF, STM32 HAL, Arduino Wire, etc.)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md76"></a>
+<h1><a class="anchor" id="autotoc_md85"></a>
 Obtaining the Source</h1>
-<h2><a class="anchor" id="autotoc_md77"></a>
+<h2><a class="anchor" id="autotoc_md86"></a>
 Option 1: Git Clone</h2>
 <div class="fragment"><div class="line">git clone https://github.com/N3b3x/hf-pca9685-driver.git</div>
 <div class="line">cd hf-pca9685-driver</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md78"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md87"></a>
 Option 2: Copy Files</h2>
 <p>Copy the following files into your project:</p>
 <div class="fragment"><div class="line">inc/</div>
 <div class="line">  └── pca9685.hpp</div>
 <div class="line">src/</div>
 <div class="line">  └── pca9685.cpp</div>
-</div><!-- fragment --><p><b>Note</b>: The driver uses a header-only template design where <code><a class="el" href="pca9685_8cpp.html" title="Hardware-agnostic implementation for the PCA9685 16-channel 12-bit PWM controller (I2C)">pca9685.cpp</a></code> is included by <code>pca9685.hpp</code>. You typically only need to include the header file in your project.</p>
-<h1><a class="anchor" id="autotoc_md79"></a>
+</div><!-- fragment --><p><b>Note</b>: The driver uses a header-only template design where <code>pca9685.cpp</code> is included by <code>pca9685.hpp</code>. You typically only need to include the header file in your project.</p>
+<h1><a class="anchor" id="autotoc_md88"></a>
 Building the Library</h1>
-<h2><a class="anchor" id="autotoc_md80"></a>
+<h2><a class="anchor" id="autotoc_md89"></a>
 Using Make</h2>
 <p>A simple Makefile is provided:</p>
 <div class="fragment"><div class="line">make</div>
 </div><!-- fragment --><p>This builds <code>build/libpca9685.a</code> which can be linked into your application.</p>
-<h2><a class="anchor" id="autotoc_md81"></a>
+<h2><a class="anchor" id="autotoc_md90"></a>
 Using CMake</h2>
 <div class="fragment"><div class="line">add_subdirectory(pca9685-driver)</div>
 <div class="line">target_link_libraries(your_target PRIVATE pca9685)</div>
@@ -116,16 +116,16 @@ Using CMake</h2>
 <div class="line">    src/pca9685.cpp</div>
 <div class="line">)</div>
 <div class="line">target_include_directories(pca9685 PUBLIC inc)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md82"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md91"></a>
 Using ESP-IDF Component</h2>
 <p>The driver can be used as an ESP-IDF component. See the <a href="../examples/esp32/">examples/esp32</a> directory for component integration examples.</p>
-<h1><a class="anchor" id="autotoc_md83"></a>
+<h1><a class="anchor" id="autotoc_md92"></a>
 Running Unit Tests</h1>
 <p>The library includes unit tests. To run them:</p>
 <div class="fragment"><div class="line">make test</div>
 <div class="line">./build/test</div>
 </div><!-- fragment --><p>Expected output: </p><div class="fragment"><div class="line">All tests passed.</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md84"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md93"></a>
 Verification</h1>
 <p>To verify the installation:</p>
 <ol type="1">
@@ -135,7 +135,7 @@ Verification</h1>
 </div><!-- fragment --></li>
 <li>If compilation succeeds, the library is properly installed.</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md85"></a>
+<h1><a class="anchor" id="autotoc_md94"></a>
 Next Steps</h1>
 <ul>
 <li>Follow the <a class="el" href="md_docs_2quickstart.html">Quick Start</a> guide to create your first application</li>

@@ -329,17 +329,19 @@
 29
 30
 31
+32
 </pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">"pca9685.hpp"</span><span class="cp">
 </span>
 <span class="c1">// 1. Implement the I2C interface</span>
 <span class="k">class</span> <span class="nc">MyI2c</span> <span class="o">:</span> <span class="k">public</span> <span class="n">pca9685</span><span class="o">::</span><span class="n">I2cInterface</span><span class="o">&lt;</span><span class="n">MyI2c</span><span class="o">&gt;</span> <span class="p">{</span>
 <span class="nl">public:</span>
-    <span class="kt">bool</span> <span class="n">Write</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">bool</span> <span class="n">EnsureInitialized</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">bool</span> <span class="n">Write</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
         <span class="c1">// Your I2C write implementation</span>
         <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
     <span class="p">}</span>
     
-    <span class="kt">bool</span> <span class="n">Read</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">bool</span> <span class="n">Read</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
         <span class="c1">// Your I2C read implementation</span>
         <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
     <span class="p">}</span>
@@ -430,9 +432,11 @@
 2
 3
 4
+5
 </pre></td><td class="rouge-code"><pre><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pwm</span><span class="p">.</span><span class="n">Reset</span><span class="p">())</span> <span class="p">{</span>
     <span class="c1">// Handle initialization failure</span>
-    <span class="k">auto</span> <span class="n">error</span> <span class="o">=</span> <span class="n">pwm</span><span class="p">.</span><span class="n">GetLastError</span><span class="p">();</span>
+    <span class="kt">uint16_t</span> <span class="n">flags</span> <span class="o">=</span> <span class="n">pwm</span><span class="p">.</span><span class="n">GetErrorFlags</span><span class="p">();</span> <span class="c1">// Bitmask error flags</span>
+    <span class="k">auto</span> <span class="n">error</span> <span class="o">=</span> <span class="n">pwm</span><span class="p">.</span><span class="n">GetLastError</span><span class="p">();</span>      <span class="c1">// Convenience accessor</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 

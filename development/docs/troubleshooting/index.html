@@ -293,7 +293,7 @@
 <p><strong>Symptoms:</strong></p>
 <ul>
   <li><code class="language-plaintext highlighter-rouge">Reset()</code> returns <code class="language-plaintext highlighter-rouge">false</code></li>
-  <li><code class="language-plaintext highlighter-rouge">GetLastError()</code> returns <code class="language-plaintext highlighter-rouge">I2cWrite</code></li>
+  <li><code class="language-plaintext highlighter-rouge">GetLastError()</code> returns <code class="language-plaintext highlighter-rouge">I2cWrite</code> (or <code class="language-plaintext highlighter-rouge">GetErrorFlags()</code> has <code class="language-plaintext highlighter-rouge">I2cWrite</code> bit set)</li>
 </ul>
 
 <p><strong>Causes:</strong></p>
@@ -350,7 +350,7 @@
 <p><strong>Symptoms:</strong></p>
 <ul>
   <li><code class="language-plaintext highlighter-rouge">SetPwmFreq()</code> returns <code class="language-plaintext highlighter-rouge">false</code></li>
-  <li><code class="language-plaintext highlighter-rouge">GetLastError()</code> returns <code class="language-plaintext highlighter-rouge">OutOfRange</code></li>
+  <li><code class="language-plaintext highlighter-rouge">GetLastError()</code> returns <code class="language-plaintext highlighter-rouge">OutOfRange</code> (or <code class="language-plaintext highlighter-rouge">GetErrorFlags()</code> has <code class="language-plaintext highlighter-rouge">OutOfRange</code> bit set)</li>
 </ul>
 
 <p><strong>Causes:</strong></p>
@@ -380,7 +380,7 @@
 <p><strong>Symptoms:</strong></p>
 <ul>
   <li><code class="language-plaintext highlighter-rouge">SetPwm()</code> or <code class="language-plaintext highlighter-rouge">SetDuty()</code> returns <code class="language-plaintext highlighter-rouge">false</code></li>
-  <li><code class="language-plaintext highlighter-rouge">GetLastError()</code> returns <code class="language-plaintext highlighter-rouge">OutOfRange</code></li>
+  <li><code class="language-plaintext highlighter-rouge">GetLastError()</code> returns <code class="language-plaintext highlighter-rouge">OutOfRange</code> (or <code class="language-plaintext highlighter-rouge">GetErrorFlags()</code> has <code class="language-plaintext highlighter-rouge">OutOfRange</code> bit set)</li>
 </ul>
 
 <p><strong>Causes:</strong></p>
@@ -421,7 +421,7 @@
 <p><strong>Symptoms:</strong></p>
 <ul>
   <li>Methods return <code class="language-plaintext highlighter-rouge">false</code></li>
-  <li><code class="language-plaintext highlighter-rouge">GetLastError()</code> returns <code class="language-plaintext highlighter-rouge">NotInitialized</code></li>
+  <li><code class="language-plaintext highlighter-rouge">GetLastError()</code> returns <code class="language-plaintext highlighter-rouge">NotInitialized</code> (or <code class="language-plaintext highlighter-rouge">GetErrorFlags()</code> has <code class="language-plaintext highlighter-rouge">NotInitialized</code> bit set)</li>
 </ul>
 
 <p><strong>Causes:</strong></p>
@@ -596,8 +596,10 @@
   <li>Check method signatures match exactly:
     <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre></td><td class="rouge-code"><pre><span class="kt">bool</span> <span class="nf">Write</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">);</span>
-<span class="kt">bool</span> <span class="nf">Read</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">);</span>
+3
+</pre></td><td class="rouge-code"><pre><span class="kt">bool</span> <span class="n">EnsureInitialized</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">Write</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">Read</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
 </pre></td></tr></tbody></table></div></code></pre></div>    </div>
   </li>
 </ul>
@@ -607,7 +609,7 @@
 <p><strong>Solution:</strong></p>
 <ul>
   <li>Verify you’re including/linking the driver source</li>
-  <li>For header-only template, ensure <code class="language-plaintext highlighter-rouge">pca9685.cpp</code> is accessible</li>
+  <li>For header-only template, ensure <code class="language-plaintext highlighter-rouge">pca9685.ipp</code> is accessible</li>
   <li>Check include paths are correct</li>
 </ul><hr />
 <h3 id="runtime-errors">
@@ -665,7 +667,7 @@
 5
 6
 7
-</pre></td><td class="rouge-code"><pre><span class="kt">bool</span> <span class="nf">Write</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+</pre></td><td class="rouge-code"><pre><span class="kt">bool</span> <span class="nf">Write</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"I2C Write: addr=0x%02X, reg=0x%02X, len=%zu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
     <span class="c1">// ... your implementation</span>
     <span class="kt">bool</span> <span class="n">result</span> <span class="o">=</span> <span class="cm">/* ... */</span><span class="p">;</span>
@@ -701,26 +703,36 @@
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></div></code></pre></div></div>
-<h3 id="check-error-codes">
+<h3 id="check-error-flags">
   
   
-    <a href="#check-error-codes" class="anchor-heading" aria-labelledby="check-error-codes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Check Error Codes
+    <a href="#check-error-flags" class="anchor-heading" aria-labelledby="check-error-flags"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Check Error Flags
   
   
 </h3>
     
 
-<p>Always check and log error codes:</p>
+<p>Always check and log error flags. Errors are now <code class="language-plaintext highlighter-rouge">uint16_t</code> bitmask flags:</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
+6
+7
+8
+9
+10
 </pre></td><td class="rouge-code"><pre><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pwm</span><span class="p">.</span><span class="n">SetPwmFreq</span><span class="p">(</span><span class="mf">50.0</span><span class="n">f</span><span class="p">))</span> <span class="p">{</span>
+    <span class="c1">// Preferred: use bitmask error flags</span>
+    <span class="kt">uint16_t</span> <span class="n">flags</span> <span class="o">=</span> <span class="n">pwm</span><span class="p">.</span><span class="n">GetErrorFlags</span><span class="p">();</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Error flags: 0x%04X</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+    <span class="n">pwm</span><span class="p">.</span><span class="n">ClearErrorFlags</span><span class="p">(</span><span class="n">flags</span><span class="p">);</span> <span class="c1">// Clear after handling</span>
+
+    <span class="c1">// Or use convenience accessor</span>
     <span class="k">auto</span> <span class="n">error</span> <span class="o">=</span> <span class="n">pwm</span><span class="p">.</span><span class="n">GetLastError</span><span class="p">();</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"Error: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">error</span><span class="p">));</span>
-    <span class="c1">// Handle specific error</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 <h3 id="use-logic-analyzer">

@@ -81,7 +81,8 @@ $(function() {
 Source Code</h1>
 <ul>
 <li><b>Main Header</b>: <a href="../inc/pca9685.hpp"><code>inc/pca9685.hpp</code></a></li>
-<li><b>Implementation</b>: <a href="../src/pca9685.cpp"><code>src/pca9685.cpp</code></a></li>
+<li><b>I2C Interface</b>: <a href="../inc/pca9685_i2c_interface.hpp"><code>inc/pca9685_i2c_interface.hpp</code></a></li>
+<li><b>Implementation</b>: <a href="../src/pca9685.ipp"><code>src/pca9685.ipp</code></a> (template implementation, included by header)</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md13"></a>
 Core Class</h1>
@@ -89,74 +90,133 @@ Core Class</h1>
 <code>PCA9685&lt;I2cType&gt;</code></h2>
 <p>Main driver class for interfacing with the PCA9685 PWM controller.</p>
 <p><b>Template Parameter</b>: <code>I2cType</code> - Your I2C interface implementation (must inherit from <code>pca9685::I2cInterface&lt;I2cType&gt;</code>)</p>
-<p><b>Location</b>: <a href="../inc/pca9685.hpp#L121"><code>inc/pca9685.hpp#L121</code></a></p>
+<p><b>Location</b>: <a href="../inc/pca9685.hpp"><code>inc/pca9685.hpp</code></a></p>
 <p><b>Constructor:</b> </p><div class="fragment"><div class="line">PCA9685(I2cType* bus, uint8_t address);</div>
-</div><!-- fragment --><p><b>Location</b>: <a href="../src/pca9685.cpp#L30"><code>src/pca9685.cpp#L30</code></a></p>
-<h1><a class="anchor" id="autotoc_md15"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md15"></a>
 Methods</h1>
 <h2><a class="anchor" id="autotoc_md16"></a>
 Initialization</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Location    </th></tr>
+<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Reset()</code>   </td><td class="markdownTableBodyNone"><code>bool Reset()</code>   </td><td class="markdownTableBodyNone"><a href="../src/pca9685.cpp#L34"><code>src/pca9685.cpp#L34</code></a>   </td></tr>
+<td class="markdownTableBodyNone"><code>EnsureInitialized()</code>   </td><td class="markdownTableBodyNone"><code>bool EnsureInitialized() noexcept</code>   </td><td class="markdownTableBodyNone">Lazy initialization - ensures bus and device are ready    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>IsInitialized()</code>   </td><td class="markdownTableBodyNone"><code>bool IsInitialized() const noexcept</code>   </td><td class="markdownTableBodyNone">Check if driver has been initialized    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>Reset()</code>   </td><td class="markdownTableBodyNone"><code>bool Reset() noexcept</code>   </td><td class="markdownTableBodyNone">Reset device to power-on default state   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md17"></a>
 Frequency Control</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Location    </th></tr>
+<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>SetPwmFreq()</code>   </td><td class="markdownTableBodyNone"><code>bool SetPwmFreq(float freq_hz)</code>   </td><td class="markdownTableBodyNone"><a href="../src/pca9685.cpp#L46"><code>src/pca9685.cpp#L46</code></a>    </td></tr>
+<td class="markdownTableBodyNone"><code>SetPwmFreq()</code>   </td><td class="markdownTableBodyNone"><code>bool SetPwmFreq(float freq_hz) noexcept</code>   </td><td class="markdownTableBodyNone">Set PWM frequency for all channels (24-1526 Hz)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>GetPrescale()</code>   </td><td class="markdownTableBodyNone"><code>bool GetPrescale(uint8_t &amp;prescale)</code>   </td><td class="markdownTableBodyNone"><a href="../src/pca9685.cpp#L220"><code>src/pca9685.cpp#L220</code></a>   </td></tr>
+<td class="markdownTableBodyNone"><code>GetPrescale()</code>   </td><td class="markdownTableBodyNone"><code>bool GetPrescale(uint8_t&amp; prescale) noexcept</code>   </td><td class="markdownTableBodyNone">Get current prescale register value   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md18"></a>
 PWM Control</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Location    </th></tr>
+<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>SetPwm()</code>   </td><td class="markdownTableBodyNone"><code>bool SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time)</code>   </td><td class="markdownTableBodyNone"><a href="../src/pca9685.cpp#L191"><code>src/pca9685.cpp#L191</code></a>    </td></tr>
+<td class="markdownTableBodyNone"><code>SetPwm()</code>   </td><td class="markdownTableBodyNone"><code>bool SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time) noexcept</code>   </td><td class="markdownTableBodyNone">Set PWM on/off time for a channel    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>SetDuty()</code>   </td><td class="markdownTableBodyNone"><code>bool SetDuty(uint8_t channel, float duty)</code>   </td><td class="markdownTableBodyNone"><a href="../src/pca9685.cpp#L199"><code>src/pca9685.cpp#L199</code></a>    </td></tr>
+<td class="markdownTableBodyNone"><code>SetDuty()</code>   </td><td class="markdownTableBodyNone"><code>bool SetDuty(uint8_t channel, float duty) noexcept</code>   </td><td class="markdownTableBodyNone">Set duty cycle (0.0-1.0) for a channel    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>SetAllPwm()</code>   </td><td class="markdownTableBodyNone"><code>bool SetAllPwm(uint16_t on_time, uint16_t off_time)</code>   </td><td class="markdownTableBodyNone"><a href="../src/pca9685.cpp#L207"><code>src/pca9685.cpp#L207</code></a>   </td></tr>
+<td class="markdownTableBodyNone"><code>SetAllPwm()</code>   </td><td class="markdownTableBodyNone"><code>bool SetAllPwm(uint16_t on_time, uint16_t off_time) noexcept</code>   </td><td class="markdownTableBodyNone">Set all channels to the same PWM value    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>SetChannelFullOn()</code>   </td><td class="markdownTableBodyNone"><code>bool SetChannelFullOn(uint8_t channel) noexcept</code>   </td><td class="markdownTableBodyNone">Set channel to fully ON (100% duty)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>SetChannelFullOff()</code>   </td><td class="markdownTableBodyNone"><code>bool SetChannelFullOff(uint8_t channel) noexcept</code>   </td><td class="markdownTableBodyNone">Set channel to fully OFF (0% duty)   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md19"></a>
-Utility</h2>
+Power Management</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Location    </th></tr>
+<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>GetLastError()</code>   </td><td class="markdownTableBodyNone"><code>Error GetLastError() const</code>   </td><td class="markdownTableBodyNone"><a href="../inc/pca9685.hpp#L213"><code>inc/pca9685.hpp#L213</code></a>    </td></tr>
+<td class="markdownTableBodyNone"><code>Sleep()</code>   </td><td class="markdownTableBodyNone"><code>bool Sleep() noexcept</code>   </td><td class="markdownTableBodyNone">Put PCA9685 into low-power sleep mode    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>SetOutputEnable()</code>   </td><td class="markdownTableBodyNone"><code>void SetOutputEnable(bool enabled)</code>   </td><td class="markdownTableBodyNone"><a href="../inc/pca9685.hpp#L227"><code>inc/pca9685.hpp#L227</code></a>   </td></tr>
+<td class="markdownTableBodyNone"><code>Wake()</code>   </td><td class="markdownTableBodyNone"><code>bool Wake() noexcept</code>   </td><td class="markdownTableBodyNone">Wake PCA9685 from sleep mode   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md20"></a>
-Types</h1>
+<h2><a class="anchor" id="autotoc_md20"></a>
+Output Configuration</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>SetOutputInvert()</code>   </td><td class="markdownTableBodyNone"><code>bool SetOutputInvert(bool invert) noexcept</code>   </td><td class="markdownTableBodyNone">Set output polarity inversion    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>SetOutputDriverMode()</code>   </td><td class="markdownTableBodyNone"><code>bool SetOutputDriverMode(bool totem_pole) noexcept</code>   </td><td class="markdownTableBodyNone">Set totem-pole or open-drain mode   </td></tr>
+</table>
 <h2><a class="anchor" id="autotoc_md21"></a>
+Error Handling</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>GetLastError()</code>   </td><td class="markdownTableBodyNone"><code>Error GetLastError() const noexcept</code>   </td><td class="markdownTableBodyNone">Get last error code (single-error convenience)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>GetErrorFlags()</code>   </td><td class="markdownTableBodyNone"><code>uint16_t GetErrorFlags() const noexcept</code>   </td><td class="markdownTableBodyNone">Get accumulated error flags (bitmask)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>HasError()</code>   </td><td class="markdownTableBodyNone"><code>bool HasError(Error e) const noexcept</code>   </td><td class="markdownTableBodyNone">Check if a specific error flag is set    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>HasAnyError()</code>   </td><td class="markdownTableBodyNone"><code>bool HasAnyError() const noexcept</code>   </td><td class="markdownTableBodyNone">Check if any error flag is set    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ClearError()</code>   </td><td class="markdownTableBodyNone"><code>void ClearError(Error e) noexcept</code>   </td><td class="markdownTableBodyNone">Clear a single error flag    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ClearErrorFlags()</code>   </td><td class="markdownTableBodyNone"><code>void ClearErrorFlags(uint16_t mask = 0xFFFF) noexcept</code>   </td><td class="markdownTableBodyNone">Clear error flags by bitmask   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md22"></a>
+Configuration</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>SetRetries()</code>   </td><td class="markdownTableBodyNone"><code>void SetRetries(int retries) noexcept</code>   </td><td class="markdownTableBodyNone">Set I2C retry count for register operations   </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md23"></a>
+Types</h1>
+<h2><a class="anchor" id="autotoc_md24"></a>
 Enumerations</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Values   </th><th class="markdownTableHeadNone">Location    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Error</code>   </td><td class="markdownTableBodyNone"><code>None</code>, <code>I2cWrite</code>, <code>I2cRead</code>, <code>InvalidParam</code>, <code>DeviceNotFound</code>, <code>NotInitialized</code>, <code>OutOfRange</code>   </td><td class="markdownTableBodyNone"><a href="../inc/pca9685.hpp#L126"><code>inc/pca9685.hpp#L126</code></a>    </td></tr>
+<td class="markdownTableBodyNone"><code>Error</code>   </td><td class="markdownTableBodyNone"><code>None</code>, <code>I2cWrite</code>, <code>I2cRead</code>, <code>InvalidParam</code>, <code>DeviceNotFound</code>, <code>NotInitialized</code>, <code>OutOfRange</code>   </td><td class="markdownTableBodyNone"><a href="../inc/pca9685.hpp"><code>inc/pca9685.hpp</code></a>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>Register</code>   </td><td class="markdownTableBodyNone"><code>MODE1</code>, <code>MODE2</code>, <code>LED0_ON_L</code>, <code>LED0_OFF_L</code>, <code>PRE_SCALE</code>, etc.   </td><td class="markdownTableBodyNone"><a href="../inc/pca9685.hpp#L139"><code>inc/pca9685.hpp#L139</code></a>   </td></tr>
+<td class="markdownTableBodyNone"><code>Register</code>   </td><td class="markdownTableBodyNone"><code>MODE1</code>, <code>MODE2</code>, <code>LED0_ON_L</code>, <code>LED0_OFF_L</code>, <code>PRE_SCALE</code>, etc.   </td><td class="markdownTableBodyNone"><a href="../inc/pca9685.hpp"><code>inc/pca9685.hpp</code></a>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md22"></a>
+<h2><a class="anchor" id="autotoc_md25"></a>
 Constants</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Constant   </th><th class="markdownTableHeadNone">Value   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>MAX_CHANNELS</code>   </td><td class="markdownTableBodyNone"><code>16</code>   </td><td class="markdownTableBodyNone">Maximum number of PWM channels    </td></tr>
+<td class="markdownTableBodyNone"><code>MAX_CHANNELS_</code>   </td><td class="markdownTableBodyNone"><code>16</code>   </td><td class="markdownTableBodyNone">Maximum number of PWM channels    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>MAX_PWM</code>   </td><td class="markdownTableBodyNone"><code>4095</code>   </td><td class="markdownTableBodyNone">Maximum PWM value    </td></tr>
+<td class="markdownTableBodyNone"><code>MAX_PWM_</code>   </td><td class="markdownTableBodyNone"><code>4095</code>   </td><td class="markdownTableBodyNone">Maximum PWM value (12-bit)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>OSC_FREQ</code>   </td><td class="markdownTableBodyNone"><code>25000000</code>   </td><td class="markdownTableBodyNone">Internal oscillator frequency (25 MHz)   </td></tr>
+<td class="markdownTableBodyNone"><code>OSC_FREQ_</code>   </td><td class="markdownTableBodyNone"><code>25000000</code>   </td><td class="markdownTableBodyNone">Internal oscillator frequency (25 MHz)   </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md26"></a>
+I2C Interface</h1>
+<h2><a class="anchor" id="autotoc_md27"></a>
+<code>I2cInterface&lt;Derived&gt;</code> (CRTP)</h2>
+<p>Hardware-agnostic I2C interface using the Curiously Recurring Template Pattern.</p>
+<p><b>Location</b>: <a href="../inc/pca9685_i2c_interface.hpp"><code>inc/pca9685_i2c_interface.hpp</code></a></p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Method   </th><th class="markdownTableHeadNone">Signature   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>Write()</code>   </td><td class="markdownTableBodyNone"><code>bool Write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) noexcept</code>   </td><td class="markdownTableBodyNone">Write bytes to a device register    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>Read()</code>   </td><td class="markdownTableBodyNone"><code>bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) noexcept</code>   </td><td class="markdownTableBodyNone">Read bytes from a device register    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>EnsureInitialized()</code>   </td><td class="markdownTableBodyNone"><code>bool EnsureInitialized() noexcept</code>   </td><td class="markdownTableBodyNone">Ensure I2C bus is initialized and ready   </td></tr>
 </table>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
