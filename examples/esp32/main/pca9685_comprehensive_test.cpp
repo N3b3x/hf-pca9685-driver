@@ -1,6 +1,6 @@
 /**
  * @file pca9685_comprehensive_test.cpp
- * @brief Comprehensive test suite for PCA9685 driver on ESP32-C6
+ * @brief Comprehensive test suite for PCA9685 driver on ESP32
  *
  * This file contains comprehensive testing for PCA9685 features including:
  * - Device initialization and reset
@@ -15,25 +15,29 @@
  * @copyright HardFOC
  */
 
-#include "pca9685.hpp"
-#include "esp32_pca9685_bus.hpp"
-#include "TestFramework.h"
+// System headers
 #include <memory>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
-// Use fully qualified name for the class
-using PCA9685Driver = pca9685::PCA9685<Esp32Pca9685Bus>;
-
+// Third-party headers (ESP-IDF)
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "esp_log.h"
-#include "driver/i2c_master.h"
 #include "driver/gpio.h"
+#include "driver/i2c_master.h"
+#include "esp_log.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #ifdef __cplusplus
 }
 #endif
+
+// Project headers
+#include "pca9685.hpp"
+#include "esp32_pca9685_bus.hpp"
+#include "TestFramework.h"
+
+// Use fully qualified name for the class
+using PCA9685Driver = pca9685::PCA9685<Esp32Pca9685Bus>;
 
 static const char* TAG = "PCA9685_Test";
 static TestResults g_test_results;
@@ -77,9 +81,10 @@ static std::unique_ptr<PCA9685Driver> create_test_driver() noexcept {
         return nullptr;
     }
 
-    // Reset to default state
-    if (!driver->Reset()) {
-        ESP_LOGE(TAG, "Failed to reset driver");
+    // Initialize driver (ensures I2C bus is ready, then resets device)
+    if (!driver->EnsureInitialized()) {
+        ESP_LOGE(TAG, "Failed to initialize driver (I2C bus or device communication failed)");
+        ESP_LOGE(TAG, "Last error: %d", static_cast<int>(driver->GetLastError()));
         return nullptr;
     }
     vTaskDelay(pdMS_TO_TICKS(10));
@@ -99,6 +104,75 @@ static constexpr gpio_num_t EXAMPLE_SCL_PIN = GPIO_NUM_5;
 #endif
 
 /**
+ * @brief Scan I2C bus for devices
+ * @param bus Pointer to initialized I2C bus
+ * @return true if at least one device found, false otherwise
+ */
+static bool scan_i2c_bus(Esp32Pca9685Bus* bus) noexcept {
+    if (!bus || !bus->IsInitialized()) {
+        ESP_LOGE(TAG, "I2C bus not initialized for scanning");
+        return false;
+    }
+
+    ESP_LOGI(TAG, "Scanning I2C bus (SDA:GPIO%d, SCL:GPIO%d)...", EXAMPLE_SDA_PIN, EXAMPLE_SCL_PIN);
+    ESP_LOGI(TAG, "     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F");
+
+    int found_count = 0;
+    for (int addr = 0x08; addr <= 0x77; addr++) {
+        if (addr % 16 == 0) {
+            ESP_LOGI(TAG, "%02X: ", addr);
+        }
+
+        // Try to read register 0x00 (MODE1) - PCA9685 should ACK if present
+        uint8_t data = 0;
+        bool ack = bus->Read(static_cast<uint8_t>(addr), 0x00, &data, 1);
+
+        if (ack) {
+            ESP_LOGI(TAG, "%02X ", addr);
+            found_count++;
+            if (addr == PCA9685_I2C_ADDRESS) {
+                ESP_LOGI(TAG, " <-- Expected PCA9685 address");
+            }
+        } else {
+            ESP_LOGI(TAG, "-- ");
+        }
+
+        if ((addr + 1) % 16 == 0) {
+            ESP_LOGI(TAG, "");
+        }
+    }
+
+    ESP_LOGI(TAG, "");
+    if (found_count == 0) {
+        ESP_LOGW(TAG, "No I2C devices found on GPIO%d (SDA) / GPIO%d (SCL)", EXAMPLE_SDA_PIN, EXAMPLE_SCL_PIN);
+        ESP_LOGW(TAG, "Check wiring, power, and pull-up resistors (2.2k-4.7k to 3.3V)");
+        ESP_LOGW(TAG, "If PCA9685 is on different pins, rebuild with:");
+        ESP_LOGW(TAG, "  -DPCA9685_EXAMPLE_I2C_SDA_GPIO=<sda> -DPCA9685_EXAMPLE_I2C_SCL_GPIO=<scl>");
+        return false;
+    } else {
+        ESP_LOGI(TAG, "Found %d device(s) on I2C bus", found_count);
+        if (found_count > 0) {
+            // Check if expected address was found during scan
+            bool found_expected = false;
+            for (int addr = 0x08; addr <= 0x77; addr++) {
+                uint8_t data = 0;
+                if (bus->Read(static_cast<uint8_t>(addr), 0x00, &data, 1)) {
+                    if (addr == PCA9685_I2C_ADDRESS) {
+                        found_expected = true;
+                        break;
+                    }
+                }
+            }
+            if (!found_expected) {
+                ESP_LOGW(TAG, "Note: Expected PCA9685 at 0x%02X not found", PCA9685_I2C_ADDRESS);
+                ESP_LOGW(TAG, "If PCA9685 is at different address, edit PCA9685_I2C_ADDRESS in this file");
+            }
+        }
+        return true;
+    }
+}
+
+/**
  * @brief Initialize test resources
  */
 static bool init_test_resources() noexcept {
@@ -111,15 +185,29 @@ static bool init_test_resources() noexcept {
     config.pullup_enable = true;
 
     g_i2c_bus = CreateEsp32Pca9685Bus(config);
-    if (!g_i2c_bus || !g_i2c_bus->isInitialized()) {
+    if (!g_i2c_bus || !g_i2c_bus->IsInitialized()) {
         ESP_LOGE(TAG, "Failed to initialize I2C bus");
         return false;
     }
 
-    // Create driver
+    // Try to create driver first (fast path - no scanning)
+    ESP_LOGI(TAG, "Attempting to initialize PCA9685 at address 0x%02X...", PCA9685_I2C_ADDRESS);
     g_driver = create_test_driver();
+    
+    // Only scan I2C bus if driver initialization failed
     if (!g_driver) {
+        ESP_LOGW(TAG, "Failed to connect to PCA9685 at address 0x%02X", PCA9685_I2C_ADDRESS);
+        ESP_LOGI(TAG, "");
+        ESP_LOGI(TAG, "╔══════════════════════════════════════════════════════════════════════════════╗");
+        ESP_LOGI(TAG, "║                         I2C BUS SCAN (Diagnostic)                            ║");
+        ESP_LOGI(TAG, "╚══════════════════════════════════════════════════════════════════════════════╝");
+        scan_i2c_bus(g_i2c_bus.get());
+        ESP_LOGI(TAG, "");
         ESP_LOGE(TAG, "Failed to create driver");
+        ESP_LOGE(TAG, "Expected PCA9685 at address 0x%02X (A0-A5 all LOW)", PCA9685_I2C_ADDRESS);
+        ESP_LOGE(TAG, "If device is at different address, edit PCA9685_I2C_ADDRESS in this file");
+        ESP_LOGE(TAG, "If device is on different pins, rebuild with:");
+        ESP_LOGE(TAG, "  -DPCA9685_EXAMPLE_I2C_SDA_GPIO=<sda> -DPCA9685_EXAMPLE_I2C_SCL_GPIO=<scl>");
         return false;
     }
 
@@ -144,7 +232,7 @@ static void cleanup_test_resources() noexcept {
 static bool test_i2c_bus_initialization() noexcept {
     ESP_LOGI(TAG, "Testing I2C bus initialization...");
 
-    if (!g_i2c_bus || !g_i2c_bus->isInitialized()) {
+    if (!g_i2c_bus || !g_i2c_bus->IsInitialized()) {
         ESP_LOGE(TAG, "I2C bus not initialized");
         return false;
     }
@@ -276,7 +364,7 @@ static bool test_duty_cycle() noexcept {
 extern "C" void app_main() {
   ESP_LOGI(TAG, "╔══════════════════════════════════════════════════════════════════════════════╗");
   ESP_LOGI(TAG,
-           "║                    ESP32-C6 PCA9685 COMPREHENSIVE TEST SUITE                  ║");
+           "║                      ESP32 PCA9685 COMPREHENSIVE TEST SUITE                   ║");
   ESP_LOGI(TAG, "║                         HardFOC PCA9685 Driver Tests                         ║");
   ESP_LOGI(TAG, "╚══════════════════════════════════════════════════════════════════════════════╝");
 

@@ -41,9 +41,13 @@ This driver provides a hardware-agnostic C++ interface that abstracts all regist
 - ✅ **Hardware Agnostic**: CRTP-based I2C interface for platform independence
 - ✅ **Modern C++**: C++11 compatible with template-based design
 - ✅ **Zero Overhead**: CRTP design for compile-time polymorphism
-- ✅ **Error Reporting**: Comprehensive error codes for debugging
+- ✅ **Error Reporting**: Bitmask error flags (`uint16_t`) via `GetErrorFlags()` / `ClearErrorFlags()`
 - ✅ **Duty Cycle Control**: High-level `SetDuty()` method for easy 0.0-1.0 control
 - ✅ **Bulk Operations**: `SetAllPwm()` for simultaneous channel updates
+- ✅ **Power Management**: `Sleep()` / `Wake()` via MODE1 SLEEP bit
+- ✅ **Output Modes**: `SetOutputInvert()`, `SetOutputDriverMode()` (totem-pole/open-drain)
+- ✅ **Full ON/OFF**: `SetChannelFullOn()` / `SetChannelFullOff()` without PWM
+- ✅ **Retry Logic**: Configurable I2C retry count via `SetRetries()`
 
 ## 🚀 Quick Start
 
@@ -53,8 +57,9 @@ This driver provides a hardware-agnostic C++ interface that abstracts all regist
 // 1. Implement the I2C interface (see platform_integration.md)
 class MyI2c : public pca9685::I2cInterface<MyI2c> {
 public:
-    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len);
-    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len);
+    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept;
+    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept;
+    bool EnsureInitialized() noexcept;
 };
 
 // 2. Create driver instance
@@ -90,7 +95,15 @@ For detailed installation instructions, see [docs/installation.md](docs/installa
 | `SetPwm(uint8_t channel, uint16_t on, uint16_t off)` | Set PWM timing for a channel |
 | `SetDuty(uint8_t channel, float duty)` | Set duty cycle (0.0-1.0) for a channel |
 | `SetAllPwm(uint16_t on, uint16_t off)` | Set all channels simultaneously |
-| `GetLastError()` | Get the last error code |
+| `SetChannelFullOn(uint8_t channel)` | Set channel fully on (no PWM) |
+| `SetChannelFullOff(uint8_t channel)` | Set channel fully off (no PWM) |
+| `Sleep()` / `Wake()` | Power management via MODE1 SLEEP bit |
+| `SetOutputInvert(bool invert)` | Set MODE2 INVRT bit |
+| `SetOutputDriverMode(bool totem_pole)` | Set MODE2 OUTDRV bit (true=totem-pole, false=open-drain) |
+| `SetRetries(int retries)` | Configure I2C retry count |
+| `GetLastError()` | Get the last error code (convenience accessor) |
+| `GetErrorFlags()` | Get all error flags as `uint16_t` bitmask |
+| `ClearErrorFlags(uint16_t mask)` | Clear specific error flags |
 | `GetPrescale(uint8_t &prescale)` | Get current prescale value |
 
 For complete API documentation with source code links, see [docs/api_reference.md](docs/api_reference.md).

@@ -17,7 +17,7 @@ This guide helps you diagnose and resolve common issues when using the PCA9685 d
 
 **Symptoms:**
 - `Reset()` returns `false`
-- `GetLastError()` returns `I2cWrite`
+- `GetLastError()` returns `I2cWrite` (or `GetErrorFlags()` has `I2cWrite` bit set)
 
 **Causes:**
 - I2C bus not initialized
@@ -54,7 +54,7 @@ This guide helps you diagnose and resolve common issues when using the PCA9685 d
 
 **Symptoms:**
 - `SetPwmFreq()` returns `false`
-- `GetLastError()` returns `OutOfRange`
+- `GetLastError()` returns `OutOfRange` (or `GetErrorFlags()` has `OutOfRange` bit set)
 
 **Causes:**
 - Frequency value outside valid range (24-1526 Hz)
@@ -73,7 +73,7 @@ pwm.SetPwmFreq(freq);
 
 **Symptoms:**
 - `SetPwm()` or `SetDuty()` returns `false`
-- `GetLastError()` returns `OutOfRange`
+- `GetLastError()` returns `OutOfRange` (or `GetErrorFlags()` has `OutOfRange` bit set)
 
 **Causes:**
 - Channel number >= 16
@@ -98,7 +98,7 @@ if (on_time <= 4095 && off_time <= 4095) {
 
 **Symptoms:**
 - Methods return `false`
-- `GetLastError()` returns `NotInitialized`
+- `GetLastError()` returns `NotInitialized` (or `GetErrorFlags()` has `NotInitialized` bit set)
 
 **Causes:**
 - `Reset()` not called before other operations
@@ -207,15 +207,16 @@ pwm.SetDuty(0, 0.5f);  // 3. Now set channels
 - Ensure you've implemented all required `I2cInterface` methods
 - Check method signatures match exactly:
   ```cpp
-  bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len);
-  bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len);
+  bool EnsureInitialized() noexcept;
+  bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept;
+  bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept;
   ```
 
 **Error: "Undefined reference"**
 
 **Solution:**
 - Verify you're including/linking the driver source
-- For header-only template, ensure `pca9685.cpp` is accessible
+- For header-only template, ensure `pca9685.ipp` is accessible
 - Check include paths are correct
 
 ---
@@ -248,7 +249,7 @@ pwm.SetDuty(0, 0.5f);  // 3. Now set channels
 Add debug prints to your I2C interface:
 
 ```cpp
-bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) {
+bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept {
     printf("I2C Write: addr=0x%02X, reg=0x%02X, len=%zu\n", addr, reg, len);
     // ... your implementation
     bool result = /* ... */;
@@ -272,15 +273,20 @@ void i2c_scanner() {
 }
 ```
 
-### Check Error Codes
+### Check Error Flags
 
-Always check and log error codes:
+Always check and log error flags. Errors are now `uint16_t` bitmask flags:
 
 ```cpp
 if (!pwm.SetPwmFreq(50.0f)) {
+    // Preferred: use bitmask error flags
+    uint16_t flags = pwm.GetErrorFlags();
+    printf("Error flags: 0x%04X\n", flags);
+    pwm.ClearErrorFlags(flags); // Clear after handling
+
+    // Or use convenience accessor
     auto error = pwm.GetLastError();
     printf("Error: %d\n", static_cast<int>(error));
-    // Handle specific error
 }
 ```
 

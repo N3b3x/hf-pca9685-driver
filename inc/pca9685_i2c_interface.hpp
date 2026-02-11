@@ -9,7 +9,7 @@
  *
  * @author Nebiyu Tadesse
  * @date 2025
- * @version 1.0
+ * @version 2.0
  */
 #ifndef PCA9685_I2C_INTERFACE_HPP
 #define PCA9685_I2C_INTERFACE_HPP
@@ -35,8 +35,9 @@ namespace pca9685 {
  * @code
  * class MyI2C : public pca9685::I2cInterface<MyI2C> {
  * public:
- *   bool Write(...) { ... }
- *   bool Read(...) { ... }
+ *   bool Write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) noexcept { ... }
+ *   bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) noexcept { ... }
+ *   bool EnsureInitialized() noexcept { ... }
  * };
  * @endcode
  *
@@ -50,10 +51,9 @@ public:
    * @param reg Register address to write to.
    * @param data Pointer to the data buffer containing bytes to send.
    * @param len Number of bytes to write from the buffer.
-   * @return true if the device acknowledges the transfer; false on NACK or
-   * error.
+   * @return true if the device acknowledges the transfer; false on NACK or error.
    */
-  bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) {
+  bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept {
     return static_cast<Derived *>(this)->Write(addr, reg, data, len);
   }
 
@@ -65,8 +65,23 @@ public:
    * @param len Number of bytes to read into the buffer.
    * @return true if the read succeeds; false on NACK or error.
    */
-  bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) {
+  bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept {
     return static_cast<Derived *>(this)->Read(addr, reg, data, len);
+  }
+
+  /**
+   * @brief Ensure the I2C bus is initialized and ready for communication.
+   *
+   * This method performs lazy initialization of the I2C bus. It should initialize
+   * the I2C hardware, configure pins, set up the bus, and verify it's ready for
+   * communication. On subsequent calls, it should return true immediately if
+   * already initialized.
+   *
+   * @return true if initialization succeeded or was already initialized;
+   *         false if initialization failed.
+   */
+  bool EnsureInitialized() noexcept {
+    return static_cast<Derived *>(this)->EnsureInitialized();
   }
 
   // Prevent copying
@@ -93,4 +108,3 @@ protected:
 } // namespace pca9685
 
 #endif // PCA9685_I2C_INTERFACE_HPP
-

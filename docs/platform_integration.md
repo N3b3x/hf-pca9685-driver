@@ -44,13 +44,17 @@ The PCA9685 driver uses **CRTP** (Curiously Recurring Template Pattern) for hard
 template <typename Derived>
 class I2cInterface {
 public:
-    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) {
+    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept {
         // Cast 'this' to Derived* and call the derived implementation
         return static_cast<Derived*>(this)->Write(addr, reg, data, len);
     }
     
-    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) {
+    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept {
         return static_cast<Derived*>(this)->Read(addr, reg, data, len);
+    }
+
+    bool EnsureInitialized() noexcept {
+        return static_cast<Derived*>(this)->EnsureInitialized();
     }
 };
 
@@ -58,12 +62,16 @@ public:
 class MyI2c : public pca9685::I2cInterface<MyI2c> {
 public:
     // This method is called directly (no virtual overhead)
-    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) {
+    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept {
         // Your platform-specific I2C code
     }
     
-    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) {
+    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept {
         // Your platform-specific I2C code
+    }
+
+    bool EnsureInitialized() noexcept {
+        // Lazy-initialize your I2C bus
     }
 };
 ```
@@ -90,16 +98,18 @@ The PCA9685 driver requires you to implement the `I2cInterface` template:
 template <typename Derived>
 class I2cInterface {
 public:
-    // Required methods (implement both)
-    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len);
-    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len);
+    // Required methods (implement all three)
+    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept;
+    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept;
+    bool EnsureInitialized() noexcept;
 };
 ```
 
 **Method Requirements**:
 - `Write()`: Write `len` bytes from `data` to register `reg` at I2C address `addr` (7-bit address)
 - `Read()`: Read `len` bytes into `data` from register `reg` at I2C address `addr` (7-bit address)
-- Both return `true` on success, `false` on failure (NACK, timeout, etc.)
+- `EnsureInitialized()`: Lazy-initialize the I2C bus; return true if ready
+- All methods return `true` on success, `false` on failure (NACK, timeout, etc.)
 
 ## Implementation Steps
 
@@ -112,19 +122,27 @@ class MyPlatformI2c : public pca9685::I2cInterface<MyPlatformI2c> {
 private:
     // Your platform-specific members
     i2c_handle_t i2c_handle_;
+    bool initialized_ = false;
     
 public:
     // Constructor
     MyPlatformI2c(i2c_handle_t handle) : i2c_handle_(handle) {}
     
     // Implement required methods (NO virtual keyword!)
-    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) {
+    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept {
         // Your I2C write implementation
         return true;
     }
     
-    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) {
+    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept {
         // Your I2C read implementation
+        return true;
+    }
+
+    bool EnsureInitialized() noexcept {
+        if (initialized_) return true;
+        // Initialize I2C hardware...
+        initialized_ = true;
         return true;
     }
 };
@@ -164,7 +182,7 @@ extern I2C_HandleTypeDef hi2c1;
 
 class STM32I2cBus : public pca9685::I2cInterface<STM32I2cBus> {
 public:
-    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) {
+    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept {
         // STM32 HAL uses 8-bit address (7-bit << 1)
         return HAL_I2C_Mem_Write(&hi2c1, addr << 1, reg, 
                                  I2C_MEMADD_SIZE_8BIT, 
@@ -172,12 +190,14 @@ public:
                                  HAL_MAX_DELAY) == HAL_OK;
     }
     
-    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) {
+    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept {
         return HAL_I2C_Mem_Read(&hi2c1, addr << 1, reg,
                                 I2C_MEMADD_SIZE_8BIT,
                                 data, len,
                                 HAL_MAX_DELAY) == HAL_OK;
     }
+
+    bool EnsureInitialized() noexcept { return true; /* HAL_I2C_Init done elsewhere */ }
 };
 ```
 
@@ -189,14 +209,14 @@ public:
 
 class ArduinoI2cBus : public pca9685::I2cInterface<ArduinoI2cBus> {
 public:
-    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) {
+    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept {
         Wire.beginTransmission(addr);
         Wire.write(reg);
         Wire.write(data, len);
         return Wire.endTransmission() == 0;
     }
     
-    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) {
+    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept {
         Wire.beginTransmission(addr);
         Wire.write(reg);
         if (Wire.endTransmission(false) != 0) return false;
@@ -207,6 +227,8 @@ public:
         }
         return true;
     }
+
+    bool EnsureInitialized() noexcept { Wire.begin(); return true; }
 };
 ```
 
@@ -227,10 +249,10 @@ public:
 ### ✅ Correct CRTP Implementation
 
 ```cpp
-// CORRECT - no virtual keyword
+// CORRECT - no virtual keyword, PascalCase, noexcept
 class MyI2c : public pca9685::I2cInterface<MyI2c> {
 public:
-    bool Write(...) {  // ✅ Direct implementation
+    bool Write(...) noexcept {  // ✅ Direct implementation
         // ...
     }
 };
@@ -279,8 +301,12 @@ if (pwm.Reset()) {
     pwm.SetPwmFreq(50.0f);
     pwm.SetDuty(0, 0.5f);
 } else {
+    // Check error flags (uint16_t bitmask)
+    auto flags = pwm.GetErrorFlags();
+    // Or use convenience accessor:
     auto error = pwm.GetLastError();
     // Debug your I2C implementation
+    pwm.ClearErrorFlags(flags); // Clear after handling
 }
 ```
 

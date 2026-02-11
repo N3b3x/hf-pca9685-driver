@@ -14,7 +14,8 @@ Complete reference documentation for all public methods and types in the PCA9685
 ## Source Code
 
 - **Main Header**: [`inc/pca9685.hpp`](../inc/pca9685.hpp)
-- **Implementation**: [`src/pca9685.cpp`](../src/pca9685.cpp)
+- **I2C Interface**: [`inc/pca9685_i2c_interface.hpp`](../inc/pca9685_i2c_interface.hpp)
+- **Implementation**: [`src/pca9685.ipp`](../src/pca9685.ipp) (template implementation, included by header)
 
 ## Core Class
 
@@ -24,44 +25,70 @@ Main driver class for interfacing with the PCA9685 PWM controller.
 
 **Template Parameter**: `I2cType` - Your I2C interface implementation (must inherit from `pca9685::I2cInterface<I2cType>`)
 
-**Location**: [`inc/pca9685.hpp#L121`](../inc/pca9685.hpp#L121)
+**Location**: [`inc/pca9685.hpp`](../inc/pca9685.hpp)
 
 **Constructor:**
 ```cpp
 PCA9685(I2cType* bus, uint8_t address);
 ```
 
-**Location**: [`src/pca9685.cpp#L30`](../src/pca9685.cpp#L30)
-
 ## Methods
 
 ### Initialization
 
-| Method | Signature | Location |
-|--------|-----------|----------|
-| `Reset()` | `bool Reset()` | [`src/pca9685.cpp#L34`](../src/pca9685.cpp#L34) |
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `EnsureInitialized()` | `bool EnsureInitialized() noexcept` | Lazy initialization - ensures bus and device are ready |
+| `IsInitialized()` | `bool IsInitialized() const noexcept` | Check if driver has been initialized |
+| `Reset()` | `bool Reset() noexcept` | Reset device to power-on default state |
 
 ### Frequency Control
 
-| Method | Signature | Location |
-|--------|-----------|----------|
-| `SetPwmFreq()` | `bool SetPwmFreq(float freq_hz)` | [`src/pca9685.cpp#L46`](../src/pca9685.cpp#L46) |
-| `GetPrescale()` | `bool GetPrescale(uint8_t &prescale)` | [`src/pca9685.cpp#L220`](../src/pca9685.cpp#L220) |
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `SetPwmFreq()` | `bool SetPwmFreq(float freq_hz) noexcept` | Set PWM frequency for all channels (24-1526 Hz) |
+| `GetPrescale()` | `bool GetPrescale(uint8_t& prescale) noexcept` | Get current prescale register value |
 
 ### PWM Control
 
-| Method | Signature | Location |
-|--------|-----------|----------|
-| `SetPwm()` | `bool SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time)` | [`src/pca9685.cpp#L191`](../src/pca9685.cpp#L191) |
-| `SetDuty()` | `bool SetDuty(uint8_t channel, float duty)` | [`src/pca9685.cpp#L199`](../src/pca9685.cpp#L199) |
-| `SetAllPwm()` | `bool SetAllPwm(uint16_t on_time, uint16_t off_time)` | [`src/pca9685.cpp#L207`](../src/pca9685.cpp#L207) |
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `SetPwm()` | `bool SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time) noexcept` | Set PWM on/off time for a channel |
+| `SetDuty()` | `bool SetDuty(uint8_t channel, float duty) noexcept` | Set duty cycle (0.0-1.0) for a channel |
+| `SetAllPwm()` | `bool SetAllPwm(uint16_t on_time, uint16_t off_time) noexcept` | Set all channels to the same PWM value |
+| `SetChannelFullOn()` | `bool SetChannelFullOn(uint8_t channel) noexcept` | Set channel to fully ON (100% duty) |
+| `SetChannelFullOff()` | `bool SetChannelFullOff(uint8_t channel) noexcept` | Set channel to fully OFF (0% duty) |
 
-### Utility
+### Power Management
 
-| Method | Signature | Location |
-|--------|-----------|----------|
-| `GetLastError()` | `Error GetLastError() const` | [`inc/pca9685.hpp#L213`](../inc/pca9685.hpp#L213) |
-| `SetOutputEnable()` | `void SetOutputEnable(bool enabled)` | [`inc/pca9685.hpp#L227`](../inc/pca9685.hpp#L227) |
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `Sleep()` | `bool Sleep() noexcept` | Put PCA9685 into low-power sleep mode |
+| `Wake()` | `bool Wake() noexcept` | Wake PCA9685 from sleep mode |
+
+### Output Configuration
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `SetOutputInvert()` | `bool SetOutputInvert(bool invert) noexcept` | Set output polarity inversion |
+| `SetOutputDriverMode()` | `bool SetOutputDriverMode(bool totem_pole) noexcept` | Set totem-pole or open-drain mode |
+
+### Error Handling
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `GetLastError()` | `Error GetLastError() const noexcept` | Get last error code (single-error convenience) |
+| `GetErrorFlags()` | `uint16_t GetErrorFlags() const noexcept` | Get accumulated error flags (bitmask) |
+| `HasError()` | `bool HasError(Error e) const noexcept` | Check if a specific error flag is set |
+| `HasAnyError()` | `bool HasAnyError() const noexcept` | Check if any error flag is set |
+| `ClearError()` | `void ClearError(Error e) noexcept` | Clear a single error flag |
+| `ClearErrorFlags()` | `void ClearErrorFlags(uint16_t mask = 0xFFFF) noexcept` | Clear error flags by bitmask |
+
+### Configuration
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `SetRetries()` | `void SetRetries(int retries) noexcept` | Set I2C retry count for register operations |
 
 ## Types
 
@@ -69,16 +96,30 @@ PCA9685(I2cType* bus, uint8_t address);
 
 | Type | Values | Location |
 |------|--------|----------|
-| `Error` | `None`, `I2cWrite`, `I2cRead`, `InvalidParam`, `DeviceNotFound`, `NotInitialized`, `OutOfRange` | [`inc/pca9685.hpp#L126`](../inc/pca9685.hpp#L126) |
-| `Register` | `MODE1`, `MODE2`, `LED0_ON_L`, `LED0_OFF_L`, `PRE_SCALE`, etc. | [`inc/pca9685.hpp#L139`](../inc/pca9685.hpp#L139) |
+| `Error` | `None`, `I2cWrite`, `I2cRead`, `InvalidParam`, `DeviceNotFound`, `NotInitialized`, `OutOfRange` | [`inc/pca9685.hpp`](../inc/pca9685.hpp) |
+| `Register` | `MODE1`, `MODE2`, `LED0_ON_L`, `LED0_OFF_L`, `PRE_SCALE`, etc. | [`inc/pca9685.hpp`](../inc/pca9685.hpp) |
 
 ### Constants
 
 | Constant | Value | Description |
 |----------|-------|-------------|
-| `MAX_CHANNELS` | `16` | Maximum number of PWM channels |
-| `MAX_PWM` | `4095` | Maximum PWM value |
-| `OSC_FREQ` | `25000000` | Internal oscillator frequency (25 MHz) |
+| `MAX_CHANNELS_` | `16` | Maximum number of PWM channels |
+| `MAX_PWM_` | `4095` | Maximum PWM value (12-bit) |
+| `OSC_FREQ_` | `25000000` | Internal oscillator frequency (25 MHz) |
+
+## I2C Interface
+
+### `I2cInterface<Derived>` (CRTP)
+
+Hardware-agnostic I2C interface using the Curiously Recurring Template Pattern.
+
+**Location**: [`inc/pca9685_i2c_interface.hpp`](../inc/pca9685_i2c_interface.hpp)
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `Write()` | `bool Write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) noexcept` | Write bytes to a device register |
+| `Read()` | `bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) noexcept` | Read bytes from a device register |
+| `EnsureInitialized()` | `bool EnsureInitialized() noexcept` | Ensure I2C bus is initialized and ready |
 
 ---
 

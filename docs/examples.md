@@ -22,7 +22,8 @@ This example shows how to control a standard servo motor using the PCA9685.
 // ESP32 I2C implementation
 class Esp32I2cBus : public pca9685::I2cInterface<Esp32I2cBus> {
 public:
-    bool Write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) {
+    bool EnsureInitialized() noexcept { return true; }
+    bool Write(uint8_t addr, uint8_t reg, const uint8_t* data, size_t len) noexcept {
         i2c_cmd_handle_t cmd = i2c_cmd_link_create();
         i2c_master_start(cmd);
         i2c_master_write_byte(cmd, (addr << 1) | I2C_MASTER_WRITE, true);
@@ -34,7 +35,7 @@ public:
         return ret == ESP_OK;
     }
     
-    bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) {
+    bool Read(uint8_t addr, uint8_t reg, uint8_t* data, size_t len) noexcept {
         i2c_cmd_handle_t cmd = i2c_cmd_link_create();
         i2c_master_start(cmd);
         i2c_master_write_byte(cmd, (addr << 1) | I2C_MASTER_WRITE, true);
@@ -175,7 +176,7 @@ Each channel operates independently. You can set different duty cycles for each 
 
 ## Example 4: Error Handling
 
-This example demonstrates proper error handling.
+This example demonstrates proper error handling using the bitmask error model.
 
 ```cpp
 #include "pca9685.hpp"
@@ -188,6 +189,11 @@ extern "C" void app_main() {
     
     // Initialize with error checking
     if (!pwm.Reset()) {
+        // Use GetErrorFlags() for bitmask-based error checking (uint16_t)
+        uint16_t flags = pwm.GetErrorFlags();
+        printf("Reset failed: error flags 0x%04X\n", flags);
+        
+        // Or use GetLastError() as a convenience accessor
         auto error = pwm.GetLastError();
         printf("Reset failed: error code %d\n", static_cast<int>(error));
         return;
@@ -195,26 +201,33 @@ extern "C" void app_main() {
     
     // Set frequency with validation
     if (!pwm.SetPwmFreq(50.0f)) {
-        auto error = pwm.GetLastError();
-        if (error == pca9685::PCA9685<Esp32I2cBus>::Error::OutOfRange) {
+        uint16_t flags = pwm.GetErrorFlags();
+        if (flags & static_cast<uint16_t>(pca9685::PCA9685<Esp32I2cBus>::Error::OutOfRange)) {
             printf("Frequency out of range!\n");
-        } else if (error == pca9685::PCA9685<Esp32I2cBus>::Error::I2cWrite) {
+        }
+        if (flags & static_cast<uint16_t>(pca9685::PCA9685<Esp32I2cBus>::Error::I2cWrite)) {
             printf("I2C write failed!\n");
         }
+        pwm.ClearErrorFlags(flags); // Clear after handling
         return;
     }
     
     // Set channel with error checking
     if (!pwm.SetDuty(0, 0.5f)) {
-        auto error = pwm.GetLastError();
-        printf("SetDuty failed: error code %d\n", static_cast<int>(error));
+        uint16_t flags = pwm.GetErrorFlags();
+        printf("SetDuty failed: error flags 0x%04X\n", flags);
+        pwm.ClearErrorFlags(flags);
     }
 }
 ```
 
 ### Explanation
 
-Always check return values and use `GetLastError()` to diagnose issues. This helps identify hardware problems, configuration errors, or I2C communication failures.
+Error flags are now `uint16_t` bitmask values:
+- `I2cWrite = 1<<0`, `I2cRead = 1<<1`, `InvalidParam = 1<<2`
+- `DeviceNotFound = 1<<3`, `NotInitialized = 1<<4`, `OutOfRange = 1<<5`
+
+Use `GetErrorFlags()` to retrieve all accumulated error flags, and `ClearErrorFlags(mask)` to clear them after handling. The convenience accessor `GetLastError()` still works for simple cases. Multiple error conditions can be set simultaneously since flags are a bitmask.
 
 ---
 
@@ -248,6 +261,58 @@ extern "C" void app_main() {
 ### Explanation
 
 `SetAllPwm()` is more efficient than calling `SetPwm()` 16 times. It writes to the ALL_LED registers, updating all channels in a single I2C transaction.
+
+---
+
+## Example 6: Power Management and Output Modes
+
+This example demonstrates the power management and output configuration features.
+
+```cpp
+#include "pca9685.hpp"
+
+// ... I2C implementation ...
+
+extern "C" void app_main() {
+    Esp32I2cBus i2c;
+    pca9685::PCA9685<Esp32I2cBus> pwm(&i2c, 0x40);
+    
+    pwm.Reset();
+    pwm.SetPwmFreq(1000.0f);
+    
+    // Configure retry count for I2C operations (default is 1 retry)
+    pwm.SetRetries(3);
+    
+    // Configure output driver mode (true = totem-pole, false = open-drain)
+    pwm.SetOutputDriverMode(true);
+    
+    // Optionally invert outputs
+    pwm.SetOutputInvert(false);
+    
+    // Set some channels
+    pwm.SetDuty(0, 0.5f);
+    
+    // Use full ON/OFF without PWM
+    pwm.SetChannelFullOn(1);   // Channel 1 fully on
+    pwm.SetChannelFullOff(2);  // Channel 2 fully off
+    
+    // Power management: put device to sleep
+    pwm.Sleep();
+    // ... device is in low-power mode ...
+    
+    // Wake up and resume
+    pwm.Wake();
+    // Outputs resume from where they were
+}
+```
+
+### Explanation
+
+- **`SetRetries()`**: Configures how many times I2C operations are retried on failure (default 1)
+- **`SetOutputDriverMode()`**: Selects totem-pole (true) or open-drain (false) output via MODE2 OUTDRV bit
+- **`SetOutputInvert()`**: Inverts output logic via MODE2 INVRT bit
+- **`SetChannelFullOn()` / `SetChannelFullOff()`**: Sets a channel fully on or off without PWM
+- **`Sleep()` / `Wake()`**: Controls the MODE1 SLEEP bit for low-power mode
 
 ---
 

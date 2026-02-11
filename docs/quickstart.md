@@ -27,12 +27,13 @@ Here's a complete working example:
 // 1. Implement the I2C interface
 class MyI2c : public pca9685::I2cInterface<MyI2c> {
 public:
-    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) {
+    bool EnsureInitialized() noexcept { return true; }
+    bool Write(uint8_t addr, uint8_t reg, const uint8_t *data, size_t len) noexcept {
         // Your I2C write implementation
         return true;
     }
     
-    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) {
+    bool Read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len) noexcept {
         // Your I2C read implementation
         return true;
     }
@@ -87,7 +88,8 @@ The constructor takes:
 ```cpp
 if (!pwm.Reset()) {
     // Handle initialization failure
-    auto error = pwm.GetLastError();
+    uint16_t flags = pwm.GetErrorFlags(); // Bitmask error flags
+    auto error = pwm.GetLastError();      // Convenience accessor
 }
 ```
 

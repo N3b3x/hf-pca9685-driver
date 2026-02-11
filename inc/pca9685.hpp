@@ -52,16 +52,20 @@ namespace pca9685 {
 template <typename I2cType> class PCA9685 {
 public:
   /**
-   * @brief Error codes for PCA9685 operations.
+   * @brief Error codes for PCA9685 operations (bitmask flags).
+   *
+   * Harmonized with PCAL95555 driver error model. Multiple errors can be
+   * active simultaneously. Use GetErrorFlags() and ClearErrorFlags() to
+   * inspect and clear errors.
    */
-  enum class Error : uint8_t {
-    None = 0,
-    I2cWrite = 1,
-    I2cRead = 2,
-    InvalidParam = 3,
-    DeviceNotFound = 4,
-    NotInitialized = 5,
-    OutOfRange = 6
+  enum class Error : uint16_t {
+    None             = 0,
+    I2cWrite         = 1 << 0,   ///< An I2C write operation failed
+    I2cRead          = 1 << 1,   ///< An I2C read operation failed
+    InvalidParam     = 1 << 2,   ///< Invalid parameter (channel, value, etc.)
+    DeviceNotFound   = 1 << 3,   ///< Device did not respond
+    NotInitialized   = 1 << 4,   ///< Driver not initialized
+    OutOfRange       = 1 << 5    ///< Value out of hardware range
   };
 
   /**
@@ -87,9 +91,9 @@ public:
     TESTMODE = 0xFF
   };
 
-  static constexpr uint8_t MAX_CHANNELS = 16;
-  static constexpr uint16_t MAX_PWM = 4095;
-  static constexpr uint32_t OSC_FREQ = 25000000;
+  static constexpr uint8_t MAX_CHANNELS_ = 16;
+  static constexpr uint16_t MAX_PWM_ = 4095;
+  static constexpr uint32_t OSC_FREQ_ = 25000000;
 
   /**
    * @brief Construct a new PCA9685 driver instance.
@@ -100,17 +104,41 @@ public:
   PCA9685(I2cType *bus, uint8_t address);
 
   /**
+   * @brief Ensure the driver and I2C bus are initialized (lazy initialization).
+   *
+   * On first call, ensures the I2C bus is initialized via
+   * I2cInterface::EnsureInitialized(), then performs a device reset to
+   * confirm communication. On subsequent calls, returns true immediately
+   * if already initialized.
+   *
+   * @return true if already initialized or initialization succeeded;
+   *         false if I2C bus init or device communication failed.
+   *
+   * @note This mirrors the PCAL95555 driver's lazy initialization pattern.
+   */
+  bool EnsureInitialized() noexcept;
+
+  /**
+   * @brief Check if the driver has been initialized.
+   * @return true if EnsureInitialized() or Reset() has completed successfully.
+   */
+  bool IsInitialized() const noexcept { return initialized_; }
+
+  /**
    * @brief Reset the device to its power-on default state.
+   *
+   * Ensures the I2C bus is initialized, then writes MODE1 register to 0x00.
+   *
    * @return true on success; false on I2C failure.
    */
-  bool Reset();
+  bool Reset() noexcept;
 
   /**
    * @brief Set the PWM frequency for all channels.
    * @param freq_hz Desired frequency in Hz (24-1526 typical).
    * @return true on success; false on I2C failure or invalid parameter.
    */
-  bool SetPwmFreq(float freq_hz);
+  bool SetPwmFreq(float freq_hz) noexcept;
 
   /**
    * @brief Set the PWM on/off time for a channel.
@@ -119,7 +147,7 @@ public:
    * @param off_time Tick count when signal turns OFF (0-4095).
    * @return true on success; false on I2C failure or invalid parameter.
    */
-  bool SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time);
+  bool SetPwm(uint8_t channel, uint16_t on_time, uint16_t off_time) noexcept;
 
   /**
    * @brief Set the duty cycle for a channel (0.0-1.0).
@@ -127,7 +155,7 @@ public:
    * @param duty Duty cycle (0.0 = always off, 1.0 = always on).
    * @return true on success; false on I2C failure or invalid parameter.
    */
-  bool SetDuty(uint8_t channel, float duty);
+  bool SetDuty(uint8_t channel, float duty) noexcept;
 
   /**
    * @brief Set all channels to the same PWM value.
@@ -135,48 +163,169 @@ public:
    * @param off_time Tick count when signal turns OFF (0-4095).
    * @return true on success; false on I2C failure.
    */
-  bool SetAllPwm(uint16_t on_time, uint16_t off_time);
+  bool SetAllPwm(uint16_t on_time, uint16_t off_time) noexcept;
 
   /**
-   * @brief Get the last error code.
-   * @return Error code from the last operation.
+   * @brief Get the accumulated error flags (bitmask).
+   * @return Bitmask of Error values; 0 (Error::None) means no errors.
    */
-  Error GetLastError() const { return last_error_; }
+  [[nodiscard]] uint16_t GetErrorFlags() const noexcept { return error_flags_; }
+
+  /**
+   * @brief Check if a specific error flag is set.
+   *
+   * @param e The error flag to test.
+   * @return true if the flag is set in the current error bitmask.
+   *
+   * @code
+   *   if (driver.HasError(PCA9685::Error::I2cWrite)) { ... }
+   * @endcode
+   */
+  [[nodiscard]] bool HasError(Error e) const noexcept {
+    return (error_flags_ & static_cast<uint16_t>(e)) != 0;
+  }
+
+  /**
+   * @brief Check if any error flag is set.
+   * @return true if error_flags_ != 0.
+   */
+  [[nodiscard]] bool HasAnyError() const noexcept { return error_flags_ != 0; }
+
+  /**
+   * @brief Clear a single error flag.
+   * @param e The error flag to clear.
+   */
+  void ClearError(Error e) noexcept {
+    error_flags_ &= ~static_cast<uint16_t>(e);
+  }
+
+  /**
+   * @brief Clear specific error flags by raw bitmask.
+   * @param mask Bitmask of Error values to clear (default: all).
+   */
+  void ClearErrorFlags(uint16_t mask = 0xFFFF) noexcept { error_flags_ &= ~mask; }
+
+  /**
+   * @brief Get the last error code (single-error convenience accessor).
+   * @return Error code from the most recent operation.
+   */
+  [[nodiscard]] Error GetLastError() const noexcept { return last_error_; }
 
   /**
    * @brief Get the current prescale value (frequency divider).
    * @param[out] prescale The prescale register value.
    * @return true on success; false on I2C failure.
    */
-  bool GetPrescale(uint8_t &prescale);
+  [[nodiscard]] bool GetPrescale(uint8_t &prescale) noexcept;
 
   /**
-   * @brief Set the output enable state (if using OE pin externally).
-   * @param enabled True to enable outputs, false to disable.
-   * @note This is a stub; actual OE pin control must be handled externally.
+   * @brief Set the I2C retry count for register read/write operations.
+   * @param retries Number of retries (0 = no retries, just one attempt).
    */
-  void SetOutputEnable(bool enabled) {
-    (void)enabled; /* User must implement if needed */
-  }
+  void SetRetries(int retries) noexcept { retries_ = retries; }
+
+  // ---- Power Management ----
+
+  /**
+   * @brief Put the PCA9685 into low-power sleep mode.
+   *
+   * Sets the SLEEP bit in MODE1. All PWM outputs are disabled during sleep.
+   * The oscillator is stopped. Use Wake() to resume.
+   *
+   * @return true on success; false on I2C failure.
+   */
+  bool Sleep() noexcept;
+
+  /**
+   * @brief Wake the PCA9685 from sleep mode.
+   *
+   * Clears the SLEEP bit in MODE1 and sets the RESTART bit if it was set
+   * prior to sleep. PWM outputs resume from their previous values.
+   *
+   * @return true on success; false on I2C failure.
+   */
+  bool Wake() noexcept;
+
+  // ---- Output Configuration ----
+
+  /**
+   * @brief Set output polarity inversion.
+   *
+   * When inverted, the output logic is inverted (useful for common-anode LEDs).
+   * Affects the INVRT bit in MODE2 register.
+   *
+   * @param invert true to invert outputs, false for normal polarity.
+   * @return true on success; false on I2C failure.
+   */
+  bool SetOutputInvert(bool invert) noexcept;
+
+  /**
+   * @brief Set the output driver mode.
+   *
+   * Configures outputs as either totem-pole (push-pull) or open-drain.
+   * Affects the OUTDRV bit in MODE2 register.
+   *
+   * @param totem_pole true for totem-pole (default), false for open-drain.
+   * @return true on success; false on I2C failure.
+   */
+  bool SetOutputDriverMode(bool totem_pole) noexcept;
+
+  // ---- Channel On/Off ----
+
+  /**
+   * @brief Set a channel to fully ON (100% duty, no PWM).
+   *
+   * Sets bit 12 of the LEDn_ON register (full-on flag).
+   *
+   * @param channel Channel number (0-15).
+   * @return true on success; false on I2C failure or invalid parameter.
+   */
+  bool SetChannelFullOn(uint8_t channel) noexcept;
+
+  /**
+   * @brief Set a channel to fully OFF (0% duty, no PWM).
+   *
+   * Sets bit 12 of the LEDn_OFF register (full-off flag).
+   *
+   * @param channel Channel number (0-15).
+   * @return true on success; false on I2C failure or invalid parameter.
+   */
+  bool SetChannelFullOff(uint8_t channel) noexcept;
 
 private:
   I2cType *i2c_;
   uint8_t addr_;
-  Error last_error_;
+  Error last_error_{Error::None};
+  uint16_t error_flags_{0};
+  int retries_{1};
   bool initialized_{false};
 
-  bool writeReg(uint8_t reg, uint8_t value);
-  bool readReg(uint8_t reg, uint8_t &value);
-  bool writeRegBlock(uint8_t reg, const uint8_t *data, size_t len);
-  bool readRegBlock(uint8_t reg, uint8_t *data, size_t len);
-  [[nodiscard]] uint8_t calcPrescale(float freq_hz) const;
+  void setError(Error e) noexcept {
+    last_error_ = e;
+    error_flags_ |= static_cast<uint16_t>(e);
+  }
+
+  bool writeReg(uint8_t reg, uint8_t value) noexcept;
+  bool readReg(uint8_t reg, uint8_t &value) noexcept;
+  bool writeRegBlock(uint8_t reg, const uint8_t *data, size_t len) noexcept;
+  bool readRegBlock(uint8_t reg, uint8_t *data, size_t len) noexcept;
+  [[nodiscard]] uint8_t calcPrescale(float freq_hz) const noexcept;
+
+  /**
+   * @brief Read-modify-write a single register.
+   * @param reg Register address.
+   * @param mask Bits to modify.
+   * @param value New value for those bits.
+   * @return true on success.
+   */
+  bool modifyReg(uint8_t reg, uint8_t mask, uint8_t value) noexcept;
 };
 
 // Include template implementation
 #define PCA9685_HEADER_INCLUDED
 // NOLINTNEXTLINE(bugprone-suspicious-include) - Intentional: template
 // implementation file
-#include "../src/pca9685.cpp"
+#include "../src/pca9685.ipp"
 #undef PCA9685_HEADER_INCLUDED
 
 } // namespace pca9685
