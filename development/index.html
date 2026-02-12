@@ -292,13 +292,20 @@
     
 
 <blockquote>
-  <p><strong>📖 <a href="https://n3b3x.github.io/hf-pca9685-driver/">📚🌐 Live Complete Documentation</a></strong> - 
+  <p><strong>📖 <a href="https://n3b3x.github.io/hf-pca9685-driver/">📚🌐 Live Complete Documentation</a></strong> -
 Interactive guides, examples, and step-by-step tutorials</p>
 </blockquote>
 
-<p>The <strong>PCA9685</strong> is a 16-channel, 12-bit PWM controller from NXP Semiconductors that communicates via I²C. It provides independent PWM control for up to 16 outputs with 12-bit resolution (4096 steps), making it ideal for driving LEDs, servos, and other PWM-controlled devices. The chip features an internal 25 MHz oscillator, configurable PWM frequency from 24 Hz to 1526 Hz, and supports daisy-chaining multiple devices for up to 992 PWM outputs.</p>
+<p>The <strong>PCA9685</strong> is a 16-channel, 12-bit PWM controller from NXP Semiconductors that communicates via
+I²C. It provides independent PWM control for up to 16 outputs with 12-bit resolution (4096 steps),
+making it ideal for driving LEDs, servos, and other PWM-controlled devices. The chip features an
+internal 25 MHz oscillator, configurable PWM frequency from 24 Hz to 1526 Hz, and supports
+daisy-chaining multiple devices for up to 992 PWM outputs.</p>
 
-<p>This driver provides a hardware-agnostic C++ interface that abstracts all register-level operations, requiring only an implementation of the <code class="language-plaintext highlighter-rouge">I2cInterface</code> for your platform. The driver uses the CRTP (Curiously Recurring Template Pattern) for zero-overhead hardware abstraction, making it suitable for resource-constrained embedded systems.</p>
+<p>This driver provides a hardware-agnostic C++ interface that abstracts all register-level operations,
+requiring only an implementation of the <code class="language-plaintext highlighter-rouge">I2cInterface</code> for your platform. The driver uses the CRTP
+(Curiously Recurring Template Pattern) for zero-overhead hardware abstraction, making it suitable
+for resource-constrained embedded systems.</p>
 <h2 id="-features">
   
   
@@ -471,7 +478,8 @@ Interactive guides, examples, and step-by-step tutorials</p>
   </tbody>
 </table></div>
 
-<p>For complete API documentation with source code links, see <a href="/hf-pca9685-driver/development/docs/api_reference/">docs/api_reference.md</a>.</p>
+<p>For complete API documentation with source code links, see
+<a href="/hf-pca9685-driver/development/docs/api_reference/">docs/api_reference.md</a>.</p>
 <h2 id="-examples">
   
   
@@ -482,7 +490,10 @@ Interactive guides, examples, and step-by-step tutorials</p>
     
 
 <ul>
-  <li><strong>ESP32</strong>: <a href="examples/esp32/">examples/esp32</a> — two apps: <strong>pca9685_comprehensive_test</strong> (full driver test suite) and <strong>pca9685_servo_demo</strong> (16-channel hobby servo animations). See <a href="/hf-pca9685-driver/development/examples/esp32/">examples/esp32/README.md</a> for build/flash and <a href="examples/esp32/docs/">examples/esp32/docs/</a> for per-app documentation.</li>
+  <li><strong>ESP32</strong>: <a href="examples/esp32/">examples/esp32</a> — two apps: <strong>pca9685_comprehensive_test</strong> (full driver
+test suite) and <strong>pca9685_servo_demo</strong> (16-channel hobby servo animations). See
+<a href="/hf-pca9685-driver/development/examples/esp32/">examples/esp32/README.md</a> for build/flash and
+<a href="examples/esp32/docs/">examples/esp32/docs/</a> for per-app documentation.</li>
   <li><strong>Driver examples</strong> (code snippets, any platform): <a href="/hf-pca9685-driver/development/docs/examples/">docs/examples.md</a>.</li>
 </ul>
 <h2 id="-documentation">

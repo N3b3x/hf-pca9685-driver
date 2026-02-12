@@ -594,7 +594,9 @@
 
 <p><strong>Solution:</strong></p>
 <ul>
-  <li>The driver is template-based: implementation is in <code class="language-plaintext highlighter-rouge">pca9685.ipp</code>, included by <code class="language-plaintext highlighter-rouge">pca9685.hpp</code>. Ensure both <code class="language-plaintext highlighter-rouge">inc/</code> and <code class="language-plaintext highlighter-rouge">src/</code> are on the include path so the header can find the <code class="language-plaintext highlighter-rouge">.ipp</code> file. No separate library needs to be linked.</li>
+  <li>The driver is template-based: implementation is in <code class="language-plaintext highlighter-rouge">pca9685.ipp</code>, included by <code class="language-plaintext highlighter-rouge">pca9685.hpp</code>.
+Ensure both <code class="language-plaintext highlighter-rouge">inc/</code> and <code class="language-plaintext highlighter-rouge">src/</code> are on the include path so the header can find the <code class="language-plaintext highlighter-rouge">.ipp</code> file.
+No separate library needs to be linked.</li>
 </ul><hr />
 <h3 id="runtime-errors">
   
@@ -752,7 +754,9 @@
 </h3>
     
 
-<p><strong>A:</strong> The PCA9685 requires the prescale register to be set before PWM outputs work correctly. The driver enforces this by checking initialization state. Always call <code class="language-plaintext highlighter-rouge">Reset()</code> then <code class="language-plaintext highlighter-rouge">SetPwmFreq()</code> before setting channels.</p>
+<p><strong>A:</strong> The PCA9685 requires the prescale register to be set before PWM outputs work correctly. The
+driver enforces this by checking initialization state. Always call <code class="language-plaintext highlighter-rouge">Reset()</code> then <code class="language-plaintext highlighter-rouge">SetPwmFreq()</code>
+before setting channels.</p>
 <h3 id="q-can-i-change-frequency-after-setting-channels">
   
   
@@ -762,7 +766,8 @@
 </h3>
     
 
-<p><strong>A:</strong> Yes, but it will affect all channels. Changing frequency updates the prescale register, which changes the PWM period for all 16 channels simultaneously.</p>
+<p><strong>A:</strong> Yes, but it will affect all channels. Changing frequency updates the prescale register, which
+changes the PWM period for all 16 channels simultaneously.</p>
 <h3 id="q-whats-the-difference-between-setpwm-and-setduty">
   
   

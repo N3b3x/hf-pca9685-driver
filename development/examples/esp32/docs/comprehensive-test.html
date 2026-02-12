@@ -258,7 +258,8 @@
 </h1>
     
 
-<p>The <strong>pca9685_comprehensive_test</strong> application runs a full set of tests against the PCA9685 driver and hardware. Use it to verify wiring, I2C address, and all driver features.</p>
+<p>The <strong>pca9685_comprehensive_test</strong> application runs a full set of tests against the PCA9685 driver
+and hardware. Use it to verify wiring, I2C address, and all driver features.</p>
 <h2 id="what-it-tests">
   
   
@@ -304,7 +305,8 @@
   </li>
   <li><strong>Error handling</strong>
     <ul>
-      <li><strong>error_handling</strong>: Invalid channel (255), invalid PWM (5000), invalid frequency (5 Hz); <code class="language-plaintext highlighter-rouge">GetLastError</code>, <code class="language-plaintext highlighter-rouge">ClearError</code>, <code class="language-plaintext highlighter-rouge">HasAnyError</code>.</li>
+      <li><strong>error_handling</strong>: Invalid channel (255), invalid PWM (5000), invalid frequency (5 Hz);
+<code class="language-plaintext highlighter-rouge">GetLastError</code>, <code class="language-plaintext highlighter-rouge">ClearError</code>, <code class="language-plaintext highlighter-rouge">HasAnyError</code>.</li>
     </ul>
   </li>
   <li><strong>Stress</strong>
@@ -323,7 +325,9 @@
 </h3>
     
 
-<p>If the first attempt to connect to the PCA9685 at the configured address fails, the app runs an <strong>I2C bus scan</strong> (all 0x08 to 0x77) and logs which addresses respond. Use this to confirm the device address and bus.</p>
+<p>If the first attempt to connect to the PCA9685 at the configured address fails, the app runs an
+<strong>I2C bus scan</strong> (all 0x08 to 0x77) and logs which addresses respond. Use this to confirm the device
+address and bus.</p>
 <h2 id="source-and-configuration">
   
   

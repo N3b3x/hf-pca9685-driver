@@ -695,7 +695,9 @@
   <li><code class="language-plaintext highlighter-rouge">DeviceNotFound = 1&lt;&lt;3</code>, <code class="language-plaintext highlighter-rouge">NotInitialized = 1&lt;&lt;4</code>, <code class="language-plaintext highlighter-rouge">OutOfRange = 1&lt;&lt;5</code></li>
 </ul>
 
-<p>Use <code class="language-plaintext highlighter-rouge">GetErrorFlags()</code> to retrieve all accumulated error flags, and <code class="language-plaintext highlighter-rouge">ClearErrorFlags(mask)</code> to clear them after handling. The convenience accessor <code class="language-plaintext highlighter-rouge">GetLastError()</code> still works for simple cases. Multiple error conditions can be set simultaneously since flags are a bitmask.</p><hr />
+<p>Use <code class="language-plaintext highlighter-rouge">GetErrorFlags()</code> to retrieve all accumulated error flags, and <code class="language-plaintext highlighter-rouge">ClearErrorFlags(mask)</code> to clear
+them after handling. The convenience accessor <code class="language-plaintext highlighter-rouge">GetLastError()</code> still works for simple cases. Multiple
+error conditions can be set simultaneously since flags are a bitmask.</p><hr />
 <h2 id="example-5-bulk-channel-update">
   
   
@@ -757,7 +759,8 @@
 </h3>
     
 
-<p><code class="language-plaintext highlighter-rouge">SetAllPwm()</code> is more efficient than calling <code class="language-plaintext highlighter-rouge">SetPwm()</code> 16 times. It writes to the ALL_LED registers, updating all channels in a single I2C transaction.</p><hr />
+<p><code class="language-plaintext highlighter-rouge">SetAllPwm()</code> is more efficient than calling <code class="language-plaintext highlighter-rouge">SetPwm()</code> 16 times. It writes to the ALL_LED
+registers, updating all channels in a single I2C transaction.</p><hr />
 <h2 id="example-6-power-management-and-output-modes">
   
   
@@ -931,7 +934,8 @@
   <span class="nt">--</span> <span class="nt">-DPCA9685_EXAMPLE_I2C_SDA_GPIO</span><span class="o">=</span>8 <span class="nt">-DPCA9685_EXAMPLE_I2C_SCL_GPIO</span><span class="o">=</span>9
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 
-<p>See <a href="/hf-pca9685-driver/development/examples/esp32/">examples/esp32/README.md</a> and <a href="../examples/esp32/docs/">examples/esp32/docs/</a> for hardware setup and app details.</p>
+<p>See <a href="/hf-pca9685-driver/development/examples/esp32/">examples/esp32/README.md</a> and
+<a href="../examples/esp32/docs/">examples/esp32/docs/</a> for hardware setup and app details.</p>
 <h3 id="other-platforms">
   
   
@@ -941,7 +945,10 @@
 </h3>
     
 
-<p>Adapt the I2C interface implementation for your platform (see <a href="/hf-pca9685-driver/development/docs/platform_integration/">Platform Integration</a>) and compile with your platform’s toolchain. The ESP32 implementation in <a href="/hf-pca9685-driver/development/examples/esp32/main/esp32_pca9685_bus.hpp"><code class="language-plaintext highlighter-rouge">examples/esp32/main/esp32_pca9685_bus.hpp</code></a> uses ESP-IDF’s <code class="language-plaintext highlighter-rouge">driver/i2c_master.h</code> (new I2C master API) as a reference.</p>
+<p>Adapt the I2C interface implementation for your platform (see
+<a href="/hf-pca9685-driver/development/docs/platform_integration/">Platform Integration</a>) and compile with your platform’s toolchain. The
+ESP32 implementation in <a href="/hf-pca9685-driver/development/examples/esp32/main/esp32_pca9685_bus.hpp"><code class="language-plaintext highlighter-rouge">examples/esp32/main/esp32_pca9685_bus.hpp</code></a>
+uses ESP-IDF’s <code class="language-plaintext highlighter-rouge">driver/i2c_master.h</code> (new I2C master API) as a reference.</p>
 <h2 id="next-steps">
   
   

@@ -1,16 +1,16 @@
-warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1765, file /tmp/doxyfile.b5YSMC
-warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.b5YSMC' has become obsolete.
+warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1765, file /tmp/doxyfile.ddvbly
+warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.ddvbly' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:30: warning: documented symbol 'pca9685::PCA9685::PCA9685' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:36: warning: documented symbol 'bool pca9685::PCA9685::EnsureInitialized' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:44: warning: documented symbol 'bool pca9685::PCA9685::Reset' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:63: warning: documented symbol 'bool pca9685::PCA9685::SetPwmFreq' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:92: warning: documented symbol 'bool pca9685::PCA9685::SetPwm' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:114: warning: documented symbol 'bool pca9685::PCA9685::SetDuty' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:122: warning: documented symbol 'bool pca9685::PCA9685::SetAllPwm' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:142: warning: documented symbol 'bool pca9685::PCA9685::GetPrescale' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:157: warning: documented symbol 'bool pca9685::PCA9685::Sleep' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:166: warning: documented symbol 'bool pca9685::PCA9685::Wake' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:35: warning: documented symbol 'bool pca9685::PCA9685::EnsureInitialized' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:43: warning: documented symbol 'bool pca9685::PCA9685::Reset' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:62: warning: documented symbol 'bool pca9685::PCA9685::SetPwmFreq' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:91: warning: documented symbol 'bool pca9685::PCA9685::SetPwm' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:115: warning: documented symbol 'bool pca9685::PCA9685::SetDuty' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:123: warning: documented symbol 'bool pca9685::PCA9685::SetAllPwm' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:143: warning: documented symbol 'bool pca9685::PCA9685::GetPrescale' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:158: warning: documented symbol 'bool pca9685::PCA9685::Sleep' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:167: warning: documented symbol 'bool pca9685::PCA9685::Wake' was not declared or defined.
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:194: warning: documented symbol 'bool pca9685::PCA9685::SetOutputInvert' was not declared or defined.
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:204: warning: documented symbol 'bool pca9685::PCA9685::SetOutputDriverMode' was not declared or defined.
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:216: warning: documented symbol 'bool pca9685::PCA9685::SetChannelFullOn' was not declared or defined.
@@ -18,9 +18,9 @@ warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.b5YSMC' has b
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:258: warning: documented symbol 'bool pca9685::PCA9685::writeReg' was not declared or defined.
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:275: warning: documented symbol 'bool pca9685::PCA9685::readReg' was not declared or defined.
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:292: warning: documented symbol 'bool pca9685::PCA9685::writeRegBlock' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:309: warning: documented symbol 'bool pca9685::PCA9685::readRegBlock' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:326: warning: documented symbol 'bool pca9685::PCA9685::modifyReg' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:340: warning: documented symbol 'uint8_t pca9685::PCA9685::calcPrescale' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:310: warning: documented symbol 'bool pca9685::PCA9685::readRegBlock' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:327: warning: documented symbol 'bool pca9685::PCA9685::modifyReg' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:341: warning: documented symbol 'uint8_t pca9685::PCA9685::calcPrescale' was not declared or defined.
 Doxygen version used: 1.10.0 (ebc57c6dd303a980bd19dd74b8b61c8f3f5180ca)
 Searching for include files...
 Searching for example files...
@@ -118,11 +118,11 @@ Generating docs for file docs/quickstart.md...
 Generating docs for file docs/troubleshooting.md...
 Generating docs for file README.md...
 Generating docs for file src/pca9685.ipp...
-Generating page d/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/examples.md:194: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/README.md' for \ref command
+Generating page d/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/examples.md:195: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/README.md' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/index.md:26: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/docs/index.md' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/index.md:26: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/docs/comprehensive-test.md' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/index.md:26: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/docs/servo-demo.md' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/installation.md:71: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/README.md' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/index.md:27: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/docs/comprehensive-test.md' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/index.md:28: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/docs/servo-demo.md' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/installation.md:78: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/README.md' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:11: warning: unable to resolve reference to '-overview' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:12: warning: unable to resolve reference to '-features' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:13: warning: unable to resolve reference to '-quick-start' for \ref command
@@ -132,7 +132,7 @@ Generating page d/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/docs/exam
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:17: warning: unable to resolve reference to '-documentation' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:18: warning: unable to resolve reference to '-contributing' for \ref command
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:19: warning: unable to resolve reference to '-license' for \ref command
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:106: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/README.md' for \ref command
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/README.md:116: warning: unable to resolve reference to '/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/examples/esp32/README.md' for \ref command
 ocumentation...
 Generating docs for page md_docs_2api__reference...
 Generating docs for page md_docs_2configuration...

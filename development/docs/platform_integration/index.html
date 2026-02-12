@@ -282,7 +282,8 @@
 </h2>
     
 
-<p>The PCA9685 driver uses <strong>CRTP</strong> (Curiously Recurring Template Pattern) for hardware abstraction. This design choice provides several critical benefits for embedded systems:</p>
+<p>The PCA9685 driver uses <strong>CRTP</strong> (Curiously Recurring Template Pattern) for hardware abstraction.
+This design choice provides several critical benefits for embedded systems:</p>
 <h3 id="why-crtp-instead-of-virtual-functions">
   
   
@@ -422,7 +423,8 @@
 <span class="p">};</span>
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 
-<p>The key insight: <code class="language-plaintext highlighter-rouge">static_cast&lt;Derived*&gt;(this)</code> allows the base class to call methods on the derived class <strong>at compile time</strong>, not runtime.</p>
+<p>The key insight: <code class="language-plaintext highlighter-rouge">static_cast&lt;Derived*&gt;(this)</code> allows the base class to call methods on the derived
+class <strong>at compile time</strong>, not runtime.</p>
 <h3 id="performance-comparison">
   
   
@@ -509,7 +511,11 @@
   <li>Write/Read return <code class="language-plaintext highlighter-rouge">true</code> on success, <code class="language-plaintext highlighter-rouge">false</code> on failure (NACK, timeout, etc.)</li>
 </ul>
 
-<p><strong>Optional retry delay</strong>: The driver can call an optional callback between I2C retries for bus recovery. Your bus class can expose a static delay (e.g. <code class="language-plaintext highlighter-rouge">static void RetryDelay() noexcept { vTaskDelay(pdMS_TO_TICKS(1)); }</code>). After constructing the driver, the application calls <code class="language-plaintext highlighter-rouge">driver-&gt;SetRetryDelay(MyBus::RetryDelay)</code>. If not set, no delay is used between retries.</p>
+<p><strong>Optional retry delay</strong>: The driver can call an optional callback between I2C retries for bus
+recovery. Your bus class can expose a static delay (e.g.
+<code class="language-plaintext highlighter-rouge">static void RetryDelay() noexcept { vTaskDelay(pdMS_TO_TICKS(1)); }</code>). After constructing the
+driver, the application calls <code class="language-plaintext highlighter-rouge">driver-&gt;SetRetryDelay(MyBus::RetryDelay)</code>. If not set, no delay is
+used between retries.</p>
 <h2 id="implementation-steps">
   
   
@@ -607,7 +613,8 @@
 </h4>
     
 
-<p><strong>Location</strong>: See <a href="/hf-pca9685-driver/development/examples/esp32/main/esp32_pca9685_bus.hpp"><code class="language-plaintext highlighter-rouge">examples/esp32/main/esp32_pca9685_bus.hpp</code></a> for a complete ESP32 implementation using ESP-IDF’s I2C master driver API.</p>
+<p><strong>Location</strong>: See <a href="/hf-pca9685-driver/development/examples/esp32/main/esp32_pca9685_bus.hpp"><code class="language-plaintext highlighter-rouge">examples/esp32/main/esp32_pca9685_bus.hpp</code></a>
+for a complete ESP32 implementation using ESP-IDF’s I2C master driver API.</p>
 
 <p>For a complete working example, see <a href="/hf-pca9685-driver/development/examples/esp32/main/pca9685_comprehensive_test.cpp"><code class="language-plaintext highlighter-rouge">examples/esp32/main/pca9685_comprehensive_test.cpp</code></a>.</p>
 

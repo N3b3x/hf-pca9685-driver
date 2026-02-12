@@ -258,7 +258,8 @@
 </h1>
     
 
-<p>The <strong>pca9685_servo_demo</strong> application drives up to 16 hobby servos from the PCA9685 with standard 1000–2000 µs pulse width, velocity-limited motion, and synchronized animations.</p>
+<p>The <strong>pca9685_servo_demo</strong> application drives up to 16 hobby servos from the PCA9685 with standard
+1000–2000 µs pulse width, velocity-limited motion, and synchronized animations.</p>
 <h2 id="servo-timing-50-hz">
   
   
@@ -286,7 +287,8 @@
 </h2>
     
 
-<p>Servos cannot jump instantly. The demo tracks a <strong>current position</strong> per channel and moves toward a <strong>target</strong> at a bounded rate:</p>
+<p>Servos cannot jump instantly. The demo tracks a <strong>current position</strong> per channel and moves toward a
+<strong>target</strong> at a bounded rate:</p>
 
 <ul>
   <li><strong>Max step</strong>: 6 ticks per 20 ms update (~260°/s).</li>
@@ -409,7 +411,8 @@
   <li>Use <strong>pulse width</strong>, not raw duty 0–1:
     <ul>
       <li>1000 µs → <code class="language-plaintext highlighter-rouge">SetPwm(ch, 0, 205)</code> (or use a helper that converts µs to ticks).</li>
-      <li>The demo uses a <code class="language-plaintext highlighter-rouge">ServoController</code> class that converts 1000–2000 µs to ticks and applies velocity limiting; you can reuse or adapt that logic.</li>
+      <li>The demo uses a <code class="language-plaintext highlighter-rouge">ServoController</code> class that converts 1000–2000 µs to ticks and applies
+velocity limiting; you can reuse or adapt that logic.</li>
     </ul>
   </li>
   <li>Avoid commanding large instantaneous changes; step or ramp toward the target to match servo speed limits.</li>

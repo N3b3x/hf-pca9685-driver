@@ -334,7 +334,10 @@ src/
   └── pca9685.ipp
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 
-<p><strong>Note</strong>: The driver uses a template design: the implementation is in <code class="language-plaintext highlighter-rouge">src/pca9685.ipp</code> and is included by <code class="language-plaintext highlighter-rouge">inc/pca9685.hpp</code>. Your build must have <code class="language-plaintext highlighter-rouge">inc/</code> and <code class="language-plaintext highlighter-rouge">src/</code> on the include path so that <code class="language-plaintext highlighter-rouge">pca9685.hpp</code> can include the <code class="language-plaintext highlighter-rouge">.ipp</code> file. You do not compile <code class="language-plaintext highlighter-rouge">pca9685.ipp</code> as a separate translation unit.</p>
+<p><strong>Note</strong>: The driver uses a template design: the implementation is in <code class="language-plaintext highlighter-rouge">src/pca9685.ipp</code> and is
+included by <code class="language-plaintext highlighter-rouge">inc/pca9685.hpp</code>. Your build must have <code class="language-plaintext highlighter-rouge">inc/</code> and <code class="language-plaintext highlighter-rouge">src/</code> on the include path so that
+<code class="language-plaintext highlighter-rouge">pca9685.hpp</code> can include the <code class="language-plaintext highlighter-rouge">.ipp</code> file. You do not compile <code class="language-plaintext highlighter-rouge">pca9685.ipp</code> as a separate
+translation unit.</p>
 <h2 id="building-the-library">
   
   
@@ -352,13 +355,15 @@ src/
 </h3>
     
 
-<p>Since the driver is header-only (template implementation in <code class="language-plaintext highlighter-rouge">.ipp</code>), add the repository <code class="language-plaintext highlighter-rouge">inc/</code> and <code class="language-plaintext highlighter-rouge">src/</code> directories to your include path and include the main header:</p>
+<p>Since the driver is header-only (template implementation in <code class="language-plaintext highlighter-rouge">.ipp</code>), add the repository <code class="language-plaintext highlighter-rouge">inc/</code> and
+<code class="language-plaintext highlighter-rouge">src/</code> directories to your include path and include the main header:</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">"pca9685.hpp"</span><span class="cp">
 </span></pre></td></tr></tbody></table></div></code></pre></div></div>
 
-<p>Your build system must allow the header to find <code class="language-plaintext highlighter-rouge">../src/pca9685.ipp</code> (relative to the header) or you can add <code class="language-plaintext highlighter-rouge">src/</code> to the include path as well.</p>
+<p>Your build system must allow the header to find <code class="language-plaintext highlighter-rouge">../src/pca9685.ipp</code> (relative to the header) or
+you can add <code class="language-plaintext highlighter-rouge">src/</code> to the include path as well.</p>
 <h3 id="using-cmake">
   
   
@@ -374,8 +379,10 @@ src/
 4
 5
 6
+7
 </pre></td><td class="rouge-code"><pre><span class="c1"># Include path must include both inc and src (for .ipp include from header)</span>
-<span class="nb">target_include_directories</span><span class="p">(</span>your_target PRIVATE
+<span class="nb">target_include_directories</span><span class="p">(</span>your_target
+    PRIVATE
     <span class="si">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="si">}</span>/hf-pca9685-driver/inc
     <span class="si">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="si">}</span>/hf-pca9685-driver/src
 <span class="p">)</span>
@@ -390,7 +397,8 @@ src/
 </h3>
     
 
-<p>The driver is provided as an ESP-IDF component in the ESP32 examples. Build and flash using the example scripts:</p>
+<p>The driver is provided as an ESP-IDF component in the ESP32 examples. Build and flash using the
+example scripts:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -402,7 +410,8 @@ src/
 ./scripts/flash_app.sh flash_monitor pca9685_comprehensive_test Debug
 </pre></td></tr></tbody></table></div></code></pre></div></div>
 
-<p>See <a href="/hf-pca9685-driver/development/examples/esp32/">examples/esp32/README.md</a> and <a href="../examples/esp32/docs/">examples/esp32/docs/</a> for full setup and app descriptions.</p>
+<p>See <a href="/hf-pca9685-driver/development/examples/esp32/">examples/esp32/README.md</a> and
+<a href="../examples/esp32/docs/">examples/esp32/docs/</a> for full setup and app descriptions.</p>
 <h2 id="verification">
   
   

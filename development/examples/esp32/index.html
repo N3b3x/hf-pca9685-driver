@@ -258,7 +258,8 @@
 </h1>
     
 
-<p>This directory contains ESP32 applications for the <strong>PCA9685</strong> 16-channel 12-bit PWM driver. They use ESP-IDF and the shared build/flash scripts.</p>
+<p>This directory contains ESP32 applications for the <strong>PCA9685</strong> 16-channel 12-bit PWM driver. They
+use ESP-IDF and the shared build/flash scripts.</p>
 <h2 id="table-of-contents">
   
   
@@ -314,7 +315,8 @@
 <p>The examples use:</p>
 
 <ul>
-  <li><strong>I2C</strong>: Default SDA=GPIO4, SCL=GPIO5 (100 kHz for PCA9685). Same pattern as the HardFOC pcal9555/bno08x examples.</li>
+  <li><strong>I2C</strong>: Default SDA=GPIO4, SCL=GPIO5 (100 kHz for PCA9685). Same pattern as the HardFOC
+pcal9555/bno08x examples.</li>
   <li><strong>Test indicator</strong>: GPIO14 (e.g. comprehensive test progress).</li>
 </ul><hr />
 <h2 id="pin-connections">
@@ -464,7 +466,8 @@
 
 <ul>
   <li><strong>ESP-IDF</strong> (e.g. <code class="language-plaintext highlighter-rouge">release/v5.5</code>). Install and source <code class="language-plaintext highlighter-rouge">export.sh</code> as usual.</li>
-  <li><strong>Target</strong>: Default in config is <code class="language-plaintext highlighter-rouge">esp32s3</code>; other targets (e.g. <code class="language-plaintext highlighter-rouge">esp32</code>, <code class="language-plaintext highlighter-rouge">esp32c6</code>) depend on <code class="language-plaintext highlighter-rouge">app_config.yml</code> and component <code class="language-plaintext highlighter-rouge">targets</code>.</li>
+  <li><strong>Target</strong>: Default in config is <code class="language-plaintext highlighter-rouge">esp32s3</code>; other targets (e.g. <code class="language-plaintext highlighter-rouge">esp32</code>, <code class="language-plaintext highlighter-rouge">esp32c6</code>) depend on
+<code class="language-plaintext highlighter-rouge">app_config.yml</code> and component <code class="language-plaintext highlighter-rouge">targets</code>.</li>
 </ul>
 <h3 id="first-time-setup">
   
@@ -577,7 +580,9 @@
 </h3>
     
 
-<p>Default in code is <strong>0x40</strong>. To use another address, change <code class="language-plaintext highlighter-rouge">PCA9685_I2C_ADDRESS</code> in the app source (e.g. <code class="language-plaintext highlighter-rouge">main/pca9685_comprehensive_test.cpp</code> or <code class="language-plaintext highlighter-rouge">main/pca9685_servo_demo.cpp</code>) and match hardware (A0–A5).</p>
+<p>Default in code is <strong>0x40</strong>. To use another address, change <code class="language-plaintext highlighter-rouge">PCA9685_I2C_ADDRESS</code> in the app source
+(e.g. <code class="language-plaintext highlighter-rouge">main/pca9685_comprehensive_test.cpp</code> or <code class="language-plaintext highlighter-rouge">main/pca9685_servo_demo.cpp</code>) and match hardware
+(A0–A5).</p>
 <h3 id="test-sections-comprehensive-test">
   
   
