@@ -9,6 +9,36 @@
 
 namespace pca9685 {
 
+// ============================================================================
+// GPIO Enums -- Standardised Control Pin Model
+// ============================================================================
+
+/**
+ * @enum CtrlPin
+ * @brief Identifies the hardware control pins of the PCA9685.
+ *
+ * Used with `GpioSet()` / `GpioSetActive()` / `GpioSetInactive()`
+ * to control the IC's dedicated GPIO pins through the I2cInterface.
+ *
+ * The mapping from `GpioSignal::ACTIVE` / `INACTIVE` to physical HIGH / LOW
+ * is determined by the platform bus implementation:
+ * - **OE**: Active-low (ACTIVE → physical LOW, outputs enabled)
+ */
+enum class CtrlPin : uint8_t {
+  OE = 0 ///< Output Enable (active-low on the physical pin)
+};
+
+/**
+ * @enum GpioSignal
+ * @brief Abstract signal level for control pins.
+ *
+ * Decouples the driver's intent from the physical pin polarity.
+ */
+enum class GpioSignal : uint8_t {
+  INACTIVE = 0, ///< Pin function is deasserted
+  ACTIVE   = 1  ///< Pin function is asserted
+};
+
 /**
  * @brief CRTP-based template interface for I2C bus operations
  *
@@ -74,6 +104,40 @@ public:
   bool EnsureInitialized() noexcept {
     return static_cast<Derived*>(this)->EnsureInitialized();
   }
+
+  // --------------------------------------------------------------------------
+  /// @name GPIO Pin Control
+  ///
+  /// Unified interface for controlling PCA9685 hardware control pins.
+  /// @{
+
+  /**
+   * @brief Set a control pin to the specified signal state.
+   *
+   * @param[in] pin     Which control pin to drive (OE).
+   * @param[in] signal  ACTIVE to assert the pin function, INACTIVE to deassert.
+   *
+   * @note The default implementation is a no-op. Override in derived class
+   *       if the OE pin is wired and controllable.
+   */
+  void GpioSet(CtrlPin pin, GpioSignal signal) noexcept {
+    (void)pin;
+    (void)signal;
+  }
+
+  /**
+   * @brief Assert a control pin (set to ACTIVE).
+   * @param[in] pin  Which control pin to assert.
+   */
+  void GpioSetActive(CtrlPin pin) noexcept { GpioSet(pin, GpioSignal::ACTIVE); }
+
+  /**
+   * @brief Deassert a control pin (set to INACTIVE).
+   * @param[in] pin  Which control pin to deassert.
+   */
+  void GpioSetInactive(CtrlPin pin) noexcept { GpioSet(pin, GpioSignal::INACTIVE); }
+
+  /// @}
 
   /** @brief Copy constructor deleted (non-copyable; avoids slicing). */
   I2cInterface(const I2cInterface&) = delete;
