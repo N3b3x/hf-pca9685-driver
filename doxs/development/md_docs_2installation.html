@@ -110,7 +110,8 @@ As Part of Your Project (Include Path)</h2>
 <h2><a class="anchor" id="autotoc_md92"></a>
 Using CMake</h2>
 <div class="fragment"><div class="line"># Include path must include both inc and src (for .ipp include from header)</div>
-<div class="line">target_include_directories(your_target PRIVATE</div>
+<div class="line">target_include_directories(your_target</div>
+<div class="line">    PRIVATE</div>
 <div class="line">    ${CMAKE_CURRENT_SOURCE_DIR}/hf-pca9685-driver/inc</div>
 <div class="line">    ${CMAKE_CURRENT_SOURCE_DIR}/hf-pca9685-driver/src</div>
 <div class="line">)</div>
