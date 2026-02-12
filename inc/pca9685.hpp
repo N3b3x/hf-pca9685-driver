@@ -1,26 +1,9 @@
 /**
  * @file pca9685.hpp
  * @brief Hardware-agnostic driver for the PCA9685 16-channel 12-bit PWM
- * controller (I2C)
- *
- * This driver provides a platform-independent C++ interface for the NXP PCA9685
- * PWM controller. It requires the user to provide an implementation of the
- * I2cInterface for their platform. No dependencies on project-specific or
- * MCU-specific types are present.
- *
- * Features:
- *   - Set PWM frequency (24 Hz to 1526 Hz typical)
- *   - Set PWM value (on/off time) for each channel
- *   - Reset and configure device
- *   - Error reporting and diagnostics
- *
- * @author Nebiyu Tadesse
- * @date 2025
- * @version 1.0
+ * @copyright Copyright (c) 2024-2025 HardFOC. All rights reserved.
  */
-#ifndef PCA9685_HPP
-#define PCA9685_HPP
-
+#pragma once
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -374,5 +357,3 @@ private:
 #undef PCA9685_HEADER_INCLUDED
 
 } // namespace pca9685
-
-#endif // PCA9685_HPP

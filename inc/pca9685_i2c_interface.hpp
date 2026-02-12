@@ -1,19 +1,9 @@
 /**
  * @file pca9685_i2c_interface.hpp
  * @brief CRTP-based I2C interface for PCA9685 driver
- *
- * This header defines the hardware-agnostic I2C communication interface
- * using the CRTP (Curiously Recurring Template Pattern) for compile-time
- * polymorphism. Platform-specific implementations should inherit from this
- * template with themselves as the template parameter.
- *
- * @author Nebiyu Tadesse
- * @date 2025
- * @version 2.0
+ * @copyright Copyright (c) 2024-2025 HardFOC. All rights reserved.
  */
-#ifndef PCA9685_I2C_INTERFACE_HPP
-#define PCA9685_I2C_INTERFACE_HPP
-
+#pragma once
 #include <cstddef>
 #include <cstdint>
 
@@ -108,5 +98,3 @@ protected:
 };
 
 } // namespace pca9685
-
-#endif // PCA9685_I2C_INTERFACE_HPP

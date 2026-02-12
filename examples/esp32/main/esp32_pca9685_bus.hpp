@@ -41,13 +41,13 @@ extern "C" {
 static constexpr const char* TAG_I2C = "PCA9685_I2C";
 
 /**
- * @class Esp32Pca9685Bus
+ * @class Esp32Pca9685I2cBus
  * @brief ESP32 implementation of pca9685::I2cInterface using ESP-IDF I2C master driver.
  *
  * This class mirrors the proven Esp32Pcal9555Bus implementation for consistent
  * I2C communication behavior across HardFOC drivers.
  */
-class Esp32Pca9685Bus : public pca9685::I2cInterface<Esp32Pca9685Bus> {
+class Esp32Pca9685I2cBus : public pca9685::I2cInterface<Esp32Pca9685I2cBus> {
 public:
   /**
    * @brief I2C bus configuration structure
@@ -65,19 +65,19 @@ public:
   /**
    * @brief Constructor with default configuration
    */
-  Esp32Pca9685Bus() : Esp32Pca9685Bus(I2CConfig{}) {}
+  Esp32Pca9685I2cBus() : Esp32Pca9685I2cBus(I2CConfig{}) {}
 
   /**
    * @brief Constructor with custom I2C configuration
    * @param config I2C bus configuration
    */
-  explicit Esp32Pca9685Bus(const I2CConfig& config)
+  explicit Esp32Pca9685I2cBus(const I2CConfig& config)
       : config_(config), bus_handle_(nullptr), initialized_(false) {}
 
   /**
    * @brief Destructor - cleans up I2C resources
    */
-  ~Esp32Pca9685Bus() {
+  ~Esp32Pca9685I2cBus() {
     Deinit();
   }
 
@@ -228,7 +228,7 @@ public:
   /**
    * @brief Optional delay callback for PCA9685 driver retries (1 ms task delay).
    *
-   * Pass to driver via SetRetryDelay(Esp32Pca9685Bus::RetryDelay) after creating
+   * Pass to driver via SetRetryDelay(Esp32Pca9685I2cBus::RetryDelay) after creating
    * the driver to allow I2C bus recovery between retry attempts.
    */
   static void RetryDelay() noexcept {
@@ -304,11 +304,11 @@ private:
 /**
  * @brief Factory function to create an ESP32 I2C bus instance
  * @param config I2C configuration (optional, uses defaults if not provided)
- * @return Unique pointer to Esp32Pca9685Bus instance
+ * @return Unique pointer to Esp32Pca9685I2cBus instance
  */
-inline std::unique_ptr<Esp32Pca9685Bus> CreateEsp32Pca9685Bus(
-    const Esp32Pca9685Bus::I2CConfig& config = Esp32Pca9685Bus::I2CConfig{}) {
-  auto bus = std::make_unique<Esp32Pca9685Bus>(config);
+inline std::unique_ptr<Esp32Pca9685I2cBus> CreateEsp32Pca9685I2cBus(
+    const Esp32Pca9685I2cBus::I2CConfig& config = Esp32Pca9685I2cBus::I2CConfig{}) {
+  auto bus = std::make_unique<Esp32Pca9685I2cBus>(config);
   if (!bus->Init()) {
     ESP_LOGE(TAG_I2C, "Failed to initialize I2C bus");
     return nullptr;

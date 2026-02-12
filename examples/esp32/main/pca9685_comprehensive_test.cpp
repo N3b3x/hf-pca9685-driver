@@ -31,13 +31,13 @@ extern "C" {
 }
 #endif
 
-// Project headers (bus before driver so template sees full Esp32Pca9685Bus)
+// Project headers (bus before driver so template sees full Esp32Pca9685I2cBus)
 #include "TestFramework.h"
 #include "esp32_pca9685_bus.hpp"
 #include "pca9685.hpp"
 
 // Use fully qualified name for the class
-using PCA9685Driver = pca9685::PCA9685<Esp32Pca9685Bus>;
+using PCA9685Driver = pca9685::PCA9685<Esp32Pca9685I2cBus>;
 
 static const char* TAG = "PCA9685_Test";
 static TestResults g_test_results;
@@ -59,7 +59,7 @@ static constexpr uint8_t PCA9685_I2C_ADDRESS = 0x40;
 //=============================================================================
 // SHARED TEST RESOURCES
 //=============================================================================
-static std::unique_ptr<Esp32Pca9685Bus> g_i2c_bus;
+static std::unique_ptr<Esp32Pca9685I2cBus> g_i2c_bus;
 static std::unique_ptr<PCA9685Driver> g_driver;
 
 //=============================================================================
@@ -108,7 +108,7 @@ static constexpr gpio_num_t EXAMPLE_SCL_PIN = GPIO_NUM_5;
  * @param bus Pointer to initialized I2C bus
  * @return true if at least one device found, false otherwise
  */
-static bool scan_i2c_bus(Esp32Pca9685Bus* bus) noexcept {
+static bool scan_i2c_bus(Esp32Pca9685I2cBus* bus) noexcept {
   if (!bus || !bus->IsInitialized()) {
     ESP_LOGE(TAG, "I2C bus not initialized for scanning");
     return false;
@@ -178,14 +178,14 @@ static bool scan_i2c_bus(Esp32Pca9685Bus* bus) noexcept {
  */
 static bool init_test_resources() noexcept {
   // Initialize I2C bus (default GPIO4/5; override with PCA9685_EXAMPLE_I2C_SDA_GPIO/SCL_GPIO)
-  Esp32Pca9685Bus::I2CConfig config;
+  Esp32Pca9685I2cBus::I2CConfig config;
   config.port = I2C_NUM_0;
   config.sda_pin = EXAMPLE_SDA_PIN;
   config.scl_pin = EXAMPLE_SCL_PIN;
   config.frequency = 100000; // 100 kHz for PCA9685
   config.pullup_enable = true;
 
-  g_i2c_bus = CreateEsp32Pca9685Bus(config);
+  g_i2c_bus = CreateEsp32Pca9685I2cBus(config);
   if (!g_i2c_bus || !g_i2c_bus->IsInitialized()) {
     ESP_LOGE(TAG, "Failed to initialize I2C bus");
     return false;
@@ -195,7 +195,7 @@ static bool init_test_resources() noexcept {
   ESP_LOGI(TAG, "Attempting to initialize PCA9685 at address 0x%02X...", PCA9685_I2C_ADDRESS);
   g_driver = create_test_driver();
   if (g_driver) {
-    g_driver->SetRetryDelay(Esp32Pca9685Bus::RetryDelay);
+    g_driver->SetRetryDelay(Esp32Pca9685I2cBus::RetryDelay);
   }
 
   // Only scan I2C bus if driver initialization failed

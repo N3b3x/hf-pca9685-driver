@@ -1,15 +1,8 @@
 /**
  * @file pca9685.ipp
  * @brief Hardware-agnostic implementation for the PCA9685 16-channel 12-bit PWM controller (I2C)
- *
- * @author Nebiyu Tadesse
- * @date 2025
- * @version 2.0
- *
- * @note This file is included by pca9685.hpp for template instantiation.
- *       It should not be compiled separately when included.
+ * @copyright Copyright (c) 2024-2025 HardFOC. All rights reserved.
  */
-
 #ifndef PCA9685_IMPL
 #define PCA9685_IMPL
 
