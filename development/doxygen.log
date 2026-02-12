@@ -1,26 +1,26 @@
-warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1765, file /tmp/doxyfile.ddvbly
-warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.ddvbly' has become obsolete.
+warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1765, file /tmp/doxyfile.DPMyCl
+warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.DPMyCl' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:30: warning: documented symbol 'pca9685::PCA9685::PCA9685' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:35: warning: documented symbol 'bool pca9685::PCA9685::EnsureInitialized' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:43: warning: documented symbol 'bool pca9685::PCA9685::Reset' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:62: warning: documented symbol 'bool pca9685::PCA9685::SetPwmFreq' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:91: warning: documented symbol 'bool pca9685::PCA9685::SetPwm' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:115: warning: documented symbol 'bool pca9685::PCA9685::SetDuty' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:123: warning: documented symbol 'bool pca9685::PCA9685::SetAllPwm' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:143: warning: documented symbol 'bool pca9685::PCA9685::GetPrescale' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:158: warning: documented symbol 'bool pca9685::PCA9685::Sleep' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:167: warning: documented symbol 'bool pca9685::PCA9685::Wake' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:194: warning: documented symbol 'bool pca9685::PCA9685::SetOutputInvert' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:204: warning: documented symbol 'bool pca9685::PCA9685::SetOutputDriverMode' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:216: warning: documented symbol 'bool pca9685::PCA9685::SetChannelFullOn' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:236: warning: documented symbol 'bool pca9685::PCA9685::SetChannelFullOff' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:258: warning: documented symbol 'bool pca9685::PCA9685::writeReg' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:275: warning: documented symbol 'bool pca9685::PCA9685::readReg' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:292: warning: documented symbol 'bool pca9685::PCA9685::writeRegBlock' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:310: warning: documented symbol 'bool pca9685::PCA9685::readRegBlock' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:327: warning: documented symbol 'bool pca9685::PCA9685::modifyReg' was not declared or defined.
-/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:341: warning: documented symbol 'uint8_t pca9685::PCA9685::calcPrescale' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:23: warning: documented symbol 'pca9685::PCA9685::PCA9685' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:28: warning: documented symbol 'bool pca9685::PCA9685::EnsureInitialized' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:36: warning: documented symbol 'bool pca9685::PCA9685::Reset' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:55: warning: documented symbol 'bool pca9685::PCA9685::SetPwmFreq' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:84: warning: documented symbol 'bool pca9685::PCA9685::SetPwm' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:108: warning: documented symbol 'bool pca9685::PCA9685::SetDuty' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:116: warning: documented symbol 'bool pca9685::PCA9685::SetAllPwm' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:136: warning: documented symbol 'bool pca9685::PCA9685::GetPrescale' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:151: warning: documented symbol 'bool pca9685::PCA9685::Sleep' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:160: warning: documented symbol 'bool pca9685::PCA9685::Wake' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:187: warning: documented symbol 'bool pca9685::PCA9685::SetOutputInvert' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:197: warning: documented symbol 'bool pca9685::PCA9685::SetOutputDriverMode' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:209: warning: documented symbol 'bool pca9685::PCA9685::SetChannelFullOn' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:229: warning: documented symbol 'bool pca9685::PCA9685::SetChannelFullOff' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:251: warning: documented symbol 'bool pca9685::PCA9685::writeReg' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:268: warning: documented symbol 'bool pca9685::PCA9685::readReg' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:285: warning: documented symbol 'bool pca9685::PCA9685::writeRegBlock' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:303: warning: documented symbol 'bool pca9685::PCA9685::readRegBlock' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:320: warning: documented symbol 'bool pca9685::PCA9685::modifyReg' was not declared or defined.
+/home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:334: warning: documented symbol 'uint8_t pca9685::PCA9685::calcPrescale' was not declared or defined.
 Doxygen version used: 1.10.0 (ebc57c6dd303a980bd19dd74b8b61c8f3f5180ca)
 Searching for include files...
 Searching for example files...

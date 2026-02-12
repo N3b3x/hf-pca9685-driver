@@ -55,7 +55,7 @@ extern "C" {
 }
 #endif
 
-// Project headers (bus before driver so template sees full Esp32Pca9685Bus)
+// Project headers (bus before driver so template sees full Esp32Pca9685I2cBus)
 #include "esp32_pca9685_bus.hpp"
 #include "pca9685.hpp"
 
@@ -65,7 +65,7 @@ extern "C" {
 
 static const char* TAG = "ServoDemo";
 
-using PCA9685Driver = pca9685::PCA9685<Esp32Pca9685Bus>;
+using PCA9685Driver = pca9685::PCA9685<Esp32Pca9685I2cBus>;
 
 /// Number of servo channels to use (PCA9685 has 16)
 static constexpr uint8_t NUM_SERVOS = 16;
@@ -531,25 +531,25 @@ static constexpr size_t NUM_ANIMATIONS = sizeof(ANIMATIONS) / sizeof(ANIMATIONS[
 // Initialization
 // ============================================================================
 
-static std::unique_ptr<Esp32Pca9685Bus> g_bus;
+static std::unique_ptr<Esp32Pca9685I2cBus> g_bus;
 static std::unique_ptr<PCA9685Driver> g_driver;
 
 static bool init_hardware() {
-  Esp32Pca9685Bus::I2CConfig config;
+  Esp32Pca9685I2cBus::I2CConfig config;
   config.port = I2C_NUM_0;
   config.sda_pin = EXAMPLE_SDA_PIN;
   config.scl_pin = EXAMPLE_SCL_PIN;
   config.frequency = 100000;
   config.pullup_enable = true;
 
-  g_bus = CreateEsp32Pca9685Bus(config);
+  g_bus = CreateEsp32Pca9685I2cBus(config);
   if (!g_bus || !g_bus->IsInitialized()) {
     ESP_LOGE(TAG, "Failed to initialize I2C bus");
     return false;
   }
 
   g_driver = std::make_unique<PCA9685Driver>(g_bus.get(), PCA9685_I2C_ADDRESS);
-  g_driver->SetRetryDelay(Esp32Pca9685Bus::RetryDelay);
+  g_driver->SetRetryDelay(Esp32Pca9685I2cBus::RetryDelay);
   if (!g_driver->EnsureInitialized()) {
     ESP_LOGE(TAG, "Failed to initialize PCA9685 at address 0x%02X", PCA9685_I2C_ADDRESS);
     return false;
