@@ -1,9 +1,24 @@
+---
 name: hf-pca9685-driver
 version: "1.0.0"
-description: Hardware-agnostic PCA9685 driver component
+description: "Hardware-agnostic PCA9685 16-channel PWM/servo driver with I2C interface"
+
 maintainers:
   - "HardFOC"
+license: "MIT"
+
 targets:
   - esp32
   - esp32c6
   - esp32s3
+
+dependencies:
+  idf: ">=5.0.0"
+
+tags:
+  - "pca9685"
+  - "pwm"
+  - "servo"
+  - "driver"
+  - "i2c"
+  - "hardware-agnostic"

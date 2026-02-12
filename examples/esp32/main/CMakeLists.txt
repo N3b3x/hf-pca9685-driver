@@ -55,7 +55,7 @@ message(STATUS "Using source file: ${APP_SOURCE_FILE}")
 # Include Directories Configuration
 # =============================================================================
 # Set include paths relative to current repository structure
-set(INC_BASE_PATH "../../../src")
+set(INC_BASE_PATH "../../../inc")
 
 # Define include directories for the main component
 set(MAIN_INCLUDE_DIRS
