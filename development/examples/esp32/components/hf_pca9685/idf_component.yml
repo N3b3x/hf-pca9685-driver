@@ -7,7 +7,7 @@ maintainers:
   - "HardFOC"
 license: "MIT"
 
-url: https://www.nxp.com/products/power-management/lighting-driver-and-controller-ics/led-controllers/16-channel-12-bit-pwm-fm-plus-ic-bus-led-controller:PCA9685
+url: https://github.com/N3b3x/hf-pca9685-driver
 repository: https://github.com/N3b3x/hf-pca9685-driver
 issues: https://github.com/N3b3x/hf-pca9685-driver/issues
 
