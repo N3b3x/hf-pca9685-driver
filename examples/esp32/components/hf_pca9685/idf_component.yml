@@ -5,7 +5,7 @@ description: "Hardware-agnostic PCA9685 16-channel PWM/servo driver with I2C int
 
 maintainers:
   - "HardFOC"
-license: "MIT"
+license: "GPL-3.0"
 
 url: https://github.com/N3b3x/hf-pca9685-driver
 repository: https://github.com/N3b3x/hf-pca9685-driver
