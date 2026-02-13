@@ -1,5 +1,5 @@
-warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1765, file /tmp/doxyfile.OuQd2Y
-warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.OuQd2Y' has become obsolete.
+warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1765, file /tmp/doxyfile.SZEzBv
+warning: Tag 'DOT_TRANSPARENT' at line 2788 of file '/tmp/doxyfile.SZEzBv' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:23: warning: documented symbol 'pca9685::PCA9685::PCA9685' was not declared or defined.
 /home/runner/work/hf-pca9685-driver/hf-pca9685-driver/src/pca9685.ipp:28: warning: documented symbol 'bool pca9685::PCA9685::EnsureInitialized' was not declared or defined.
