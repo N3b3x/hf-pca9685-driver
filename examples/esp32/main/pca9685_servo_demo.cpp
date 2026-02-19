@@ -590,6 +590,7 @@ extern "C" void app_main() {
   ESP_LOGI(TAG, "║  2. Breathe      - All channels pulsate in unison                            ║");
   ESP_LOGI(TAG, "║  3. Cascade      - Sequential sweep with staggered start                     ║");
   ESP_LOGI(TAG, "╚══════════════════════════════════════════════════════════════════════════════╝");
+  ESP_LOGI(TAG, "Driver version: %s", pca9685::GetDriverVersion());
   ESP_LOGI(TAG, "");
 
   vTaskDelay(pdMS_TO_TICKS(500));
