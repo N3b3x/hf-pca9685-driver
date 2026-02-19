@@ -1,88 +1,58 @@
-# =============================================================================
-# PCA9685 Driver Component - CMakeLists.txt
-# =============================================================================
-# This component provides the PCA9685 driver library
-# =============================================================================
-
-cmake_minimum_required(VERSION 3.16)
-
-# =============================================================================
-# Path Configuration
-# =============================================================================
-# Set the source root path relative to this component directory
-set(SRC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../../src")
-set(INC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../../inc")
-
-message(STATUS "PCA9685 Driver - ESP32 Component Configuration")
-message(STATUS "Source Root: ${SRC_ROOT}")
+###############################################################################
+# HF PCA9685 Driver - ESP-IDF Component Wrapper
+###############################################################################
+# Purpose:
+#   Adapt the generic, hardware-agnostic driver target contract to ESP-IDF's
+#   component model using idf_component_register().
+#
+# Key Rule:
+#   Do not duplicate source/include/dependency definitions here.
+#   Always consume the shared build settings from driver root.
+#
+# Note:
+#   cmake_minimum_required() is intentionally omitted here — ESP-IDF's
+#   project.cmake already sets it and adding another can cause policy conflicts.
+###############################################################################
 
 # =============================================================================
-# Source File Discovery and Validation
+# Shared Build Contract Import
 # =============================================================================
-# List all potential driver source files
-# Note: pca9685.cpp is a template implementation file included by the header,
-#       so it should NOT be compiled separately
-set(DRIVER_SRCS
-    # No source files - template implementation is included in header
-)
+# Resolve driver root from this component folder and import canonical variables.
+# Users can override HF_PCA9685_ROOT if the component is placed outside
+# the default directory structure (e.g., referencing via EXTRA_COMPONENT_DIRS).
+set(HF_PCA9685_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../.." CACHE PATH
+    "Path to root of hf-pca9685-driver (auto-detected from component location)")
 
-# Check which source files actually exist and add them
-set(EXISTING_SRCS "")
-foreach(src_file ${DRIVER_SRCS})
-    if(EXISTS "${src_file}")
-        list(APPEND EXISTING_SRCS "${src_file}")
-        message(STATUS "Found source: ${src_file}")
-    else()
-        message(WARNING "Source file not found: ${src_file}")
-    endif()
-endforeach()
+# Normalise and validate the resolved path
+get_filename_component(HF_PCA9685_ROOT "${HF_PCA9685_ROOT}" ABSOLUTE)
+if(NOT EXISTS "${HF_PCA9685_ROOT}/cmake/hf_pca9685_build_settings.cmake")
+    message(FATAL_ERROR
+        "Cannot find PCA9685 driver root.\n"
+        "  Resolved path: ${HF_PCA9685_ROOT}\n"
+        "  Expected file: ${HF_PCA9685_ROOT}/cmake/hf_pca9685_build_settings.cmake\n"
+        "  Fix: set HF_PCA9685_ROOT to the correct driver checkout path.")
+endif()
 
-# =============================================================================
-# Include Directories Configuration
-# =============================================================================
-# Define include directories for the driver component
-set(DRIVER_INCLUDE_DIRS
-    "${INC_ROOT}"                       # Main driver headers
-)
+include("${HF_PCA9685_ROOT}/cmake/hf_pca9685_build_settings.cmake")
 
 # =============================================================================
-# Component Dependencies
+# ESP-IDF Component Registration
 # =============================================================================
-# Define required ESP-IDF components for the driver
-set(DRIVER_REQUIRES
-    driver              # ESP-IDF driver framework
-)
-
-# =============================================================================
-# Component Registration
-# =============================================================================
-# Register the driver component with ESP-IDF build system
+# The component maps the shared contract directly into ESP-IDF primitives.
 idf_component_register(
-    SRCS ${EXISTING_SRCS}                 # Source files (validated above)
-    INCLUDE_DIRS ${DRIVER_INCLUDE_DIRS}   # Include directories defined above
-    REQUIRES ${DRIVER_REQUIRES}           # Component dependencies defined above
+    SRCS ${HF_PCA9685_SOURCE_FILES}
+    INCLUDE_DIRS ${HF_PCA9685_PUBLIC_INCLUDE_DIRS}
+    REQUIRES ${HF_PCA9685_IDF_REQUIRES}
 )
 
 # =============================================================================
-# Compiler Configuration
+# C++ Standard Contract
 # =============================================================================
-# Set C++ standard (use INTERFACE since this may be an INTERFACE library)
-target_compile_features(${COMPONENT_LIB} INTERFACE cxx_std_20)
-
-# =============================================================================
-# Compiler Flags
-# =============================================================================
-# Note: Compiler flags are typically set by the consuming component,
-#       but we can set INTERFACE properties for INTERFACE libraries
-#       For regular libraries, these would be PRIVATE, but since we have
-#       no source files, ESP-IDF creates an INTERFACE library
-
-# =============================================================================
-# Build Summary
-# =============================================================================
-list(LENGTH EXISTING_SRCS NUM_SOURCES)
-message(STATUS "=== PCA9685 Driver Component Summary ===")
-message(STATUS "Component configured successfully")
-message(STATUS "Included ${NUM_SOURCES} source files")
-message(STATUS "C++ Standard: 17")
-message(STATUS "===============================================")
+# If sources exist, component is a compiled library -> PRIVATE feature.
+# If no sources exist (header-only), component behaves like INTERFACE ->
+# INTERFACE feature ensures downstream targets still get the requirement.
+if(HF_PCA9685_SOURCE_FILES)
+    target_compile_features(${COMPONENT_LIB} PRIVATE cxx_std_20)
+else()
+    target_compile_features(${COMPONENT_LIB} INTERFACE cxx_std_20)
+endif()

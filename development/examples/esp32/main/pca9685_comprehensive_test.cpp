@@ -826,6 +826,7 @@ extern "C" void app_main() {
            "║                      ESP32 PCA9685 COMPREHENSIVE TEST SUITE                   ║");
   ESP_LOGI(TAG, "║                         HardFOC PCA9685 Driver Tests                         ║");
   ESP_LOGI(TAG, "╚══════════════════════════════════════════════════════════════════════════════╝");
+  ESP_LOGI(TAG, "Driver version: %s", pca9685::GetDriverVersion());
 
   vTaskDelay(pdMS_TO_TICKS(1000));
 
