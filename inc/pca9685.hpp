@@ -11,6 +11,7 @@
 #include <cstdint>
 
 #include "pca9685_i2c_interface.hpp"
+#include "pca9685_version.h"
 
 namespace pca9685 {
 
@@ -308,6 +309,50 @@ public:
    */
   bool SetChannelFullOff(uint8_t channel) noexcept;
 
+  // ===========================================================================
+  // Driver Version
+  // ===========================================================================
+
+  /**
+   * @brief Get the compiled driver version string.
+   *
+   * Returns the version that was compiled into the binary, in
+   * "MAJOR.MINOR.PATCH" format. This is a static method — it can be
+   * called without a driver instance.
+   *
+   * @return Null-terminated version string, e.g. "1.0.0".
+   *
+   * @example
+   *   ESP_LOGI("APP", "PCA9685 driver v%s", PCA9685::GetDriverVersion());
+   */
+  static constexpr const char* GetDriverVersion() noexcept {
+    return HF_PCA9685_VERSION_STRING;
+  }
+
+  /**
+   * @brief Get the compiled driver major version number.
+   * @return Major version (incremented on breaking API changes).
+   */
+  static constexpr uint8_t GetDriverVersionMajor() noexcept {
+    return HF_PCA9685_VERSION_MAJOR;
+  }
+
+  /**
+   * @brief Get the compiled driver minor version number.
+   * @return Minor version (incremented on new features, backward-compatible).
+   */
+  static constexpr uint8_t GetDriverVersionMinor() noexcept {
+    return HF_PCA9685_VERSION_MINOR;
+  }
+
+  /**
+   * @brief Get the compiled driver patch version number.
+   * @return Patch version (incremented on bug fixes).
+   */
+  static constexpr uint8_t GetDriverVersionPatch() noexcept {
+    return HF_PCA9685_VERSION_PATCH;
+  }
+
 private:
   I2cType* i2c_;
   uint8_t addr_;
@@ -355,5 +400,10 @@ private:
 // implementation file
 #include "../src/pca9685.ipp"
 #undef PCA9685_HEADER_INCLUDED
+
+// Public API: Get driver version string
+inline const char* GetDriverVersion() noexcept {
+  return HF_PCA9685_VERSION_STRING;
+}
 
 } // namespace pca9685
