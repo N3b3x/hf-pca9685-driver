@@ -218,7 +218,7 @@
   },"31": {
     "doc": "⚙️ CMake Integration",
     "title": "PCA9685 — CMake Integration Guide",
-    "content": "How to consume the PCA9685 driver in your CMake or ESP-IDF project. Build contract architecture, variable naming conventions, porting guide, and templates for new drivers are documented at the HAL level: CMake Build Contract. This page covers only the PCA9685-specific integration steps. ",
+    "content": "How to consume the PCA9685 driver in your CMake or ESP-IDF project. ",
     "url": "/hf-pca9685-driver/development/docs/cmake_integration/#pca9685--cmake-integration-guide",
     
     "relUrl": "/docs/cmake_integration/#pca9685--cmake-integration-guide"
@@ -288,14 +288,14 @@
   },"41": {
     "doc": "⚙️ CMake Integration",
     "title": "PCA9685-Specific Build Variables",
-    "content": "These variables are defined in cmake/hf_pca9685_build_settings.cmake: . | Variable | Value | . | HF_PCA9685_TARGET_NAME | hf_pca9685 | . | HF_PCA9685_VERSION | Current MAJOR.MINOR.PATCH | . | HF_PCA9685_PUBLIC_INCLUDE_DIRS | inc/ + generated header dir | . | HF_PCA9685_SOURCE_FILES | \"\" (header-only) | . | HF_PCA9685_IDF_REQUIRES | driver | . For the full variable naming convention and how the 3-layer CMake contract works, see the CMake Build Contract. ",
+    "content": "These variables are defined in cmake/hf_pca9685_build_settings.cmake: . | Variable | Value | . | HF_PCA9685_TARGET_NAME | hf_pca9685 | . | HF_PCA9685_VERSION | Current MAJOR.MINOR.PATCH | . | HF_PCA9685_PUBLIC_INCLUDE_DIRS | inc/ + generated header dir | . | HF_PCA9685_SOURCE_FILES | \"\" (header-only) | . | HF_PCA9685_IDF_REQUIRES | driver | . ",
     "url": "/hf-pca9685-driver/development/docs/cmake_integration/#pca9685-specific-build-variables",
     
     "relUrl": "/docs/cmake_integration/#pca9685-specific-build-variables"
   },"42": {
     "doc": "⚙️ CMake Integration",
     "title": "Version Header",
-    "content": "The build system generates pca9685_version.h from inc/pca9685_version.h.in at configure time. It provides: . | 1 2 3 4 . | #define HF_PCA9685_VERSION_MAJOR 1 #define HF_PCA9685_VERSION_MINOR 0 #define HF_PCA9685_VERSION_PATCH 0 #define HF_PCA9685_VERSION_STRING \"1.0.0\" . | . Include it in your application to verify at runtime which version is compiled in: . | 1 2 . | #include \"pca9685_version.h\" printf(\"PCA9685 driver v%s\\n\", HF_PCA9685_VERSION_STRING); . | . Navigation ⬅️ Back to Documentation Index | CMake Build Contract ↗ . ",
+    "content": "The build system generates pca9685_version.h from inc/pca9685_version.h.in at configure time. It provides: . | 1 2 3 4 . | #define HF_PCA9685_VERSION_MAJOR 1 #define HF_PCA9685_VERSION_MINOR 0 #define HF_PCA9685_VERSION_PATCH 0 #define HF_PCA9685_VERSION_STRING \"1.0.0\" . | . Include it in your application to verify at runtime which version is compiled in: . | 1 2 . | #include \"pca9685_version.h\" printf(\"PCA9685 driver v%s\\n\", HF_PCA9685_VERSION_STRING); . | . Navigation ⬅️ Back to Documentation Index . ",
     "url": "/hf-pca9685-driver/development/docs/cmake_integration/#version-header",
     
     "relUrl": "/docs/cmake_integration/#version-header"
