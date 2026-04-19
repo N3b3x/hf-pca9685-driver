@@ -76,11 +76,11 @@ $(function() {
   <div class="headertitle"><div class="title">PCA9685 — CMake Integration Guide</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md29"></a> How to consume the PCA9685 driver in your CMake or ESP-IDF project.</p>
-<h1><a class="anchor" id="autotoc_md30"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md30"></a> How to consume the PCA9685 driver in your CMake or ESP-IDF project.</p>
+<h1><a class="anchor" id="autotoc_md31"></a>
 ESP-IDF Integration</h1>
 <p>The driver ships with an ESP-IDF component wrapper in <code>examples/esp32/components/hf_pca9685/</code>.</p>
-<h2><a class="anchor" id="autotoc_md31"></a>
+<h2><a class="anchor" id="autotoc_md32"></a>
 1. Reference the Component</h2>
 <p><b>Option 1 — Symlink or copy the wrapper:</b></p>
 <div class="fragment"><div class="line">your-esp-project/</div>
@@ -94,11 +94,11 @@ ESP-IDF Integration</h1>
 </div><!-- fragment --><p><b>Option 2 — Use <code>EXTRA_COMPONENT_DIRS</code>:</b></p>
 <div class="fragment"><div class="line"># In your project-level CMakeLists.txt, before include($ENV{IDF_PATH}/...)</div>
 <div class="line">set(EXTRA_COMPONENT_DIRS &quot;${CMAKE_CURRENT_LIST_DIR}/../path/to/hf-pca9685-driver/examples/esp32/components&quot;)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md32"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md33"></a>
 2. Override the Driver Root (if needed)</h2>
 <p>The component wrapper auto-detects the driver root via a relative path. If your directory layout differs, override it:</p>
 <div class="fragment"><div class="line">set(HF_PCA9685_ROOT &quot;/absolute/path/to/hf-pca9685-driver&quot; CACHE PATH &quot;&quot;)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md33"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md34"></a>
 3. Require the Component</h2>
 <p>In your <code>main/CMakeLists.txt</code>:</p>
 <div class="fragment"><div class="line">idf_component_register(</div>
@@ -107,14 +107,14 @@ ESP-IDF Integration</h1>
 <div class="line">    REQUIRES hf_pca9685 driver</div>
 <div class="line">)</div>
 <div class="line">target_compile_features(${COMPONENT_LIB} PRIVATE cxx_std_20)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md34"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md35"></a>
 4. Include and Use</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;pca9685.hpp&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;pca9685_version.h&quot;</span>  <span class="comment">// optional — version macros</span></div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Create your platform I2C implementation, then:</span></div>
 <div class="line">pca9685::PCA9685&lt;MyI2cBus&gt; driver(&amp;bus, 0x40);</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md35"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md36"></a>
 Version Header</h1>
 <p>The build system generates <code>pca9685_version.h</code> from <code>inc/pca9685_version.h.in</code> at configure time. It provides:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#define HF_PCA9685_VERSION_MAJOR  1</span></div>

@@ -76,25 +76,25 @@ $(function() {
   <div class="headertitle"><div class="title">API Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md11"></a> Complete reference documentation for all public methods and types in the PCA9685 driver.</p>
-<h1><a class="anchor" id="autotoc_md12"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md12"></a> Complete reference documentation for all public methods and types in the PCA9685 driver.</p>
+<h1><a class="anchor" id="autotoc_md13"></a>
 Source Code</h1>
 <ul>
 <li><b>Main Header</b>: <a href="../inc/pca9685.hpp"><code>inc/pca9685.hpp</code></a></li>
 <li><b>I2C Interface</b>: <a href="../inc/pca9685_i2c_interface.hpp"><code>inc/pca9685_i2c_interface.hpp</code></a></li>
 <li><b>Implementation</b>: <a href="../src/pca9685.ipp"><code>src/pca9685.ipp</code></a> (template implementation, included by header)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md13"></a>
+<h1><a class="anchor" id="autotoc_md14"></a>
 Core Class</h1>
-<h2><a class="anchor" id="autotoc_md14"></a>
+<h2><a class="anchor" id="autotoc_md15"></a>
 <code>PCA9685&lt;I2cType&gt;</code></h2>
 <p>Main driver class for interfacing with the PCA9685 PWM controller.</p>
 <p><b>Template Parameter</b>: <code>I2cType</code> - Your I2C interface implementation (must inherit from <code>pca9685::I2cInterface&lt;I2cType&gt;</code>)</p>
 <p><b>Location</b>: <a href="../inc/pca9685.hpp"><code>inc/pca9685.hpp</code></a></p>
 <p><b>Constructor:</b> </p><div class="fragment"><div class="line">PCA9685(I2cType* bus, uint8_t address);</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md15"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md16"></a>
 Methods</h1>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 Initialization</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -106,7 +106,7 @@ Initialization</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Reset()</code>   </td><td class="markdownTableBodyNone"><code>bool Reset() noexcept</code>   </td><td class="markdownTableBodyNone">Reset device to power-on default state   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 Frequency Control</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -116,7 +116,7 @@ Frequency Control</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>GetPrescale()</code>   </td><td class="markdownTableBodyNone"><code>bool GetPrescale(uint8_t&amp; prescale) noexcept</code>   </td><td class="markdownTableBodyNone">Get current prescale register value   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md19"></a>
 PWM Control</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -132,7 +132,7 @@ PWM Control</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SetChannelFullOff()</code>   </td><td class="markdownTableBodyNone"><code>bool SetChannelFullOff(uint8_t channel) noexcept</code>   </td><td class="markdownTableBodyNone">Set channel to fully OFF (0% duty)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 Power Management</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -142,7 +142,7 @@ Power Management</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Wake()</code>   </td><td class="markdownTableBodyNone"><code>bool Wake() noexcept</code>   </td><td class="markdownTableBodyNone">Wake PCA9685 from sleep mode   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md21"></a>
 Output Configuration</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -152,7 +152,7 @@ Output Configuration</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SetOutputDriverMode()</code>   </td><td class="markdownTableBodyNone"><code>bool SetOutputDriverMode(bool totem_pole) noexcept</code>   </td><td class="markdownTableBodyNone">Set totem-pole or open-drain mode   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md21"></a>
+<h2><a class="anchor" id="autotoc_md22"></a>
 Error Handling</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -170,7 +170,7 @@ Error Handling</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ClearErrorFlags()</code>   </td><td class="markdownTableBodyNone"><code>void ClearErrorFlags(uint16_t mask = 0xFFFF) noexcept</code>   </td><td class="markdownTableBodyNone">Clear error flags by bitmask   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md22"></a>
+<h2><a class="anchor" id="autotoc_md23"></a>
 Configuration</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -180,9 +180,9 @@ Configuration</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SetRetryDelay()</code>   </td><td class="markdownTableBodyNone"><code>void SetRetryDelay(RetryDelayFn fn) noexcept</code>   </td><td class="markdownTableBodyNone">Set optional callback invoked between retries (e.g. 1 ms delay for bus recovery); default nullptr   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md23"></a>
+<h1><a class="anchor" id="autotoc_md24"></a>
 Types</h1>
-<h2><a class="anchor" id="autotoc_md24"></a>
+<h2><a class="anchor" id="autotoc_md25"></a>
 Type Aliases</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -190,7 +190,7 @@ Type Aliases</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>RetryDelayFn</code>   </td><td class="markdownTableBodyNone"><code>void (*)()</code>   </td><td class="markdownTableBodyNone">Optional callback for delay between I2C retries; used with <code>SetRetryDelay()</code>.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md25"></a>
+<h2><a class="anchor" id="autotoc_md26"></a>
 Enumerations</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -200,7 +200,7 @@ Enumerations</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Register</code>   </td><td class="markdownTableBodyNone"><code>MODE1</code>, <code>MODE2</code>, <code>LED0_ON_L</code>, <code>LED0_OFF_L</code>, <code>PRE_SCALE</code>, etc.   </td><td class="markdownTableBodyNone"><a href="../inc/pca9685.hpp"><code>inc/pca9685.hpp</code></a>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md26"></a>
+<h2><a class="anchor" id="autotoc_md27"></a>
 Constants</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -212,9 +212,9 @@ Constants</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>OSC_FREQ_</code>   </td><td class="markdownTableBodyNone"><code>25000000</code>   </td><td class="markdownTableBodyNone">Internal oscillator frequency (25 MHz)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
 I2C Interface</h1>
-<h2><a class="anchor" id="autotoc_md28"></a>
+<h2><a class="anchor" id="autotoc_md29"></a>
 <code>I2cInterface&lt;Derived&gt;</code> (CRTP)</h2>
 <p>Hardware-agnostic I2C interface using the Curiously Recurring Template Pattern.</p>
 <p><b>Location</b>: <a href="../inc/pca9685_i2c_interface.hpp"><code>inc/pca9685_i2c_interface.hpp</code></a></p>
