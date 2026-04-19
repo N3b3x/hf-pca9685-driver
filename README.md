@@ -22,8 +22,9 @@ permalink: /
 5. [API Reference](#-api-reference)
 6. [Examples](#-examples)
 7. [Documentation](#-documentation)
-8. [Contributing](#-contributing)
-9. [License](#-license)
+8. [References](#-references)
+9. [Contributing](#-contributing)
+10. [License](#-license)
 
 ## 📦 Overview
 
@@ -127,6 +128,16 @@ For complete API documentation with source code links, see
 ## 📚 Documentation
 
 For complete documentation, see the [docs directory](docs/index.md).
+
+## 🔗 References
+
+| Resource | Link |
+|----------|------|
+| NXP PCA9685 product page | <https://www.nxp.com/products/PCA9685> |
+| PCA9685 datasheet (NXP) | <https://www.nxp.com/docs/en/data-sheet/PCA9685.pdf> |
+| ESP-IDF I²C master | <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/peripherals/i2c.html> |
+| Adafruit PCA9685 servo guide | <https://learn.adafruit.com/16-channel-pwm-servo-driver> |
+| C++11 language reference | <https://en.cppreference.com/w/cpp/11> |
 
 ## 🤝 Contributing
 
