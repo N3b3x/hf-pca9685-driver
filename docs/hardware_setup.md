@@ -9,6 +9,8 @@ permalink: /docs/hardware_setup/
 
 # Hardware Setup
 
+![PCA9685 16-channel PWM topology with 50 Hz servo timing example](assets/pca9685-topology.svg)
+
 This guide covers the physical connections and hardware requirements for the PCA9685 chip.
 
 ## Pin Connections

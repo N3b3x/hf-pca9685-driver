@@ -42,6 +42,8 @@ requiring only an implementation of the `I2cInterface` for your platform. The dr
 (Curiously Recurring Template Pattern) for zero-overhead hardware abstraction, making it suitable
 for resource-constrained embedded systems.
 
+![PCA9685 16-channel PWM topology with 50 Hz servo timing example](docs/assets/pca9685-topology.svg)
+
 ## ✨ Features
 
 - ✅ **16 Independent PWM Channels**: Each with 12-bit resolution (0-4095)
