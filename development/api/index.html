@@ -99,6 +99,7 @@ $(function() {
 </blockquote>
 <p>The <b>PCA9685</b> is a 16-channel, 12-bit PWM controller from NXP Semiconductors that communicates via I²C. It provides independent PWM control for up to 16 outputs with 12-bit resolution (4096 steps), making it ideal for driving LEDs, servos, and other PWM-controlled devices. The chip features an internal 25 MHz oscillator, configurable PWM frequency from 24 Hz to 1526 Hz, and supports daisy-chaining multiple devices for up to 992 PWM outputs.</p>
 <p>This driver provides a hardware-agnostic C++ interface that abstracts all register-level operations, requiring only an implementation of the <code>I2cInterface</code> for your platform. The driver uses the CRTP (Curiously Recurring Template Pattern) for zero-overhead hardware abstraction, making it suitable for resource-constrained embedded systems.</p>
+<p><img src="docs/assets/pca9685-topology.svg" alt="PCA9685 16-channel PWM topology with 50 Hz servo timing example" style="pointer-events: none;" class="inline"/></p>
 <h1><a class="anchor" id="autotoc_md3"></a>
 ✨ Features</h1>
 <ul>

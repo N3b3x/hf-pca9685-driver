@@ -603,7 +603,7 @@
   },"86": {
     "doc": "🔌 Hardware Setup",
     "title": "Hardware Setup",
-    "content": "This guide covers the physical connections and hardware requirements for the PCA9685 chip. ",
+    "content": ". This guide covers the physical connections and hardware requirements for the PCA9685 chip. ",
     "url": "/hf-pca9685-driver/development/docs/hardware_setup/#hardware-setup",
     
     "relUrl": "/docs/hardware_setup/#hardware-setup"
