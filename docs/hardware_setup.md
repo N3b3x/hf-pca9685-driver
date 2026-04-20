@@ -87,6 +87,8 @@ The PCA9685 I2C address is determined by pins A0-A5:
 
 ## Example Wiring Diagram
 
+![PCA9685 wiring](assets/pca9685-wiring.svg)
+
 ### Single PCA9685
 
 ```
