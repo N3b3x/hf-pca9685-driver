@@ -64,6 +64,7 @@ exclude = [
   
   # Documentation site URLs (may not be published yet)
   '^https://n3b3x\.github\.io/hf-pca9685-driver/.*',
-  # Manufacturer / IC vendor documentation URLs (frequently block automated crawlers)
-  '^https?://(www\\.)?nxp\\.com/',
+
+  # NXP — datasheet/product URLs often 404 or redirect from CI; README links kept for humans
+  '^https?://(www\.)?nxp\.com/',
 ]
